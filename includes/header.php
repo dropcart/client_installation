@@ -55,21 +55,17 @@
 <div class="masthead">
 	<nav>
 		<ul class="nav nav-justified">
-			<li class="active"><a href="#">Home</a></li>
-			<li class="dropdown">
-                <a href="#" data-toggle="dropdown" class="dropdown-toggle">Messages <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Inbox</a></li>
-                    <li><a href="#">Drafts</a></li>
-                    <li><a href="#">Sent Items</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">Trash</a></li>
-                </ul>
-            </li>
-			<li><a href="#">Services</a></li>
-			<li><a href="#">Downloads</a></li>
-			<li><a href="#">About</a></li>
-			<li><a href="#">Contact</a></li>
+			<li><a href="<?= route('home'); ?>"><b class="glyphicon glyphicon-home"></b></a></li>
+<?php
+global $client;
+
+$categories = $client->getCategories();
+foreach ($categories as $category):
+?>
+			<li><a href="<?= route('products_by_category', $category['id']) ?>" title="<?= $category['description'] ?>"><?= $category['name'] ?></a></li>
+<?php
+endforeach
+?>
 		</ul>
 	</nav>
 </div>
