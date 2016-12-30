@@ -50,6 +50,9 @@ endif;
 		</div>
 		<div class="float-clear"></div>
 	</div>
+<?php
+if (isset($product['price'])):
+?>
 	<div class="col-md-2">
 		<h3 class="price">&euro;&nbsp;<?= $product['price']['price_with_shipment_and_tax'] ?> <div class="float-right flag flag-<?= strtolower($product['price']['price_for_country']) ?>"></div></h3>
 		<p class="float-clear">
@@ -59,4 +62,7 @@ endif;
 			<a href="#" class="btn btn-lg btn-block btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Bestellen</a>
 		</div>
 	</div>
+<?php
+endif;
+?>
 </div>

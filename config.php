@@ -24,6 +24,7 @@ class Config {
 	static $site_contact_email = "info@tonerkopen.nl";
 	
 	// [Technical] Endpoint for Dropcart API
+	//static $dropcart_api_endpoint = "api.staging.dropcart.nl";
 	static $dropcart_api_endpoint = "api.dropcart.dev";
 	
 	// [Technical] Public key for Dropcart API

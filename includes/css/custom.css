@@ -37,27 +37,36 @@
 .product-id-table td, .product-id-table th {
 	padding: 1px;
 }
-.product-list .row.i {
+.product-list .row {
+	margin-bottom: 5px;
+}
+.product-list .row.i .color {
 	background-color: #c4e17f;
 }
-.product-list .row.ii {
+.product-list .row.ii .color {
 	background-color: #f7fdca;
 }
-.product-list .row.iii {
+.product-list .row.iii .color {
 	background-color: #fecf71;
 }
-.product-list .row.iv {
+.product-list .row.iv .color {
 	background-color: #f0776c;
 }
-.product-list .row.v {
+.product-list .row.v .color {
 	background-color: #db9dbe;
 }
-.product-list .row.vi {
+.product-list .row.vi .color {
 	background-color: #c49cde;
 }
-.product-list .row.vii {
+.product-list .row.vii .color {
 	background-color: #669ae1;
 }
-.product-list .row.viii {
+.product-list .row.vii .color a {
+	color: white;
+}
+.product-list .row.viii .color {
 	background-color: #62c2e4;
+}
+.product-list .row.viii .color a {
+	color: white;
 }

@@ -2,13 +2,13 @@
 
 global $client;
 global $category;
+global $products;
 
 ?>
 <h1>Producten: <?= $category['name'] ?></h1>
 <div class="product-list">
 <?php
 
-$products = $client->getProductListing($category);
 $index = 0;
 foreach($products as $product):
 $index = $index % 8 + 1;
@@ -27,7 +27,7 @@ else:
 endif;
 ?>
 	</div>
-	<div class="col-md-7">
+	<div class="col-md-7 color">
 		<h3><a href="<?= route('product', $product['id']) ?>"><?= $product['name'] ?></a></h3>
 		<p>
 			<?= $product['description'] ?>
@@ -60,10 +60,19 @@ endif;
 		<div class="float-clear"></div>
 	</div>
 	<div class="col-md-2">
-		<h3>&euro;&nbsp;<?= $product['price'] ?></h3>
+<?php
+if (isset($product['price'])):
+?>
+		<h3 class="price">&euro;&nbsp;<?= number_format($product['price']['price_with_shipment_and_tax'],2,",",".") ?> <div class="float-right flag flag-<?= strtolower($product['price']['price_for_country']) ?>"></div></h3>
+		<p class="float-clear">
+			<small>Incl. verzendkosten</small>
+		</p>
 		<div>
 			<a href="#" class="btn btn-lg btn-block btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Bestellen</a>
 		</div>
+<?php
+endif;
+?>
 	</div>
 </div>
 <?php

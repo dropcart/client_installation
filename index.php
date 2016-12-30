@@ -9,10 +9,6 @@ if (!Config::$domain) {
 // Dropcart API
 require_once "./client/vendor/autoload.php";
 use Dropcart\Client;
-Client::setEndpoint(config('dropcart_api_endpoint'));
-global $client;
-$client = Client::instance();
-$client->auth(config('dropcart_api_key'), 'NL');
 
 // Global helper functions
 
@@ -69,6 +65,13 @@ function roman_number($integer)
 	return $return;
 }
 
+try {
+
+Client::setEndpoint(config('dropcart_api_endpoint'));
+global $client;
+$client = Client::instance();
+$client->auth(config('dropcart_api_key'), 'NL');
+
 // Request routing
 
 $action = isset($_GET['act']) ? $_GET['act'] : false;
@@ -93,6 +96,8 @@ case 'products_by_category':
 		}
 	}
 	if ($category) {
+		global $products;
+		$products = $client->getProductListing($category_id);
 		view('product_list');
 	} else {
 		// Unknown category
@@ -109,6 +114,15 @@ default:
 	// Unknown action, redirect to home.
 	redirect('home');
 	break;
+}
+
+} catch (Exception $e) {
+	print("<h1>");
+	print($e->getMessage());
+	print("</h1>");
+	print("<pre>");
+	var_dump($e->context);
+	print("</pre>");
 }
 
 ?>
