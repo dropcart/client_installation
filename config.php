@@ -33,14 +33,3 @@ class Config {
 	static $has_rewriting = false;
 
 }
-
-// Static functions
-
-// Default configuration properties
-if (!Config::$domain) {
-	Config::$domain = $_SERVER['SERVER_NAME'];
-}
-
-function config($name) {
-	return Config::$$name;
-}

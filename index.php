@@ -1,10 +1,14 @@
 <?php
 
+// Default configuration properties
 require_once "./config.php";
+if (!Config::$domain) {
+	Config::$domain = $_SERVER['SERVER_NAME'];
+}
+
+// Dropcart API
 require_once "./client/vendor/autoload.php";
-
 use Dropcart\Client;
-
 Client::setEndpoint(config('dropcart_api_endpoint'));
 global $client;
 $client = Client::instance();
@@ -12,6 +16,9 @@ $client->auth(config('dropcart_api_key'), 'NL');
 
 // Global helper functions
 
+function config($name) {
+	return Config::$$name;
+}
 function view($name) {
 	$name = preg_replace('/[^A-Za-z0-9_\-]/', '', $name);
 	include("includes/header.php");
@@ -46,6 +53,21 @@ function route($name, $params = []) {
 	}
 	return $url;
 }
+function roman_number($integer)
+{
+	$table = array('x'=>10, 'ix'=>9, 'v'=>5, 'iv'=>4, 'i'=>1);
+	$return = '';
+	while($integer > 0) {
+		foreach($table as $rom=>$arb) {
+			if($integer >= $arb) {
+				$integer -= $arb;
+				$return .= $rom;
+				break;
+			}
+		}
+	}
+	return $return;
+}
 
 // Request routing
 
@@ -58,7 +80,7 @@ case 'contact':
 case 'faq':
 case 'home':
 	view($action);
-	exit();
+	break;
 // Dynamic pages
 case 'products_by_category':
 	$category_id = (int) $_GET['p1'];
@@ -72,17 +94,21 @@ case 'products_by_category':
 	}
 	if ($category) {
 		view('product_list');
-		exit();
 	} else {
 		// Unknown category
 		redirect('home');
 	}
+	break;
 case 'product':
-	view($action);
-	exit();
+	$product_id = (int) $_GET['p1'];
+	global $product;
+	$product = $client->getProductInfo($product_id);
+	view('product_details');
+	break;
 default:
 	// Unknown action, redirect to home.
 	redirect('home');
+	break;
 }
 
 ?>

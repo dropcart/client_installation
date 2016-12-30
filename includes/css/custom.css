@@ -20,3 +20,44 @@
 .float-clear {
 	clear: both;
 }
+
+.center {
+	text-align: center;
+}
+.fill {
+	max-width: 90%;
+}
+.product-list .fill {
+	max-height: 12em;
+}
+.price .flag {
+	margin-top: -5px;
+}
+
+.product-id-table td, .product-id-table th {
+	padding: 1px;
+}
+.product-list .row.i {
+	background-color: #c4e17f;
+}
+.product-list .row.ii {
+	background-color: #f7fdca;
+}
+.product-list .row.iii {
+	background-color: #fecf71;
+}
+.product-list .row.iv {
+	background-color: #f0776c;
+}
+.product-list .row.v {
+	background-color: #db9dbe;
+}
+.product-list .row.vi {
+	background-color: #c49cde;
+}
+.product-list .row.vii {
+	background-color: #669ae1;
+}
+.product-list .row.viii {
+	background-color: #62c2e4;
+}
