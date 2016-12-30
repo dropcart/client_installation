@@ -23,6 +23,12 @@ class Config {
 	// Please refer to the contact template for editing the contact page.
 	static $site_contact_email = "info@tonerkopen.nl";
 	
+	// [Technical] Endpoint for Dropcart API
+	static $dropcart_api_endpoint = "api.dropcart.dev";
+	
+	// [Technical] Public key for Dropcart API
+	static $dropcart_api_key = "e5312706be8ae2aba08dcd1b3fb9274a438afdee4cdfe074ff3287c93038ee72";
+	
 	// [Technical] Whether or not URL rewriting is enabled.
 	static $has_rewriting = false;
 

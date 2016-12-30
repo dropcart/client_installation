@@ -3,6 +3,12 @@
 require_once "./config.php";
 require_once "./client/vendor/autoload.php";
 
+use Dropcart\Client;
+use Dropcart\ClientException;
+
+Client::setEndpoint(config('dropcart_api_endpoint'));
+Client::instance()->auth(config('dropcart_api_key'), 'NL');
+
 // Global helper functions
 
 function view($name) {
