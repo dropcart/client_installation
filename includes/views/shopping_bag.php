@@ -8,6 +8,9 @@
 </ul>
 
 <table class="shopping-bag">
+<?php
+if ($total_quantity > 0):
+?>
 <thead>
 	<tr>
 		<td width="10%"></td>
@@ -18,6 +21,9 @@
 		<td class="fold"></td>
 	</tr>
 </thead>
+<?php
+endif;
+?>
 <tbody>
 <?php
 
@@ -48,7 +54,7 @@ endif;
 	</td>
 	<td>
 		<p>
-			<strong><?= $product['name'] ?></strong>
+			<strong><a href="<?= route('product', $product['id']) ?>"><?= $product['name'] ?></a></strong>
 <?php
 if ($product['in_stock']):
 ?>
@@ -72,9 +78,9 @@ endif;
 	</td>
 	<td>
 		<input type="text "disabled="disabled" value="<?= $quantity; ?>" /><a
-			class="btn btn-primary btn-bag-plus" href="<?= route('edit_shopping_bag', $product['id'], 1); ?>" alt="Plus"><span
+			class="btn btn-primary btn-bag-plus" href="<?= route('edit_shopping_bag', [$product['id'], 1]); ?>" alt="Plus"><span
 			class="glyphicon glyphicon-plus"></span></a><a
-			class="btn btn-primary btn-bag-minus" href="<?= route('edit_shopping_bag', $product['id'], -1); ?>" alt="Minus"><span
+			class="btn btn-primary btn-bag-minus" href="<?= route('edit_shopping_bag', [$product['id'], -1]); ?>" alt="Minus"><span
 			class="glyphicon glyphicon-minus"></span></a>
 	</td>
 	<td>

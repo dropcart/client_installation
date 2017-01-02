@@ -68,7 +68,7 @@ if (isset($product['price'])):
 			<small>Incl. verzendkosten</small>
 		</p>
 		<div>
-			<a href="<?= route('add_product', $product['id'], 1); ?>" class="btn btn-lg btn-block btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Bestellen</a>
+			<a href="<?= route('edit_shopping_bag', [$product['id'], 1]); ?>" class="btn btn-lg btn-block btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Bestellen</a>
 		</div>
 <?php
 endif;

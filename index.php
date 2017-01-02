@@ -129,7 +129,11 @@ case 'add_product':
 		$quantity = 1;
 	}
 	$product = $client->getProductInfo($product_id);
-	$shoppingBag = $client->addShoppingBag($shoppingBag, $product);
+	if ($quantity < 0) {
+		$shoppingBag = $client->removeShoppingBag($shoppingBag, $product, -$quantity);
+	} else {
+		$shoppingBag = $client->addShoppingBag($shoppingBag, $product, $quantity);
+	}
 	setcookie('sb', $shoppingBag, time() + 60*60*24*30); // 30 days
 	switch ($action) {
 	case 'edit_shopping_bag':

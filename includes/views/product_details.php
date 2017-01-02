@@ -54,12 +54,12 @@ endif;
 if (isset($product['price'])):
 ?>
 	<div class="col-md-2">
-		<h3 class="price">&euro;&nbsp;<?= $product['price']['price_with_shipment_and_tax'] ?> <div class="float-right flag flag-<?= strtolower($product['price']['price_for_country']) ?>"></div></h3>
+		<h3 class="price">&euro;&nbsp;<?= number_format($product['price']['price_with_shipment_and_tax'],2,",",".") ?> <div class="float-right flag flag-<?= strtolower($product['price']['price_for_country']) ?>"></div></h3>
 		<p class="float-clear">
 			<small>Incl. verzendkosten</small>
 		</p>
 		<div>
-			<a href="<?= route('edit_shopping_bag', $product['id'], 1); ?>" class="btn btn-lg btn-block btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Bestellen</a>
+			<a href="<?= route('edit_shopping_bag', [$product['id'], 1]); ?>" class="btn btn-lg btn-block btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Bestellen</a>
 		</div>
 	</div>
 <?php
