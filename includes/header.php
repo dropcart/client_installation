@@ -48,6 +48,37 @@
 					<li><a href="<?= route('account'); ?>">Mijn account</a></li>
 				</ul>
 			</nav>
+			<div id="cart">
+<?php
+global $client;
+global $shoppingBag;
+
+$rsb = $client->readShoppingBag($shoppingBag);
+$total_price = 0.0;
+$total_quantity = 0;
+foreach ($rsb as $pq) {
+	$product = $pq['product'];
+	$quantity = $pq['quantity'];
+	$total_price += (float) ($quantity * $product['price']['price_with_shipment_and_tax']);
+	$total_quantity += (int) $quantity;
+}
+?>
+				<a href="<?= route('shopping_bag'); ?>">
+					<h3>
+						<span class="glyphicon glyphicon-shopping-cart"></span> Winkelwagen
+					</h3>
+					<div class="cart-content">
+						<span class="cart-items"><?= $total_quantity; ?></span> artikelen
+<?php
+if ($total_quantity > 0):
+?>
+						- <span class="cart-total">&euro;&nbsp;<?= number_format($total_price,2,",","."); ?></span>
+<?php
+endif;
+?>
+					</div>
+				</a>
+			</div>
 		</div>
 		<div class="float-clear"></div>
 	</div>

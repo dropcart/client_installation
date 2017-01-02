@@ -36,11 +36,11 @@ endif;
 <?php
 if ($product['in_stock']):
 ?>
-<div class="label label-success">Op voorraad</div>
+			<div class="label label-success">Op voorraad</div>
 <?php
 else:
 ?>
-<div class="label label-warning">Niet op voorraad</div>
+			<div class="label label-warning">Niet op voorraad</div>
 <?php
 endif;
 ?>
@@ -68,7 +68,7 @@ if (isset($product['price'])):
 			<small>Incl. verzendkosten</small>
 		</p>
 		<div>
-			<a href="#" class="btn btn-lg btn-block btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Bestellen</a>
+			<a href="<?= route('add_product', $product['id'], 1); ?>" class="btn btn-lg btn-block btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Bestellen</a>
 		</div>
 <?php
 endif;

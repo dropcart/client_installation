@@ -21,12 +21,10 @@ function view($name) {
 	include("includes/views/$name.php");
 	include("includes/footer.php");
 }
-
 function redirect($name, $params = []) {
 	header("Location: " . route($name, $params));
 	exit();
 }
-
 function route($name, $params = []) {
 	$url = config('base_url');
 	if (config('has_rewriting')) {
@@ -49,8 +47,7 @@ function route($name, $params = []) {
 	}
 	return $url;
 }
-function roman_number($integer)
-{
+function roman_number($integer) {
 	$table = array('x'=>10, 'ix'=>9, 'v'=>5, 'iv'=>4, 'i'=>1);
 	$return = '';
 	while($integer > 0) {
@@ -72,6 +69,14 @@ global $client;
 $client = Client::instance();
 $client->auth(config('dropcart_api_key'), 'NL');
 
+// Shopping bag handling
+global $shoppingBag;
+if (isset($_COOKIE['sb'])) {
+	$shoppingBag = $_COOKIE['sb'];
+} else {
+	$shoppingBag = "";
+}
+
 // Request routing
 
 $action = isset($_GET['act']) ? $_GET['act'] : false;
@@ -82,6 +87,10 @@ case 'about':
 case 'contact':
 case 'faq':
 case 'home':
+	view($action);
+	break;
+// Semi-static pages
+case 'shopping_bag':
 	view($action);
 	break;
 // Dynamic pages
@@ -109,6 +118,27 @@ case 'product':
 	global $product;
 	$product = $client->getProductInfo($product_id);
 	view('product_details');
+	break;
+// Actions
+case 'edit_shopping_bag':
+case 'add_product':
+	$product_id = (int) $_GET['p1'];
+	if (isset($_GET['p2'])) {
+		$quantity = (int) $_GET['p2'];
+	} else {
+		$quantity = 1;
+	}
+	$product = $client->getProductInfo($product_id);
+	$shoppingBag = $client->addShoppingBag($shoppingBag, $product);
+	setcookie('sb', $shoppingBag, time() + 60*60*24*30); // 30 days
+	switch ($action) {
+	case 'edit_shopping_bag':
+		redirect('shopping_bag');
+		break;
+	default:
+		redirect('product', [$product_id]);
+		break;
+	}
 	break;
 default:
 	// Unknown action, redirect to home.
