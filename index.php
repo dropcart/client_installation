@@ -241,13 +241,13 @@ case 'customer_details':
 	}
 	global $diff_billing_shipping;
 	// Check difference shipping/billing
-	$diff_billing_shipping = $details['billing_first_name'] != $details['shipping_first_name'] ||
-			$details['billing_last_name'] != $details['shipping_last_name'] ||
-			$details['billing_address_1'] != $details['shipping_address_1'] ||
-			$details['billing_address_2'] != $details['shipping_address_2'] ||
-			$details['billing_city'] != $details['shipping_city'] ||
-			$details['billing_postcode'] != $details['shipping_postcode'] ||
-			$details['billing_country'] != $details['shipping_country'];
+	$diff_billing_shipping = @$details['billing_first_name'] != @$details['shipping_first_name'] ||
+			@$details['billing_last_name'] != @$details['shipping_last_name'] ||
+			@$details['billing_address_1'] != @$details['shipping_address_1'] ||
+			@$details['billing_address_2'] != @$details['shipping_address_2'] ||
+			@$details['billing_city'] != @$details['shipping_city'] ||
+			@$details['billing_postcode'] != @$details['shipping_postcode'] ||
+			@$details['billing_country'] != @$details['shipping_country'];
 	unset($value);
 	view('customer_details');
 	break;
