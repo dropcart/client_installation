@@ -63,6 +63,7 @@ function roman_number($integer) {
 }
 function acopy($from, &$to, $fields) {
 	foreach ($fields as $from_key => $to_key) {
+		if (is_int($from_key)) $from_key = $to_key;
 		if (isset($from[$from_key]))
 			$to[$to_key] = $from[$from_key];
 	}
@@ -86,17 +87,40 @@ if (isset($_COOKIE['sb'])) {
 		// Clear bag on error
 		$shoppingBag = "";
 		$readShoppingBag = [];
+		unset($_COOKIE['sb']);
+		setcookie('sb', '', time()-3600);
 	}
 } else {
 	$shoppingBag = "";
 	$readShoppingBag = [];
+	unset($_COOKIE['sb']);
+	setcookie('sb', '', time()-3600);
 }
 
 // Transaction handling
-
+global $transaction;
+global $reference;
+global $checksum;
+if ($shoppingBag && isset($_COOKIE['ref']) && isset($_COOKIE['cs'])) {
+	$reference = $_COOKIE['ref'];
+	$checksum = $_COOKIE['cs'];
+	try {
+		$transaction = $client->getTransaction($shoppingBag, $reference, $checksum);
+		if ($transaction['transaction']['system_status'] != "FINAL")
+			throw new \Exception("Illegal transaction state");
+	} catch (Exception $e) {
+		// Clear transaction on error
+		$transaction = null;
+		$reference = 0;
+		$checksum = "";
+	}
+} else {
+	$transaction = null;
+	$reference = 0;
+	$checksum = "";
+}
 
 // Request routing
-
 $action = isset($_GET['act']) ? $_GET['act'] : false;
 if (!$action) $action = 'home';
 switch ($action) {
@@ -109,39 +133,53 @@ case 'home':
 	break;
 // Dynamic pages
 case 'checkout':
+	if (!$transaction) {
+		redirect('shopping_bag');
+		break;
+	}
+	if (isset($_POST['submit'])) {
+		// Confirm the transaction
+		$result = $client->confirmTransaction($shoppingBag, $reference, $checksum);
+		if (isset($result['redirect'])) {
+			// Perform the redirect as instructed by the server
+			header("Location: " . $result['redirect']);
+			exit(0);
+		} else {
+			// Otherwise, we retrieve a transaction as usual
+			$transaction = $result;
+		}
+	}
 	view('checkout');
 	break;
 case 'customer_details':
 	global $details;
-	global $transaction;
 	$details = [];
-	$transaction = null;
 	if (isset($_POST['submit'])) {
 		acopy($_POST, $details, [
 					'billing_first_name' => 'first_name',
 					'billing_last_name' => 'last_name'
 		]);
 		acopy($_POST, $details, [
-					'email' => 'email',
-					'telephone' => 'telephone',
-					'billing_first_name' => 'billing_first_name',
-					'billing_last_name' => 'billing_last_name',
-					'billing_address_1' => 'billing_address_1',
-					'billing_address_2' => 'billing_address_2',
-					'billing_city' => 'billing_city',
-					'billing_postcode' => 'billing_postcode',
-					'billing_country' => 'billing_country',
+					'email',
+					'telephone',
+					'billing_first_name',
+					'billing_last_name',
+					'billing_address_1',
+					'billing_address_2',
+					'billing_city',
+					'billing_postcode',
+					'billing_country',
 				
 		]);
 		if (isset($_POST['has_delivery']) && $_POST['has_delivery']) {
 			acopy($_POST, $details, [
-					'shipping_first_name' => 'shipping_first_name',
-					'shipping_last_name' => 'shipping_last_name',
-					'shipping_address_1' => 'shipping_address_1',
-					'shipping_address_2' => 'shipping_address_2',
-					'shipping_city' => 'shipping_city',
-					'shipping_postcode' => 'shipping_postcode',
-					'shipping_country' => 'shipping_country'
+					'shipping_first_name',
+					'shipping_last_name',
+					'shipping_address_1',
+					'shipping_address_2',
+					'shipping_city',
+					'shipping_postcode',
+					'shipping_country'
 			]);
 		} else {
 			acopy($_POST, $details, [
@@ -154,17 +192,63 @@ case 'customer_details':
 					'billing_country' => 'shipping_country'
 			]);
 		}
-		$transaction = $client->createTransaction($shoppingBag, $details);
+		if ($transaction) {
+			// Update transaction to change customer details
+			$transaction = $client->updateTransaction($shoppingBag, $reference, $checksum, $details);
+		} else {
+			// Create new transaction
+			$transaction = $client->createTransaction($shoppingBag, $details);
+		}
 		if ($transaction && isset($transaction['reference']) &&
 				isset($transaction['checksum']) && isset($transaction['transaction']) &&
 				isset($transaction['transaction']['system_status']) &&
 				$transaction['transaction']['system_status'] == "FINAL") {
-			setcookie('ref', $transaction['reference']);
-			setcookie('cs', $transaction['checksum']);
+			$reference = $transaction['reference'];
+			$checksum = $transaction['checksum'];
+			setcookie('ref', $reference);
+			setcookie('cs', $checksum);
 			redirect('checkout');
 			break;
 		}
+	} else {
+		if ($transaction && isset($transaction['customer_details'])) {
+			// Copy customer details as supplied previously.
+			acopy($transaction['customer_details'], $details, [
+					'email',
+					'telephone',
+					'billing_first_name',
+					'billing_last_name',
+					'billing_address_1',
+					'billing_address_2',
+					'billing_city',
+					'billing_postcode',
+					'billing_country',
+					'shipping_first_name',
+					'shipping_last_name',
+					'shipping_address_1',
+					'shipping_address_2',
+					'shipping_city',
+					'shipping_postcode',
+					'shipping_country'
+			]);
+		} else {
+			
+		}
 	}
+	// Convert details to escaped value
+	foreach ($details as $key => &$value) {
+		$value = htmlspecialchars($value);
+	}
+	global $diff_billing_shipping;
+	// Check difference shipping/billing
+	$diff_billing_shipping = $details['billing_first_name'] != $details['shipping_first_name'] ||
+			$details['billing_last_name'] != $details['shipping_last_name'] ||
+			$details['billing_address_1'] != $details['shipping_address_1'] ||
+			$details['billing_address_2'] != $details['shipping_address_2'] ||
+			$details['billing_city'] != $details['shipping_city'] ||
+			$details['billing_postcode'] != $details['shipping_postcode'] ||
+			$details['billing_country'] != $details['shipping_country'];
+	unset($value);
 	view('customer_details');
 	break;
 case 'shopping_bag':

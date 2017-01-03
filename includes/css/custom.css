@@ -80,6 +80,9 @@
 .table>tfoot>tr>td, .table>tfoot>tr>th {
 	border: 0;
 }
+.order-tabs {
+	margin-bottom: 2em;
+}
 .next-step .confirm {
 	line-height: 2.5em;
 	padding-left: 2.5em;

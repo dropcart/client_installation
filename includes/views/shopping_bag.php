@@ -1,11 +1,37 @@
+<?php
+global $transaction;
+?>
+
 <h1>Winkelwagen</h1>
 
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs order-tabs">
 	<li class="active"><a href="#"><strong>Stap 1)</strong> Winkelwagen</a></li>
 	<li class=""><a href="<?= route('customer_details'); ?>"><strong>Stap 2)</strong> Klantgegevens</a></li>
-	<li class="disabled"><a href="#"><strong>Stap 3)</strong> Afrekenen</a></li>
+	<li class="<?= $transaction ? '' : 'disabled' ?>"><a href="<?= route('checkout') ?>"><strong>Stap 3)</strong> Bevestigen en afrekenen</a></li>
 	<li class="disabled"><a href="#"><strong>Stap 4)</strong> Bestelling geplaatst</a></li>
 </ul>
+
+<?php
+if ($transaction && isset($transaction['warnings']))
+	foreach($transaction['warnings'] as $warning):
+?>
+<div class="alert alert-warning">
+	<?= $warning ?>
+</div>
+<?php
+	endforeach;
+?>
+
+<?php
+if ($transaction && isset($transaction['errors']))
+	foreach($transaction['errors'] as $error):
+?>
+<div class="alert alert-danger">
+	<?= $error ?>
+</div>
+<?php
+	endforeach;
+?>
 
 <table class="shopping-bag table">
 <?php
@@ -15,7 +41,7 @@ if ($total_quantity > 0):
 	<tr>
 		<th width="10%"></th>
 		<th>Product</th>
-		<th width="12%">Aantal</th>
+		<th width="14%">Aantal</th>
 		<th width="12%">Stukprijs</th>
 		<th width="12%">Prijs</th>
 		<th class="fold"></th>
@@ -110,7 +136,17 @@ if ($total_quantity > 0):
 	<tr>
 		<td colspan="4" align="right">
 			<div class="next-step">
-				<a href="<?= route('customer_details'); ?>" class="btn btn-lg btn-block btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Stap 2: Klantgegevens</a>
+<?php
+if ($transaction):
+?>
+				<a href="<?= route('checkout'); ?>" class="btn btn-lg btn-block btn-primary">Naar <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Stap 3: Afrekenen</a>
+<?php
+else:
+?>
+				<a href="<?= route('customer_details'); ?>" class="btn btn-lg btn-block btn-primary">Naar <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Stap 2: Klantgegevens</a>
+<?php
+endif;
+?>
 			</div>
 		</td>
 		<td>

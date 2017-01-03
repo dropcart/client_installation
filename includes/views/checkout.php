@@ -1,11 +1,18 @@
+<?php
+global $transaction;
+?>
 <h1>Bestelling afrekenen</h1>
 
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs order-tabs">
 	<li class=""><a href="<?= route('shopping_bag'); ?>"><strong>Stap 1)</strong> Winkelwagen</a></li>
 	<li class=""><a href="<?= route('customer_details'); ?>"><strong>Stap 2)</strong> Klantgegevens</a></li>
-	<li class="active"><a href="#"><strong>Stap 3)</strong> Afrekenen</a></li>
+	<li class="active"><a href="#"><strong>Stap 3)</strong> Bevestigen en afrekenen</a></li>
 	<li class="disabled"><a href="#"><strong>Stap 4)</strong> Bestelling geplaatst</a></li>
 </ul>
+
+<div class="alert alert-info">
+Controleer de onderstaande informatie goed! Als u een fout ontdekt in het afleveradres, factuuradres of in de contactgegevens, <a href="<?= route('customer_details') ?>">klik hier om deze te wijzigen</a>.
+</div>
 
 <form class="form-horizontal confirm-form bv-form" role="form" method="post" novalidate="novalidate">
 <input type="hidden" name="submit" value="1" />
@@ -19,29 +26,51 @@
 </thead>
 <tbody>
 	<tr>
-		<td>Voornaam Achternaam</td>
-		<td></td>
-		<td>E-mail</td>
+		<td><?= $transaction['customer_details']['billing_first_name'] ?> <?= $transaction['customer_details']['billing_last_name'] ?></td>
+		<td><?= $transaction['customer_details']['shipping_first_name'] ?> <?= $transaction['customer_details']['shipping_last_name'] ?></td>
+		<td><?= $transaction['customer_details']['first_name'] ?> <?= $transaction['customer_details']['last_name'] ?></td>
 	</tr>
 	<tr>
-		<td>Straatnaam</td>
-		<td></td>
-		<td>Telefoon</td>
+		<td rowspan="2"><?= $transaction['customer_details']['billing_address_1'] ?><?= $transaction['customer_details']['billing_address_2'] ?></td>
+		<td rowspan="2"><?= $transaction['customer_details']['shipping_address_1'] ?><?= $transaction['customer_details']['shipping_address_2'] ?></td>
+		<td><?= $transaction['customer_details']['email'] ?></td>
 	</tr>
 	<tr>
-		<td>Straatnaam2</td>
-		<td></td>
+		<td><?= $transaction['customer_details']['telephone'] ?></td>
 	</tr>
 	<tr>
-		<td>Postcode Plaats</td>
-		<td></td>
+		<td><?= $transaction['customer_details']['billing_postcode'] ?> <?= $transaction['customer_details']['billing_city'] ?></td>
+		<td><?= $transaction['customer_details']['shipping_postcode'] ?> <?= $transaction['customer_details']['shipping_city'] ?></td>
 	</tr>
 	<tr>
-		<td>Land</td>
-		<td></td>
+		<td><?= $transaction['customer_details']['billing_country'] ?></td>
+		<td><?= $transaction['customer_details']['shipping_country'] ?></td>
 	</tr>
 </tbody>
 </table>
+
+<?php
+if ($transaction && isset($transaction['warnings']))
+	foreach($transaction['warnings'] as $warning):
+?>
+<div class="alert alert-warning">
+	<?= $warning ?>
+</div>
+<?php
+	endforeach;
+?>
+
+<?php
+if ($transaction && isset($transaction['errors']))
+	foreach($transaction['errors'] as $error):
+?>
+<div class="alert alert-danger">
+	<?= $error ?>
+</div>
+<?php
+	endforeach;
+?>
+
 <table class="shopping-bag table">
 <thead>
 	<tr>
@@ -127,7 +156,7 @@ endforeach;
 			<div class="next-step">
 				<button type="submit" class="btn btn-lg btn-block btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Stap 4: Bestelling plaatsen</button>
 				<p>
-					U wordt omgeleid naar onze betaalpagina waar u het totaalbedrag direct kan voldoen.
+					U wordt omgeleid naar onze betaalpagina waar u het totaalbedrag (&euro;&nbsp;<?= number_format($total_price,2,",",".") ?>) direct kan voldoen.
 				</p>
 			</div>
 		</td>

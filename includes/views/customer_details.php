@@ -2,14 +2,15 @@
 global $shoppingBag;
 global $details;
 global $transaction;
+global $diff_billing_shipping;
 ?>
 
 <h1>Klantgegevens</h1>
 
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs order-tabs">
 	<li class=""><a href="<?= route('shopping_bag'); ?>"><strong>Stap 1)</strong> Winkelwagen</a></li>
 	<li class="active"><a href="#"><strong>Stap 2)</strong> Klantgegevens</a></li>
-	<li class="disabled"><a href="#"><strong>Stap 3)</strong> Afrekenen</a></li>
+	<li class="<?= $transaction ? '' : 'disabled' ?>"><a href="<?= route('checkout') ?>"><strong>Stap 3)</strong> Bevestigen en afrekenen</a></li>
 	<li class="disabled"><a href="#"><strong>Stap 4)</strong> Bestelling geplaatst</a></li>
 </ul>
 
@@ -17,7 +18,6 @@ global $transaction;
 if ($transaction && isset($transaction['warnings']))
 	foreach($transaction['warnings'] as $warning):
 ?>
-<div class="shopping-bag"></div>
 <div class="alert alert-warning">
 	<?= $warning ?>
 </div>
@@ -29,7 +29,6 @@ if ($transaction && isset($transaction['warnings']))
 if ($transaction && isset($transaction['errors']))
 	foreach($transaction['errors'] as $error):
 ?>
-<div class="shopping-bag"></div>
 <div class="alert alert-danger">
 	<?= $error ?>
 </div>
@@ -37,7 +36,15 @@ if ($transaction && isset($transaction['errors']))
 	endforeach;
 ?>
 
-<div class="shopping-bag"></div>
+<?php
+if ($transaction && !isset($_POST['submit'])):
+?>
+<div class="alert alert-info">
+	Vergeet niet onderaan de pagina op de knop "Opslaan" te drukken na het bewerken van de gegevens. 
+</div>
+<?php
+endif;
+?>
 
 <form class="form-horizontal register-form bv-form" role="form" method="post" novalidate="novalidate">
 	<input type="hidden" name="submit" value="1" />
@@ -46,7 +53,7 @@ if ($transaction && isset($transaction['errors']))
 	<div class="form-group has-feedback">
 		<label class="col-sm-2 control-label" for="email">E-mailadres</label>
 		<div class="col-sm-8">
-			<input type="email" class="form-control" name="email" value="" data-bv-notempty="true" data-bv-emailaddress="true" data-bv-field="email">
+			<input type="email" class="form-control" name="email" value="<?= @$details['email'] ?>" data-bv-notempty="true" data-bv-emailaddress="true" data-bv-field="email">
 			<p class="help-block">Op dit e-mailadres ontvangt u het besteloverzicht, het betalingsbewijs en de verzendingsinformatie.</p>
 		</div>
 	</div>
@@ -54,21 +61,8 @@ if ($transaction && isset($transaction['errors']))
 	<div class="form-group has-feedback">
 		<label class="col-sm-2 control-label" for="telephone">Telefoonnummer</label>
 		<div class="col-sm-8">
-			<input type="text" class="form-control" name="telephone" value="" data-bv-notempty="true" data-bv-field="telephone">
+			<input type="text" class="form-control" name="telephone" value="<?= @$details['telephone'] ?>" data-bv-notempty="true" data-bv-field="telephone">
 			<p class="help-block">Met dit telefoonnummer nemen wij contact op als wij u dringend willen spreken over uw bestelling.</p>
-		</div>
-	</div>
-
-	<div class="form-group has-feedback">
-		<label class="col-sm-2 control-label" for="textinput">Wachtwoord</label>
-		<div class="col-sm-8">
-			<div class="input-group">
-				<input type="password" class="form-control pwd" value="" name="password" data-bv-notempty="true" data-bv-message="Dit veld is verplicht" data-bv-field="password"><i class="form-control-feedback" data-bv-icon-for="password" style="display: none;"></i>
-				<span class="input-group-btn">
-					<button tabindex="-1" class="btn btn-default reveal" type="button"><i class="glyphicon glyphicon-eye-open"></i></button>
-				</span>
-			</div>
-			<p class="help-block">Een uniek wachtwoord is een veilig wachtwoord. Dit wachtwoord gebruikt u om de status van uw bestelling te bekijken.</p>
 		</div>
 	</div>
 
@@ -77,42 +71,50 @@ if ($transaction && isset($transaction['errors']))
 	<div class="form-group has-feedback">
 		<label class="col-sm-2 control-label" for="billing_first_name">Voornaam</label>
 		<div class="col-sm-4">
-			<input type="text" placeholder="" class="form-control" name="billing_first_name" value="" data-bv-notempty="true" data-bv-field="billing_first_name">
+			<input type="text" placeholder="" class="form-control" name="billing_first_name" value="<?= @$details['billing_first_name'] ?>" data-bv-notempty="true" data-bv-field="billing_first_name">
 		</div>
 	</div>
 
 	<div class="form-group has-feedback">
 		<label class="col-sm-2 control-label" for="billing_last_name">Achternaam</label>
 		<div class="col-sm-6">
-			<input type="text" placeholder="" class="form-control" name="billing_last_name" value="" data-bv-notempty="true" data-bv-field="billing_last_name">
+			<input type="text" placeholder="" class="form-control" name="billing_last_name" value="<?= @$details['billing_last_name'] ?>" data-bv-notempty="true" data-bv-field="billing_last_name">
 		</div>
 	</div>
 
 	<div class="form-group has-feedback">
 		<label class="col-sm-2 control-label" for="billing_address_1">Straatnaam en huisnummer</label>
 		<div class="col-sm-8">
-			<input type="text" class="form-control billing_address_1" name="billing_address_1" value="" data-bv-notempty="true" autocomplete="off" data-bv-field="billing_address_1" /><br />
-			<input type="text" class="form-control billing_address_2 double-input" name="billing_address_2" value="" autocomplete="off" data-bv-field="billing_address_2" />
+			<input type="text" class="form-control billing_address_1" name="billing_address_1" value="<?= @$details['billing_address_1'] ?>" data-bv-notempty="true" autocomplete="off" data-bv-field="billing_address_1" /><br />
+			<input type="text" class="form-control billing_address_2 double-input" name="billing_address_2" value="<?= @$details['billing_address_2'] ?>" autocomplete="off" data-bv-field="billing_address_2" />
 		</div>
 	</div>
 
 	<div class="form-group has-feedback">
 		<label class="col-sm-2 control-label" for="billing_postcode">Postcode</label>
 		<div class="col-sm-3">
-			<input type="text" placeholder="1234AB" class="form-control billing_postcode" name="billing_postcode" value="" data-bv-notempty="true" data-bv-field="billing_postcode">
+			<input type="text" placeholder="1234AB" class="form-control billing_postcode" name="billing_postcode" value="<?= @$details['billing_postcode'] ?>" data-bv-notempty="true" data-bv-field="billing_postcode">
 		</div>
 		<label class="col-sm-1 control-label" for="billing_city">Plaats</label>
 		<div class="col-sm-4">
-			<input type="text" class="form-control billing_city" name="billing_city" value="" data-bv-notempty="true" data-bv-field="billing_city">
+			<input type="text" class="form-control billing_city" name="billing_city" value="<?= @$details['billing_city'] ?>" data-bv-notempty="true" data-bv-field="billing_city">
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-2 control-label" for="billing_country">Land</label>
 		<div class="col-sm-8">
+<?php
+$countries = ["Nederland" => "Nederland", "Belgie" => "Belgi&euml;"];
+?>
 			<select class="form-control" name="billing_country">
-				<option value="Nederland">Nederland</option>
-				<option value="Belgie">Belgi&euml;</option>
+<?php
+foreach($countries as $value => $country):
+?>
+				<option value="<?= $value ?>"<?= @$details['billing_country'] == $value ? ' checked="checked"' : '' ?>><?= $country ?></option>
+<?php
+endforeach;
+?>
 			</select>
 		</div>
 	</div>
@@ -122,7 +124,7 @@ if ($transaction && isset($transaction['errors']))
 	<div class="form-group checkbox">
 		<div class="col-sm-2"></div>
 		<div class="col-sm-8">
-			<label><input type="checkbox" name="has_delivery" id="deliveryAddress" value="1"> Mijn bestelling afleveren op een ander adres</label>
+			<label><input type="checkbox" name="has_delivery" id="deliveryAddress"<?= $diff_billing_shipping ? ' selected="selected"' : '' ?> value="1"> Mijn bestelling afleveren op een ander adres</label>
 		</div>
 	</div>
 	
@@ -133,33 +135,33 @@ if ($transaction && isset($transaction['errors']))
 	<div class="form-group has-feedback">
 		<label class="col-sm-2 control-label" for="shipping_first_name">Voornaam</label>
 		<div class="col-sm-4">
-			<input type="text" placeholder="" class="form-control" name="shipping_first_name" value="" data-bv-notempty="true" data-bv-field="shipping_first_name">
+			<input type="text" placeholder="" class="form-control" name="shipping_first_name" value="<?= @$details['shipping_first_name'] ?>" data-bv-notempty="true" data-bv-field="shipping_first_name">
 		</div>
 	</div>
 	
 	<div class="form-group has-feedback">
 		<label class="col-sm-2 control-label" for="shipping_last_name">Achternaam</label>
 		<div class="col-sm-6">
-			<input type="text" placeholder="" class="form-control" name="shipping_last_name" value="" data-bv-notempty="true" data-bv-field="shipping_last_name">
+			<input type="text" placeholder="" class="form-control" name="shipping_last_name" value="<?= @$details['shipping_last_name'] ?>" data-bv-notempty="true" data-bv-field="shipping_last_name">
 		</div>
 	</div>
 
 	<div class="form-group has-feedback">
 		<label class="col-sm-2 control-label" for="shipping_address_1">Straatnaam en huisnummer</label>
 		<div class="col-sm-8">
-			<input type="text" class="form-control shipping_address_1" name="shipping_address_1" value="" data-bv-notempty="true" autocomplete="off" data-bv-field="shipping_address_1" /><br />
-			<input type="text" class="form-control shipping_address_2 double-input" name="shipping_address_2" value="" autocomplete="off" data-bv-field="shipping_address_2" />
+			<input type="text" class="form-control shipping_address_1" name="shipping_address_1" value="<?= @$details['shipping_address_1'] ?>" data-bv-notempty="true" autocomplete="off" data-bv-field="shipping_address_1" /><br />
+			<input type="text" class="form-control shipping_address_2 double-input" name="shipping_address_2" value="<?= @$details['shipping_address_2'] ?>" autocomplete="off" data-bv-field="shipping_address_2" />
 		</div>
 	</div>
 
 	<div class="form-group has-feedback">
 		<label class="col-sm-2 control-label" for="shipping_postcode">Postcode</label>
 		<div class="col-sm-3">
-			<input type="text" placeholder="1234AB" class="form-control shipping_postcode" name="shipping_postcode" value="" data-bv-notempty="true" data-bv-field="shipping_postcode">
+			<input type="text" placeholder="1234AB" class="form-control shipping_postcode" name="shipping_postcode" value="<?= @$details['shipping_postcode'] ?>" data-bv-notempty="true" data-bv-field="shipping_postcode">
 		</div>
 		<label class="col-sm-1 control-label" for="shipping_city">Plaats</label>
 		<div class="col-sm-4">
-			<input type="text" class="form-control shipping_city" name="shipping_city" value="" data-bv-notempty="true" data-bv-field="shipping_city">
+			<input type="text" class="form-control shipping_city" name="shipping_city" value="<?= @$details['shipping_city'] ?>" data-bv-notempty="true" data-bv-field="shipping_city">
 		</div>
 	</div>
 
@@ -167,8 +169,13 @@ if ($transaction && isset($transaction['errors']))
 		<label class="col-sm-2 control-label" for="shipping_country">Land</label>
 		<div class="col-sm-8">
 			<select class="form-control" name="shipping_country">
-				<option value="Nederland">Nederland</option>
-				<option value="Belgie">Belgi&euml;</option>
+<?php
+foreach($countries as $value => $country):
+?>
+				<option value="<?= $value ?>"<?= @$details['shipping_country'] == $value ? ' selected="selected"' : '' ?>><?= $country ?></option>
+<?php
+endforeach;
+?>
 			</select>
 		</div>
 	</div>
@@ -182,7 +189,7 @@ if ($transaction && isset($transaction['errors']))
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-8">
 			<div class="next-step">
-				<button type="submit" class="btn btn-lg btn-block btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Stap 3: Afrekenen</a>
+				<button type="submit" class="btn btn-lg btn-block btn-primary">Opslaan en naar <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Stap 3: Afrekenen</a>
 			</div>
 		</div>
 	</div>
@@ -227,16 +234,29 @@ $('.zipcode, .houseNr, .houseNrAdd').focusout(function() {
 	}
 });
 $(document).ready(function() {
-    $('.register-form').bootstrapValidator({
-        message: 'Dit veld is noodzakelijk',
-        feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        }
-    });
+	$('.register-form').bootstrapValidator({
+		message: 'Dit veld is noodzakelijk',
+		feedbackIcons: {
+			valid: 'glyphicon glyphicon-ok',
+			invalid: 'glyphicon glyphicon-remove',
+			validating: 'glyphicon glyphicon-refresh'
+		}
+	});
+<?php
+if ($transaction):
+?>
+	$('.register-form').data('bootstrapValidator').validate();
+<?php
+endif;
+?>
+<?php
+if (!$diff_billing_shipping):
+?>
 	// After bootstrap validator
-    $('.delivery').toggle();
+	$('.delivery').toggle();
+<?php
+endif;
+?>
 });
 </script>
 <script src="<?= config('base_url') ?>includes/js/bv.min.js" language="javascript"></script>
