@@ -61,6 +61,12 @@ function roman_number($integer) {
 	}
 	return $return;
 }
+function acopy($from, &$to, $fields) {
+	foreach ($fields as $from_key => $to_key) {
+		if (isset($from[$from_key]))
+			$to[$to_key] = $from[$from_key];
+	}
+}
 
 try {
 
@@ -86,6 +92,9 @@ if (isset($_COOKIE['sb'])) {
 	$readShoppingBag = [];
 }
 
+// Transaction handling
+
+
 // Request routing
 
 $action = isset($_GET['act']) ? $_GET['act'] : false;
@@ -98,12 +107,70 @@ case 'faq':
 case 'home':
 	view($action);
 	break;
-// Semi-static pages
-case 'customer_details':
-case 'shopping_bag':
-	view($action);
-	break;
 // Dynamic pages
+case 'checkout':
+	view('checkout');
+	break;
+case 'customer_details':
+	global $details;
+	global $transaction;
+	$details = [];
+	$transaction = null;
+	if (isset($_POST['submit'])) {
+		acopy($_POST, $details, [
+					'billing_first_name' => 'first_name',
+					'billing_last_name' => 'last_name'
+		]);
+		acopy($_POST, $details, [
+					'email' => 'email',
+					'telephone' => 'telephone',
+					'billing_first_name' => 'billing_first_name',
+					'billing_last_name' => 'billing_last_name',
+					'billing_address_1' => 'billing_address_1',
+					'billing_address_2' => 'billing_address_2',
+					'billing_city' => 'billing_city',
+					'billing_postcode' => 'billing_postcode',
+					'billing_country' => 'billing_country',
+				
+		]);
+		if (isset($_POST['has_delivery']) && $_POST['has_delivery']) {
+			acopy($_POST, $details, [
+					'shipping_first_name' => 'shipping_first_name',
+					'shipping_last_name' => 'shipping_last_name',
+					'shipping_address_1' => 'shipping_address_1',
+					'shipping_address_2' => 'shipping_address_2',
+					'shipping_city' => 'shipping_city',
+					'shipping_postcode' => 'shipping_postcode',
+					'shipping_country' => 'shipping_country'
+			]);
+		} else {
+			acopy($_POST, $details, [
+					'billing_first_name' => 'shipping_first_name',
+					'billing_last_name' => 'shipping_last_name',
+					'billing_address_1' => 'shipping_address_1',
+					'billing_address_2' => 'shipping_address_2',
+					'billing_city' => 'shipping_city',
+					'billing_postcode' => 'shipping_postcode',
+					'billing_country' => 'shipping_country'
+			]);
+		}
+		$transaction = $client->createTransaction($shoppingBag, $details);
+		if ($transaction && isset($transaction['reference']) &&
+				isset($transaction['checksum']) && isset($transaction['transaction']) &&
+				isset($transaction['transaction']['system_status']) &&
+				$transaction['transaction']['system_status'] == "FINAL") {
+			setcookie('ref', $transaction['reference']);
+			setcookie('cs', $transaction['checksum']);
+			redirect('checkout');
+			break;
+		}
+	}
+	view('customer_details');
+	break;
+case 'shopping_bag':
+	// Displays same shopping bag as in the header
+	view('shopping_bag');
+	break;
 case 'products_by_category':
 	$category_id = (int) $_GET['p1'];
 	$categories = $client->getCategories();

@@ -7,18 +7,18 @@
 	<li class="disabled"><a href="#"><strong>Stap 4)</strong> Bestelling geplaatst</a></li>
 </ul>
 
-<table class="shopping-bag">
+<table class="shopping-bag table">
 <?php
 if ($total_quantity > 0):
 ?>
 <thead>
 	<tr>
-		<td width="10%"></td>
+		<th width="10%"></th>
 		<th>Product</th>
 		<th width="12%">Aantal</th>
 		<th width="12%">Stukprijs</th>
 		<th width="12%">Prijs</th>
-		<td class="fold"></td>
+		<th class="fold"></th>
 	</tr>
 </thead>
 <?php
@@ -87,7 +87,7 @@ endif;
 <?php
 if (isset($product['price'])):
 ?>
-		<input type="text "disabled="disabled" value="&euro;&nbsp;<?= number_format($product['price']['price_with_shipment_and_tax'],2,",",".") ?>" />
+		&euro;&nbsp;<?= number_format($product['price']['price_with_shipment_and_tax'],2,",",".") ?>
 <?php
 endif;
 ?>

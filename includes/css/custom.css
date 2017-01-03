@@ -74,8 +74,31 @@
 	margin-left: 6em;
 	margin-right: 6em;
 }
+.next-step > * {
+	margin-top: 8pt;
+}
+.table>tfoot>tr>td, .table>tfoot>tr>th {
+	border: 0;
+}
+.next-step .confirm {
+	line-height: 2.5em;
+	padding-left: 2.5em;
+}
+.next-step .confirm input {
+	width: auto;
+	height: 2em;
+	width: 2em;
+    margin-left: -2.5em;
+    cursor: pointer;
+}
+.next-step p {
+	text-align: center;
+}
 .double-input {
 	margin-top: -19px;
+}
+.no-weight {
+	font-weight: normal;
 }
 
 /* Override Bootstrap */

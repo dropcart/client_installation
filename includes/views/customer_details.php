@@ -1,4 +1,10 @@
-<h1>Winkelwagen</h1>
+<?php
+global $shoppingBag;
+global $details;
+global $transaction;
+?>
+
+<h1>Klantgegevens</h1>
 
 <ul class="nav nav-tabs">
 	<li class=""><a href="<?= route('shopping_bag'); ?>"><strong>Stap 1)</strong> Winkelwagen</a></li>
@@ -7,9 +13,34 @@
 	<li class="disabled"><a href="#"><strong>Stap 4)</strong> Bestelling geplaatst</a></li>
 </ul>
 
+<?php
+if ($transaction && isset($transaction['warnings']))
+	foreach($transaction['warnings'] as $warning):
+?>
+<div class="shopping-bag"></div>
+<div class="alert alert-warning">
+	<?= $warning ?>
+</div>
+<?php
+	endforeach;
+?>
+
+<?php
+if ($transaction && isset($transaction['errors']))
+	foreach($transaction['errors'] as $error):
+?>
+<div class="shopping-bag"></div>
+<div class="alert alert-danger">
+	<?= $error ?>
+</div>
+<?php
+	endforeach;
+?>
+
 <div class="shopping-bag"></div>
 
 <form class="form-horizontal register-form bv-form" role="form" method="post" novalidate="novalidate">
+	<input type="hidden" name="submit" value="1" />
 	<fieldset>
 
 	<div class="form-group has-feedback">
@@ -34,7 +65,7 @@
 			<div class="input-group">
 				<input type="password" class="form-control pwd" value="" name="password" data-bv-notempty="true" data-bv-message="Dit veld is verplicht" data-bv-field="password"><i class="form-control-feedback" data-bv-icon-for="password" style="display: none;"></i>
 				<span class="input-group-btn">
-					<button class="btn btn-default reveal" type="button"><i class="glyphicon glyphicon-eye-open"></i></button>
+					<button tabindex="-1" class="btn btn-default reveal" type="button"><i class="glyphicon glyphicon-eye-open"></i></button>
 				</span>
 			</div>
 			<p class="help-block">Een uniek wachtwoord is een veilig wachtwoord. Dit wachtwoord gebruikt u om de status van uw bestelling te bekijken.</p>
@@ -80,8 +111,8 @@
 		<label class="col-sm-2 control-label" for="billing_country">Land</label>
 		<div class="col-sm-8">
 			<select class="form-control" name="billing_country">
-				<option value="nl">Nederland</option>
-				<option value="be">Belgi&euml;</option>
+				<option value="Nederland">Nederland</option>
+				<option value="Belgie">Belgi&euml;</option>
 			</select>
 		</div>
 	</div>
@@ -136,8 +167,8 @@
 		<label class="col-sm-2 control-label" for="shipping_country">Land</label>
 		<div class="col-sm-8">
 			<select class="form-control" name="shipping_country">
-				<option value="nl">Nederland</option>
-				<option value="be">Belgi&euml;</option>
+				<option value="Nederland">Nederland</option>
+				<option value="Belgie">Belgi&euml;</option>
 			</select>
 		</div>
 	</div>
