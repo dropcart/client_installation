@@ -13,9 +13,10 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Stylesheet -->
-<link href="/includes/css/justified-nav.css" rel="stylesheet">
-<link href="/includes/css/flags.css" rel="stylesheet">
-<link href="/includes/css/custom.css" rel="stylesheet">
+<link href="/includes/css/justified-nav.css" rel="stylesheet" />
+<link href="/includes/css/bv.min.css" rel="stylesheet" />
+<link href="/includes/css/flags.css" rel="stylesheet" />
+<link href="/includes/css/custom.css" rel="stylesheet" />
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -32,15 +33,17 @@
 <div class="container">
 
 <div class="row">
-	<div class="col-lg-12 col-ms-12 col-sm-12 col-xs-12">
-		<div class="push-left float-left">
+	<div class="col-md-6">
+		<div class="push-left">
 			<h3 class="text-muted"><?= config('site_name'); ?></h3>
 			<a href="<?= route('home'); ?>"><img src="<?= config('base_url') ?>includes/images/logo_small.png" alt="<?= config('site_name'); ?>" /></a>
 			<h4 class="slogan"><?= config('site_slogan') ?></h4>
 		</div>
-		<div class="push-right float-right">
+	</div>
+	<div class="col-md-6">
+		<div class="push-right">
 			<h3>&nbsp;</h3>
-			<nav>
+			<nav class="float-right">
 				<ul class="nav nav-pills">
 					<li><a href="<?= route('contact'); ?>">Contact</a></li>
 					<li><a href="<?= route('about'); ?>">Over ons</a></li>
@@ -48,15 +51,16 @@
 					<li><a href="<?= route('account'); ?>">Mijn account</a></li>
 				</ul>
 			</nav>
+			<div class="float-clear"></div>
 			<div id="cart">
 <?php
 global $client;
 global $shoppingBag;
+global $readShoppingBag;
 
-$rsb = $client->readShoppingBag($shoppingBag);
 $total_price = 0.0;
 $total_quantity = 0;
-foreach ($rsb as $pq) {
+foreach ($readShoppingBag as $pq) {
 	$product = $pq['product'];
 	$quantity = $pq['quantity'];
 	$total_price += (float) ($quantity * $product['price']['price_with_shipment_and_tax']);
@@ -80,7 +84,6 @@ endif;
 				</a>
 			</div>
 		</div>
-		<div class="float-clear"></div>
 	</div>
 </div>
 

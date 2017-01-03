@@ -2,8 +2,8 @@
 
 <ul class="nav nav-tabs">
 	<li class="active"><a href="#"><strong>Stap 1)</strong> Winkelwagen</a></li>
-	<li class="disabled"><a href="#"><strong>Stap 2)</strong> Klantgegevens</a></li>
-	<li class="disabled"><a href="#"><strong>Stap 3)</strong> Betaling</a></li>
+	<li class=""><a href="<?= route('customer_details'); ?>"><strong>Stap 2)</strong> Klantgegevens</a></li>
+	<li class="disabled"><a href="#"><strong>Stap 3)</strong> Afrekenen</a></li>
 	<li class="disabled"><a href="#"><strong>Stap 4)</strong> Bestelling geplaatst</a></li>
 </ul>
 
@@ -26,12 +26,12 @@ endif;
 ?>
 <tbody>
 <?php
+global $readShoppingBag;
 
 $index = 0;
-$rsb = $client->readShoppingBag($shoppingBag);
 $total_price = 0.0;
 $total_quantity = 0;
-foreach ($rsb as $pq):
+foreach ($readShoppingBag as $pq):
 $index = $index % 8 + 1;
 $product = $pq['product'];
 $quantity = $pq['quantity'];

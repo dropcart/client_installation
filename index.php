@@ -71,10 +71,19 @@ $client->auth(config('dropcart_api_key'), 'NL');
 
 // Shopping bag handling
 global $shoppingBag;
+global $readShoppingBag;
 if (isset($_COOKIE['sb'])) {
 	$shoppingBag = $_COOKIE['sb'];
+	try {
+		$readShoppingBag = $client->readShoppingBag($shoppingBag);
+	} catch (Exception $e) {
+		// Clear bag on error
+		$shoppingBag = "";
+		$readShoppingBag = [];
+	}
 } else {
 	$shoppingBag = "";
+	$readShoppingBag = [];
 }
 
 // Request routing
@@ -90,6 +99,7 @@ case 'home':
 	view($action);
 	break;
 // Semi-static pages
+case 'customer_details':
 case 'shopping_bag':
 	view($action);
 	break;
