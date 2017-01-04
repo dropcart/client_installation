@@ -76,6 +76,8 @@ function acopy($from, &$to, $fields) {
 
 try {
 
+// MIDDLEWARE
+
 Client::setEndpoint(config('dropcart_api_endpoint'));
 global $client;
 $client = Client::instance();
@@ -93,39 +95,75 @@ if (isset($_COOKIE['sb'])) {
 		$shoppingBag = "";
 		$readShoppingBag = [];
 		unset($_COOKIE['sb']);
-		setcookie('sb', '', time()-3600);
+		setcookie('sb', $shoppingBag, time()-3600);
 	}
 } else {
 	$shoppingBag = "";
 	$readShoppingBag = [];
 	unset($_COOKIE['sb']);
-	setcookie('sb', '', time()-3600);
+	setcookie('sb', $shoppingBag, time()-3600);
 }
 
 // Transaction handling
+global $transaction_status;
 global $transaction;
 global $reference;
 global $checksum;
 if ($shoppingBag && isset($_COOKIE['ref']) && isset($_COOKIE['cs'])) {
 	$reference = $_COOKIE['ref'];
 	$checksum = $_COOKIE['cs'];
+	// First retrieve status,
 	try {
-		$transaction = $client->getTransaction($shoppingBag, $reference, $checksum);
-		if ($transaction['transaction']['system_status'] != "FINAL")
-			throw new \Exception("Illegal transaction state");
+		$transaction_status = $client->statusTransaction($reference, $checksum);
 	} catch (Exception $e) {
-		// Clear transaction on error
+		// Checksum does not match, or invalid order
+		$transaction_status = null;
+	}
+	if ($transaction_status && isset($transaction_status['status']) && ($transaction_status['status'] == "PARTIAL" || $transaction_status['status'] == "FINAL")) {
+		// Then if PARTIAL or FINAL, retrieve transaction.
+		try {
+			$transaction = $client->getTransaction($shoppingBag, $reference, $checksum);
+		} catch (Exception $e) {
+			// Clear transaction on error
+			$transaction_status = null;
+			$transaction = null;
+			$reference = 0;
+			$checksum = "";
+		}
+	} else if ($transaction_status && isset($transaction_status['status']) && ($transaction_status['status'] == "PAYED")) {
+		// Clear shopping bag and transaction references, since order was payed
 		$transaction = null;
-		$reference = 0;
+		$reference = "";
 		$checksum = "";
+		unset($_COOKIE['ref']);
+		unset($_COOKIE['cs']);
+		setcookie('ref', $reference, time()-3600);
+		setcookie('cs', $checksum, time()-3600);
+	} else {
+		// Clear transaction on status
+		$transaction_status = null;
+		$transaction = null;
+		$reference = "";
+		$checksum = "";
+		$shoppingBag = "";
+		$readShoppingBag = [];
+		unset($_COOKIE['ref']);
+		unset($_COOKIE['cs']);
+		unset($_COOKIE['sb']);
+		setcookie('ref', $reference, time()-3600);
+		setcookie('cs', $checksum, time()-3600);
+		setcookie('sb', $shoppingBag, time()-3600);
 	}
 } else {
+	// Clear transaction if no reference and checksum known
+	$transaction_status = null;
 	$transaction = null;
 	$reference = 0;
 	$checksum = "";
 }
 
-// Request routing
+// REQUEST ROUTING
+
 $action = isset($_GET['act']) ? $_GET['act'] : false;
 if (!$action) $action = 'home';
 switch ($action) {

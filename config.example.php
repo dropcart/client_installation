@@ -1,7 +1,8 @@
 <?php
 
-// Installation configuration file
-// NOTE: This file may be automatically generated and overwritten.
+// Installation configuration file example
+// Actual file name: config.php
+// NOTE: The file config.php may be automatically generated and overwritten.
 
 class Config {
 
