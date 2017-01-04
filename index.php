@@ -157,15 +157,6 @@ if ($shoppingBag && isset($_COOKIE['ref']) && isset($_COOKIE['cs'])) {
 		}
 	} else if ($transaction_status && isset($transaction_status['status']) && ($transaction_status['status'] == "PAYED")) {
 		// Clear shopping bag and transaction references, since order was payed
-		$transaction = null;
-		$reference = "";
-		$checksum = "";
-		unset($_COOKIE['ref']);
-		unset($_COOKIE['cs']);
-		setcookie('ref', $reference, time()-3600);
-		setcookie('cs', $checksum, time()-3600);
-	} else {
-		// Clear transaction on status
 		$transaction_status = null;
 		$transaction = null;
 		$reference = "";
@@ -178,6 +169,25 @@ if ($shoppingBag && isset($_COOKIE['ref']) && isset($_COOKIE['cs'])) {
 		setcookie('ref', $reference, time()-3600);
 		setcookie('cs', $checksum, time()-3600);
 		setcookie('sb', $shoppingBag, time()-3600);
+	} else if ($transaction_status && isset($transaction_status['status']) && ($transaction_status['status'] == "CONFIRMED")) {
+		// Clear reference (but not shopping cart) and let visitor browse site further (i.e. thanks page)
+		$transaction = null;
+		$reference = "";
+		$checksum = "";
+		unset($_COOKIE['ref']);
+		unset($_COOKIE['cs']);
+		setcookie('ref', $reference, time()-3600);
+		setcookie('cs', $checksum, time()-3600);
+	} else {
+		// Clear transaction on faulty status, but not shopping bag, redirect to error page
+		$transaction = null;
+		$reference = "";
+		$checksum = "";
+		unset($_COOKIE['ref']);
+		unset($_COOKIE['cs']);
+		setcookie('ref', $reference, time()-3600);
+		setcookie('cs', $checksum, time()-3600);
+		redirect('error');
 	}
 } else {
 	// Clear transaction if no reference and checksum known
