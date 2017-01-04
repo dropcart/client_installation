@@ -73,6 +73,13 @@ function acopy($from, &$to, $fields) {
 			$to[$to_key] = $from[$from_key];
 	}
 }
+function logger($level, $error) {
+	$fd = @fopen(dirname(__FILE__) . "/error.log", "a");
+	if (!$fd) return;
+	$str = "[" . date("Y/m/d h:i:s", mktime()) . "] " . $level . " " . print_r($error, true);
+	@fwrite($fd, $str . "\n");
+	@fclose($fd);
+}
 
 try {
 
@@ -116,6 +123,7 @@ if ($shoppingBag && isset($_COOKIE['ref']) && isset($_COOKIE['cs'])) {
 	try {
 		$transaction_status = $client->statusTransaction($reference, $checksum);
 	} catch (Exception $e) {
+		logger('WARNING:statusTransaction', $e);
 		// Checksum does not match, or invalid order
 		$transaction_status = null;
 	}
@@ -124,6 +132,7 @@ if ($shoppingBag && isset($_COOKIE['ref']) && isset($_COOKIE['cs'])) {
 		try {
 			$transaction = $client->getTransaction($shoppingBag, $reference, $checksum);
 		} catch (Exception $e) {
+			logger('WARNING:getTransaction', $e);
 			// Clear transaction on error
 			$transaction_status = null;
 			$transaction = null;
@@ -172,6 +181,7 @@ case 'about':
 case 'contact':
 case 'faq':
 case 'home':
+case 'error':
 	view($action);
 	break;
 // Dynamic pages
@@ -359,12 +369,8 @@ default:
 }
 
 } catch (Exception $e) {
-	print("<h1>");
-	print($e->getMessage());
-	print("</h1>");
-	print("<pre>");
-	var_dump($e->context);
-	print("</pre>");
+	logger('CRITICAL:route', $e);
+	redirect('error');
 }
 
 ?>
