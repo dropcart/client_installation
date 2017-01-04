@@ -25,8 +25,13 @@ function redirect($name, $params = []) {
 	header("Location: " . route($name, $params));
 	exit();
 }
-function route($name, $params = []) {
-	$url = config('base_url');
+function route($name, $params = [], $absolute = true) {
+	if ($absolute) {
+		$url = "http://" . config('domain');
+	} else {
+		$url = "";
+	}
+	$url .= config('base_url');
 	if (config('has_rewriting')) {
 		$url .= urlencode($name);
 		foreach ($params as $param) {
@@ -132,6 +137,9 @@ case 'home':
 	view($action);
 	break;
 // Dynamic pages
+case 'thanks':
+	view($action);
+	break;
 case 'checkout':
 	if (!$transaction) {
 		redirect('shopping_bag');
@@ -139,7 +147,8 @@ case 'checkout':
 	}
 	if (isset($_POST['submit'])) {
 		// Confirm the transaction
-		$result = $client->confirmTransaction($shoppingBag, $reference, $checksum);
+		$returnURL = route('thanks', [], true);
+		$result = $client->confirmTransaction($shoppingBag, $reference, $checksum, $returnURL);
 		if (isset($result['redirect'])) {
 			// Perform the redirect as instructed by the server
 			header("Location: " . $result['redirect']);
@@ -232,7 +241,7 @@ case 'customer_details':
 					'shipping_country'
 			]);
 		} else {
-			
+			// Nothing to do
 		}
 	}
 	// Convert details to escaped value

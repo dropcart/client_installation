@@ -10,7 +10,7 @@ class Config {
 	// to `On`, and the virtual host must have a defined `ServerName`, to prevent spoofing.
 	static $domain;
 
-	// The URL relative to the domain, must begin with a slash.
+	// The URL relative to the domain, must begin with a slash and must end with a slash.
 	static $base_url = "/";
 
 	// The visible name of the site.
