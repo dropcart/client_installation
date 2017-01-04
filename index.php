@@ -22,12 +22,28 @@ function view($name) {
 	include("includes/footer.php");
 }
 function redirect($name, $params = []) {
+	header("HTTP/1.1 302 Found");
 	header("Location: " . route($name, $params));
 	exit();
 }
+function force_ssl() {
+	if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+		// All is fine.
+	} else {
+		// Redirect current location to HTTPS
+		header("HTTP/1.1 307 Temporary Redirect");
+		header("Location: https://" . config('domain') . $_SERVER[REQUEST_URI]);
+		exit();
+	}
+}
 function route($name, $params = [], $absolute = true) {
 	if ($absolute) {
-		$url = "http://" . config('domain');
+		if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+			$proto = "https";
+		} else {
+			$proto = "http";
+		}
+		$url = $proto . "://" . config('domain');
 	} else {
 		$url = "";
 	}
@@ -186,9 +202,11 @@ case 'error':
 	break;
 // Dynamic pages
 case 'thanks':
+	force_ssl();
 	view($action);
 	break;
 case 'checkout':
+	force_ssl();
 	if (!$transaction) {
 		redirect('shopping_bag');
 		break;
@@ -209,6 +227,7 @@ case 'checkout':
 	view('checkout');
 	break;
 case 'customer_details':
+	force_ssl();
 	global $details;
 	$details = [];
 	if (isset($_POST['submit'])) {
@@ -309,6 +328,7 @@ case 'customer_details':
 	view('customer_details');
 	break;
 case 'shopping_bag':
+	force_ssl();
 	// Displays same shopping bag as in the header
 	view('shopping_bag');
 	break;
@@ -340,6 +360,7 @@ case 'product':
 // Actions
 case 'edit_shopping_bag':
 case 'add_product':
+	force_ssl();
 	$product_id = (int) $_GET['p1'];
 	if (isset($_GET['p2'])) {
 		$quantity = (int) $_GET['p2'];
