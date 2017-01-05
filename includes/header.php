@@ -35,14 +35,14 @@
 <div class="row">
 	<div class="col-md-6">
 		<div class="push-left">
-			<h3 class="text-muted"><?= config('site_name'); ?></h3>
+			<!-- <h3 class="text-muted"><?= config('site_name'); ?></h3> -->
 			<a href="<?= route('home'); ?>"><img src="<?= config('base_url') ?>includes/images/logo_small.png" alt="<?= config('site_name'); ?>" /></a>
 			<h4 class="slogan"><?= config('site_slogan') ?></h4>
 		</div>
 	</div>
 	<div class="col-md-6">
 		<div class="push-right">
-			<h3>&nbsp;</h3>
+			<!-- <h3>&nbsp;</h3> -->
 			<nav class="float-right">
 				<ul class="nav nav-pills">
 					<li><a href="<?= route('contact'); ?>">Contact</a></li>
@@ -90,7 +90,7 @@ endif;
 <div class="masthead">
 	<nav>
 		<ul class="nav nav-justified">
-			<li><a href="<?= route('home'); ?>"><b class="glyphicon glyphicon-home"></b></a></li>
+			<li class="no-stretch"><a href="<?= route('home'); ?>"><b class="glyphicon glyphicon-home"></b></a></li>
 <?php
 global $client;
 

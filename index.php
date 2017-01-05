@@ -402,7 +402,9 @@ case 'products_by_category':
 	}
 	if ($category) {
 		global $products;
+		global $title;
 		$products = $client->getProductListing($category_id, isset($_GET['page']) ? $_GET['page'] : null);
+		$title = $category['name'];
 		view('product_list');
 	} else {
 		// Unknown category

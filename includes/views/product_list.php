@@ -1,11 +1,12 @@
 <?php
 
 global $client;
+global $title;
 global $category;
 global $products;
 
 ?>
-<h1>Producten: <?= $category['name'] ?></h1>
+<h1>Producten: <?= $title ?></h1>
 
 <div class="product-list">
 <?php
