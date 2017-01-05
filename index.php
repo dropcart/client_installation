@@ -55,23 +55,60 @@ function route($name, $params = [], $absolute = true) {
 	$url .= config('base_url');
 	if (config('has_rewriting')) {
 		$url .= urlencode($name);
-		foreach ($params as $param) {
-			$url .= "/";
-			$url .= urlencode($param);
+		foreach ($params as $key => $param) {
+			if (is_int($key)) {
+				$url .= "/";
+				$url .= urlencode($param);
+			}
+		}
+		$has_query = false;
+		foreach ($params as $key => $param) {
+			if (!is_int($key)) {
+				if (!$has_query) {
+					$url .= "?";
+				} else {
+					$url .= "&";
+				}
+				$url .= urlencode($key) . "=";
+				$has_query = true;
+				$url .= urlencode($param);
+			}
 		}
 	} else {
 		$url .= "?act=" . urlencode($name);
-		$key = 1;
 		if (!is_array($params)) {
 			$params = [$params];
 		}
-		foreach ($params as $param) {
-			$url .= "&p" . $key . "=";
-			$url .= urlencode($param);
-			$key++;
+		foreach ($params as $key => $param) {
+			if (is_int($key)) {
+				$url .= "&p" . ($key + 1) . "=" . urlencode($param);
+			}
+		}
+		foreach ($params as $key => $param) {
+			if (!is_int($key)) {
+				$url .= "&". urlencode($key) . "=" . urlencode($param);
+			}
 		}
 	}
 	return $url;
+}
+function relroute($params = []) {
+	// Construct original params from $_GET superglobal (assume max. 8 params)
+	$name = $_GET['act'];
+	$original_params = [];
+	for ($index = 1; $index < 9; $index++) {
+		if (isset($_GET["p$index"])) {
+			$original_params[] = $_GET["p$index"];
+		} else {
+			break;
+		}
+	}
+	foreach ($original_params as $key => $value) {
+		if (!isset($params[$key])) {
+			$params[$key] = $value;
+		}
+	}
+	return route($name, $params);
 }
 function roman_number($integer) {
 	$table = array('x'=>10, 'ix'=>9, 'v'=>5, 'iv'=>4, 'i'=>1);
@@ -93,6 +130,13 @@ function acopy($from, &$to, $fields) {
 		if (isset($from[$from_key]))
 			$to[$to_key] = $from[$from_key];
 	}
+}
+function compute_pages($curr, $total) {
+	$result = [];
+	for ($page = 1; $page <= $total; $page++) {
+		$result[] = $page;
+	}
+	return $result;
 }
 function logger($level, $error) {
 	$fd = @fopen(dirname(__FILE__) . "/error.log", "a");
@@ -358,7 +402,7 @@ case 'products_by_category':
 	}
 	if ($category) {
 		global $products;
-		$products = $client->getProductListing($category_id);
+		$products = $client->getProductListing($category_id, isset($_GET['page']) ? $_GET['page'] : null);
 		view('product_list');
 	} else {
 		// Unknown category

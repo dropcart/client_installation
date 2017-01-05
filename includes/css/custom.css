@@ -103,6 +103,16 @@
 .no-weight {
 	font-weight: normal;
 }
+.pagination-block {
+	text-align: center;
+}
+.pagination-block .pagination {
+	vertical-align: middle;
+}
+.pagination-block .info {
+	padding-left: 12pt;
+	padding-right: 12pt;
+}
 
 /* Override Bootstrap */
 .nav-justified {

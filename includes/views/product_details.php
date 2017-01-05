@@ -4,7 +4,8 @@ global $product;
 
 ?>
 <h1><?= $product['name'] ?></h1>
-<div class="row <?= roman_number($index); ?>">
+
+<div class="row">
 	<div class="col-md-3 center">
 <?php
 if (count($product['images'])):
@@ -25,13 +26,20 @@ endif;
 		</p>
 		<div class="float-left stock-shipping-status">
 <?php
-if ($product['in_stock']):
+if ($product['stock']):
 ?>
-<div class="label label-success">Op voorraad</div>
+<div class="label label-success"><?= $product['stock'] ?> stuk<?= $product['stock'] != 1 ? 's' : '' ?> op voorraad</div>
+<?php
+	if ($product['shipping_days']):
+?>
+<div class="label label-info">Leverbaar binnen <?= $product['shipping_days'] ?> werkdagen</div>
+<?php
+	endif;
+?>
 <?php
 else:
 ?>
-<div class="label label-warning">Niet op voorraad</div>
+<div class="label label-warning">Niet op voorraad, langere levertijd</div>
 <?php
 endif;
 ?>

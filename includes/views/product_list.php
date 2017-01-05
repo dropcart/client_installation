@@ -6,11 +6,12 @@ global $products;
 
 ?>
 <h1>Producten: <?= $category['name'] ?></h1>
+
 <div class="product-list">
 <?php
 
 $index = 0;
-foreach($products as $product):
+foreach($products['list'] as $product):
 $index = $index % 8 + 1;
 ?>
 <div class="row <?= roman_number($index); ?>">
@@ -34,7 +35,7 @@ endif;
 		</p>
 		<div class="float-left stock-shipping-status">
 <?php
-if ($product['in_stock']):
+if ($product['stock']):
 ?>
 			<div class="label label-success">Op voorraad</div>
 <?php
@@ -76,6 +77,60 @@ endif;
 	</div>
 </div>
 <?php
-endforeach
+endforeach;
+
+if (isset($products['pagination'])):
+?>
+<div class="pagination-block">
+<span class="info">
+<?= $products['pagination']['count'] ?> resultaten op deze pagina
+</span>
+<ul class="pagination">
+<?php
+if ($products['pagination']['current_page'] <= 1):
+?>
+	<li class="disabled"><span>Vorige pagina</span></li>
+<?php
+else:
+?>
+	<li><a href="<?= relroute(['page' => $products['pagination']['current_page'] - 1]) ?>" rel="previous">Vorige pagina</a></li>
+<?php
+endif;
+?>
+<?php
+foreach (compute_pages($products['pagination']['current_page'], $products['pagination']['total_pages']) as $page):
+	if ($page == "..."):
+?>
+	<li class="disabled"><span>...</span></li>
+<?php
+	elseif ($page == $products['pagination']['current_page']):
+?>
+    <li class="active"><a href="<?= relroute(['page' => $page]) ?>"><?= $page ?></a></li>
+<?php
+	else:
+?>
+	<li><a href="<?= relroute(['page' => $page]) ?>"><?= $page ?></a></li>
+<?php
+	endif;
+endforeach;
+?>
+<?php
+if ($products['pagination']['current_page'] == $products['pagination']['total_pages']):
+?>
+	<li class="disabled"><span>Volgende pagina</span></li>
+<?php
+else:
+?>
+	<li><a href="<?= relroute(['page' => $products['pagination']['current_page'] + 1]) ?>" rel="next">Volgende pagina</a></li>
+<?php
+endif;
+?>
+</ul>
+<span class="info">
+Totaal aantal resultaten: <?= $products['pagination']['total'] ?>
+</span>
+</div>
+<?php
+endif;
 ?>
 </div>
