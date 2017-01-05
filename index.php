@@ -1,5 +1,10 @@
 <?php
 
+// Handle static error page
+if (isset($_GET['act']) && $_GET['act'] == 'error') {
+	include("includes/views/error.php");
+}
+
 // Default configuration properties
 require_once "./config.php";
 if (!Config::$domain) {
@@ -95,11 +100,6 @@ function logger($level, $error) {
 	$str = "[" . date("Y/m/d h:i:s", mktime()) . "] " . $level . " " . print_r($error, true);
 	@fwrite($fd, $str . "\n");
 	@fclose($fd);
-}
-
-// Handle static error page
-if (isset($_GET['act']) && $_GET['act'] == 'error') {
-	include("includes/views/error.php");
 }
 
 try {

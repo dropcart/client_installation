@@ -1,3 +1,6 @@
+<?php
+// This file is stand-alone. No functions are defined.
+?>
 <html>
 <body>
 <h1>Er is iets fout gegaan!</h1>
@@ -9,7 +12,6 @@ Onze excuses voor het ongemak.
 
 <p>
 <a href="javascript:history.back()">Terug naar vorige pagina</a>
-<a href="<?= route('home') ?>">Naar de hoofdpagina</a>
 </p>
 </body>
 </html>
