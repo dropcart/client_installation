@@ -1,5 +1,10 @@
 <?php
 
+// Handle static error page
+if (isset($_GET['act']) && $_GET['act'] == 'error') {
+	include("includes/views/error.php");
+}
+
 // Default configuration properties
 require_once "./config.php";
 if (!Config::$domain) {
@@ -207,7 +212,6 @@ case 'about':
 case 'contact':
 case 'faq':
 case 'home':
-case 'error':
 	view($action);
 	break;
 // Dynamic pages
