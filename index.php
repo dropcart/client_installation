@@ -3,6 +3,7 @@
 // Handle static error page
 if (isset($_GET['act']) && $_GET['act'] == 'error') {
 	include("includes/views/error.php");
+	exit();
 }
 
 // Default configuration properties
