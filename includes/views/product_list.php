@@ -38,11 +38,18 @@ endif;
 <?php
 if ($product['stock']):
 ?>
-			<div class="label label-success">Op voorraad</div>
+<div class="label label-success"><?= $product['stock'] ?> stuk<?= $product['stock'] != 1 ? 's' : '' ?> op voorraad</div>
+<?php
+	if ($product['shipping_days']):
+?>
+<div class="label label-info">Leverbaar binnen <?= $product['shipping_days'] ?> werkdagen</div>
+<?php
+	endif;
+?>
 <?php
 else:
 ?>
-			<div class="label label-warning">Niet op voorraad</div>
+<div class="label label-warning">Niet op voorraad, langere levertijd</div>
 <?php
 endif;
 ?>
