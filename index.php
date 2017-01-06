@@ -137,10 +137,6 @@ case 'thanks':
 	break;
 case 'checkout':
 	if (config('force_https_checkout')) force_ssl();
-	if (!$transaction) {
-		redirect('shopping_bag');
-		break;
-	}
 	if (isset($_POST['submit']) || isset($_GET['submit'])) {
 		// Confirm the transaction
 		$returnURL = route('thanks', [], true);
@@ -153,6 +149,10 @@ case 'checkout':
 			// Otherwise, we retrieve a transaction as usual
 			$transaction = $result;
 		}
+	}
+	if (!$transaction) {
+		redirect('shopping_bag');
+		break;
 	}
 	view('checkout');
 	break;
