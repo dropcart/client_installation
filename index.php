@@ -82,7 +82,7 @@ if ($shoppingBag && isset($_COOKIE['ref']) && isset($_COOKIE['cs'])) {
 		}
 	} else if ($transaction_status && isset($transaction_status['status']) && ($transaction_status['status'] == "PAYED")) {
 		// Clear shopping bag and transaction references, since order was payed
-		$transaction_status = null;
+		// IMPORTANT: $transaction_status is checked before showing the thanks page
 		$transaction = null;
 		$reference = "";
 		$checksum = "";
@@ -95,14 +95,7 @@ if ($shoppingBag && isset($_COOKIE['ref']) && isset($_COOKIE['cs'])) {
 		setcookie('cs', $checksum, time()-3600);
 		setcookie('sb', $shoppingBag, time()-3600);
 	} else if ($transaction_status && isset($transaction_status['status']) && ($transaction_status['status'] == "CONFIRMED")) {
-		// Clear reference (but not shopping cart) and let visitor browse site further (i.e. thanks page)
-		$transaction = null;
-		$reference = "";
-		$checksum = "";
-		unset($_COOKIE['ref']);
-		unset($_COOKIE['cs']);
-		setcookie('ref', $reference, time()-3600);
-		setcookie('cs', $checksum, time()-3600);
+		// Do not clear transaction, as user might want to retry the payment
 	} else {
 		// Clear transaction on faulty status, but not shopping bag, redirect to error page
 		$transaction = null;
@@ -137,6 +130,9 @@ case 'home':
 // Dynamic pages
 case 'thanks':
 	if (config('force_https_checkout')) force_ssl();
+	if (!$transaction_status || !isset($transaction_status['status'])) {
+		redirect('home');
+	}
 	view($action);
 	break;
 case 'checkout':
@@ -145,7 +141,7 @@ case 'checkout':
 		redirect('shopping_bag');
 		break;
 	}
-	if (isset($_POST['submit'])) {
+	if (isset($_POST['submit']) || isset($_GET['submit'])) {
 		// Confirm the transaction
 		$returnURL = route('thanks', [], true);
 		$result = $client->confirmTransaction($shoppingBag, $reference, $checksum, $returnURL);
