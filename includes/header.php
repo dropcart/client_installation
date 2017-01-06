@@ -13,10 +13,10 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Stylesheet -->
-<link href="/includes/css/justified-nav.css" rel="stylesheet" />
-<link href="/includes/css/bv.min.css" rel="stylesheet" />
-<link href="/includes/css/flags.css" rel="stylesheet" />
-<link href="/includes/css/custom.css" rel="stylesheet" />
+<link href="<?= config('base_url') ?>includes/css/justified-nav.css" rel="stylesheet" />
+<link href="<?= config('base_url') ?>includes/css/bv.min.css" rel="stylesheet" />
+<link href="<?= config('base_url') ?>includes/css/flags.css" rel="stylesheet" />
+<link href="<?= config('base_url') ?>includes/css/custom.css" rel="stylesheet" />
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
