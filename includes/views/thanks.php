@@ -15,8 +15,7 @@ ontvangen berichten: als de betaling toch geslaagd is, ontvangt u een betalingsb
 <a href="<?= route('checkout', ['submit' => 1]) ?>">Probeer de betaling opnieuw.</a>
 </p>
 <?php
-endif;
-if ($transaction_status['status'] == "PAYED"):
+elseif ($transaction_status['status'] == "PAYED"):
 ?>
 <h1>Bedankt voor uw bestelling!</h1>
 
@@ -25,5 +24,7 @@ We hebben uw betaling ontvangen en u een betalingsbewijs toegezonden. Uw bestell
 mogelijk worden geleverd.  
 </p>
 <?php
+else:
+	logger('WARNING:thanks', $transaction_status);
 endif;
 ?>
