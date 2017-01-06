@@ -32,5 +32,11 @@ class Config {
 	
 	// [Technical] Whether or not URL rewriting is enabled.
 	static $has_rewriting = false;
+	
+	// [Technical] Whether all pages are accessible only over HTTPS
+	static $force_https_all = false;
+	
+	// [Technical] Whether only checkout related pages and customer details are accessible only over HTTPS
+	static $force_https_checkout = true;
 
 }
