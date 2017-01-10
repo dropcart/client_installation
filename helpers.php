@@ -62,6 +62,7 @@ function force_ssl() {
 	}
 }
 function route($name, $params = [], $absolute = true) {
+	if(!is_array($params)) $params = [$params];
 	if ($absolute) {
 		if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
 			$proto = "https";
