@@ -154,9 +154,9 @@ function compute_pages($curr, $total) {
 	return $result;
 }
 function logger($level, $error) {
-	$fd = @fopen(dirname(__FILE__) . "/error.log", "a");
+	$fd = fopen(dirname(__FILE__) . "/error.log", "a");
 	if (!$fd) return;
 	$str = "[" . date("Y/m/d h:i:s", time()) . "] " . $level . " " . print_r($error, true);
-	@fwrite($fd, $str . "\n");
-	@fclose($fd);
+	fwrite($fd, $str . "\n");
+	fclose($fd);
 }
