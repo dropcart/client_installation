@@ -9,11 +9,11 @@
 <table class="table">
 	<tr>
 		<th>KVK nummer</th>
-		<td><?= config('chamber_of_commerce_no'); ?></td>
+		<td><?= config('company_chamber_of_commerce_no'); ?></td>
 	</tr>
 	<tr>
 		<th>BTW nummer</th>
-		<td><?= config('vat_id'); ?></td>
+		<td><?= config('company_vat_id'); ?></td>
 	</tr>
 	<tr>
 		<th>Adres gegevens</th>
@@ -21,10 +21,10 @@
 	</tr>
 	<tr>
 		<th>E-mailadres</th>
-		<td><?= config('customer_email'); ?></td>
+		<td><?= config('company_customer_email'); ?></td>
 	</tr>
 	<tr>
 		<th>Telefoonnummer</th>
-		<td><?= config('phone_number'); ?></td>
+		<td><?= config('company_customer_phone'); ?></td>
 	</tr>
 </table>
