@@ -49,7 +49,7 @@ function force_ssl() {
 	} else {
 		// Redirect current location to HTTPS
 		header("HTTP/1.1 307 Temporary Redirect");
-		header("Location: https://" . config('domain') . $_SERVER[REQUEST_URI]);
+		header("Location: https://" . config('domain') . $_SERVER['REQUEST_URI']);
 		exit();
 	}
 }
