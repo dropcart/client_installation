@@ -158,9 +158,15 @@ function logger($level, $error) {
 	if (!$fd) return;
 
 	if(is_object($error))
-		$error = $error->getMessage();
-
-	$str = "[" . date("Y/m/d h:i:s", time()) . "] " . $level . " " . print_r($error, true);
+	{
+		$str = "[" . date("Y/m/d h:i:s", time()) . "] " . $level . ": ";
+		do {
+			$str =  "\n\t" . print_r($error->getMessage(), true);
+		} while($error = $error->getPrevious());
+	}
+	else {
+		$str = "[" . date("Y/m/d h:i:s", time()) . "] " . $level . ": " . $error;
+	}
 	@fwrite($fd, $str . "\n");
 	@fclose($fd);
 }
