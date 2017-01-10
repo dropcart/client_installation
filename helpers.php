@@ -4,6 +4,12 @@ function config($name, $or = null) {
 	if(isset(Config::$$name))
 		return Config::$$name;
 
+	switch($name)
+	{
+		case 'year': return date('Y'); break;
+		case 'date': return date('x'); break;
+	}
+
 	return (is_null($or) ? null : $or);
 }
 function getLanguage()
@@ -22,11 +28,11 @@ function content($name, $else = '')
 }
 function parseContent($content)
 {
-	preg_match_all('/%([^\s])%/mi', $content, $matches);
+	preg_match_all('/%[\w]+%/mi', $content, $matches);
 	foreach($matches[0] as $match)
 	{
 		$conf = strtolower(trim($match, '%'));
-		str_replace($match, config($conf, ''), $content);
+		$content = str_replace($match, config($conf, $match), $content);
 
 	}
 	return $content;
