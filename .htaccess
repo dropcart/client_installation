@@ -5,4 +5,4 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{DOCUMENT_ROOT}/index\.php -f
     RewriteRule ^(.*)$  /$1 [QSA]
-</If>
+</IfModule>
