@@ -118,6 +118,20 @@ if ($shoppingBag && isset($_COOKIE['ref']) && isset($_COOKIE['cs'])) {
 // REQUEST ROUTING
 
 $action = isset($_GET['act']) ? $_GET['act'] : false;
+if(substr_count($action, '/') > 0)
+{
+	// We got params
+	$params = explode('/', $action);
+	$action = array_shift($params);
+
+	$i = 1;
+	foreach($params as $param)
+	{
+		$_GET['p' . $i] = $param;
+		$i++;
+	}
+}
+
 if (!$action) $action = 'home';
 switch ($action) {
 // Static pages
