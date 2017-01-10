@@ -20,7 +20,7 @@ use Dropcart\Client;
 require_once "./helpers.php";
 
 // Enforce HTTPS
-if (config('force_https_all')) force_ssl();
+if ((bool) config('force_https_all')) force_ssl();
 
 try {
 

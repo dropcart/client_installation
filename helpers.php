@@ -68,7 +68,7 @@ function route($name, $params = [], $absolute = true) {
 		$url = "";
 	}
 	$url .= config('base_url');
-	if (config('has_rewriting')) {
+	if ((bool) config('has_rewriting')) {
 		$url .= urlencode($name);
 		foreach ($params as $key => $param) {
 			if (is_int($key)) {
