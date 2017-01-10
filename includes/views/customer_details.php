@@ -5,7 +5,7 @@ global $transaction;
 global $diff_billing_shipping;
 ?>
 
-<h1>Klantgegevens</h1>
+<h1><?= content('page_name_account', 'Klantgegevens'); ?></h1>
 
 <ul class="nav nav-tabs order-tabs">
 	<li class=""><a href="<?= route('shopping_bag'); ?>"><strong>Stap 1)</strong> Winkelwagen</a></li>
@@ -189,7 +189,7 @@ endforeach;
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-8">
 			<div class="next-step">
-				<button type="submit" class="btn btn-lg btn-block btn-primary">Opslaan en naar <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Stap 3: Afrekenen</a>
+				<button type="submit" class="btn btn-lg btn-block btn-primary">Opslaan en naar <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Stap 3: Afrekenen</button>
 			</div>
 		</div>
 	</div>

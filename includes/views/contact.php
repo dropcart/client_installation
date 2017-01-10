@@ -1,30 +1,30 @@
-<h1>Contactpagina</h1>
+<h1><?= content('page_name_contact', 'Contactpagina'); ?></h1>
 
-<p>
-U kunt het beste met ons contact opnemen per e-mail: <a href="mailto:<?= config('site_contact_email') ?>"><?= config('site_contact_email') ?></a>
-</p>
+<?= content('page_contact_content'); ?>
 
-<h2>Contactgegevens</h2>
+<hr>
+
+<h2><?= content('page_contact_details', 'Contactgegevens') ?></h2>
 
 <table class="table">
-<tr>
-<th>KVK nummer</th>
-<td>60680326</td>
-</tr>
-<tr>
-<th>BTW nummer</th>
-<td>NL854012965B01</td>
-</tr>
-<tr>
-<th>Adres gegevens</th>
-<td>Prof. van der Waalsstraat 2, 1821 BT Alkmaar</td>
-</tr>
-<tr>
-<th>E-mailadres</th>
-<td>info@tonerkopen.nl</td>
-</tr>
-<tr>
-<th>Telefoonnummer</th>
-<td>072-5675052</td>
-</tr>
+	<tr>
+		<th>KVK nummer</th>
+		<td><?= config('chamber_of_commerce_no'); ?></td>
+	</tr>
+	<tr>
+		<th>BTW nummer</th>
+		<td><?= config('vat_id'); ?></td>
+	</tr>
+	<tr>
+		<th>Adres gegevens</th>
+		<td><?= config('address'); ?></td>
+	</tr>
+	<tr>
+		<th>E-mailadres</th>
+		<td><?= config('customer_email'); ?></td>
+	</tr>
+	<tr>
+		<th>Telefoonnummer</th>
+		<td><?= config('phone_number'); ?></td>
+	</tr>
 </table>

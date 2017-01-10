@@ -1,7 +1,36 @@
 <?php
 
-function config($name) {
-	return Config::$$name;
+function config($name, $or = null) {
+	if(isset(Config::$$name))
+		return Config::$$name;
+
+	return (is_null($or) ? null : $or);
+}
+function getLanguage()
+{
+	return config('default_language');
+}
+function content($name, $else = '')
+{
+	$language = getLanguage();
+	if(file_exists("lang_$language.php"))
+		$content = include("lang_$language.php");
+	else
+		$content = include("lang_nl.php");
+
+	return (isset($content[$name]) ? parseContent($content[$name]) : $else);
+}
+function parseContent($content)
+{
+	preg_match_all('/%([^\s])%/mi', $content, $matches);
+	foreach($matches[0] as $match)
+	{
+		$conf = strtolower(trim($match, '%'));
+		str_replace($match, config($conf, ''), $content);
+
+	}
+	return $content;
+
 }
 function view($name) {
 	$name = preg_replace('/[^A-Za-z0-9_\-]/', '', $name);

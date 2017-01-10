@@ -1,3 +1,3 @@
-<h1>Over ons</h1>
+<h1><?= content('page_name_aboutus', 'Over %STORE_NAME%'); ?></h1>
 
-<p>Bij Tonerkopen koopt u toners voordelig en snel.</p>
+<?= content('page_aboutus_content', '<p>Wij zijn %STORE_NAME%</p>'); ?>

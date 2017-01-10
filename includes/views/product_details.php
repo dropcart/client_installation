@@ -22,7 +22,7 @@ endif;
 	<div class="col-md-7">
 		<h3>&nbsp;</h3>
 		<p>
-			<?= $product['description'] ?>
+			<?= (empty($product['description']) ? content('product_boilerplate', $product['name'] . ' bij %STORE_NAME%. Binnen 24 uur geleverd, mits op voorraad.') : $product['description']) ?>
 		</p>
 		<div class="float-left stock-shipping-status">
 <?php

@@ -1,7 +1,7 @@
 <?php
 global $transaction;
 ?>
-<h1>Bestelling afrekenen</h1>
+<h1><?= content('page_name_checkout', 'Bestelling afrekenen') ?></h1>
 
 <ul class="nav nav-tabs order-tabs">
 	<li class=""><a href="<?= route('shopping_bag'); ?>"><strong>Stap 1)</strong> Winkelwagen</a></li>
