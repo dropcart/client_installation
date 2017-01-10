@@ -161,7 +161,7 @@ function logger($level, $error) {
 	{
 		$str = "[" . date("Y/m/d h:i:s", time()) . "] " . $level . ": ";
 		do {
-			$str =  "\n\t" . $error->getMessage();
+			$str .=  "\n\t" . $error->getMessage();
 		} while($error = $error->getPrevious());
 	}
 	else {
