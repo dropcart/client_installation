@@ -48,8 +48,10 @@ function force_ssl() {
 		// All is fine.
 	} else {
 		// Redirect current location to HTTPS
+		$domain = parse_url(config('domain'));
+
 		header("HTTP/1.1 307 Temporary Redirect");
-		header("Location: https://" . config('domain') . $_SERVER['REQUEST_URI']);
+		header("Location: https://" . $domain['host'] . $_SERVER['REQUEST_URI']);
 		exit();
 	}
 }
@@ -60,7 +62,8 @@ function route($name, $params = [], $absolute = true) {
 		} else {
 			$proto = "http";
 		}
-		$url = $proto . "://" . config('domain');
+		$domain = parse_url(config('domain'));
+		$url = $proto . "://" . $domain['host'];
 	} else {
 		$url = "";
 	}
@@ -153,7 +156,7 @@ function compute_pages($curr, $total) {
 function logger($level, $error) {
 	$fd = @fopen(dirname(__FILE__) . "/error.log", "a");
 	if (!$fd) return;
-	$str = "[" . date("Y/m/d h:i:s", mktime()) . "] " . $level . " " . print_r($error, true);
+	$str = "[" . date("Y/m/d h:i:s", time()) . "] " . $level . " " . print_r($error, true);
 	@fwrite($fd, $str . "\n");
 	@fclose($fd);
 }

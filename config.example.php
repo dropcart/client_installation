@@ -30,10 +30,10 @@ class Config
 	static $address = "Straatnaam 23A, 1133 IZ Nuenen, Nederland";
 
 
-	static $company_customer_phone = "078 9655994";
+	static $company_customer_phone = "(+31)(0) 72 1234 567";
 
 
-	static $domain = "http://client.dropcart.app";
+	static $domain = "";
 
 
 	static $site_name = "Superwinkel";
