@@ -2,3 +2,4 @@ config.php
 error.log
 /.project
 /.idea
+/vendor/
