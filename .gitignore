@@ -2,4 +2,6 @@ config.php
 error.log
 /.project
 /.idea
-/vendor/
+Homestead.json
+Homestead.yaml
+.env
