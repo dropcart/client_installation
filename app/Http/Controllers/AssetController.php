@@ -84,6 +84,13 @@ class AssetController extends Controller
         else
                 abort(404, $file . ' does not exists');
 
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            // Load image for windows
+            $this->loadImageWindows($path);
+            exit;
+        }
+
+        // Load on unix
         exec("cd " . getcwd());
         $pathToFile = escapeshellcmd($path);
         $mimeType = exec("file -b --mime-type $pathToFile");
@@ -95,6 +102,17 @@ class AssetController extends Controller
         header('Content-Disposition: inline;');
         header('Content-Length: ' . filesize($pathToFile) );
         passthru('cat ' . $pathToFile);
+        exit;
+    }
+
+    private function loadImageWindows($image)
+    {
+        $mime = mime_content_type($image);
+
+        header('Content-Type: ' . $mime);
+        header('Content-Disposition: inline;');
+        header('Content-Length: ' . filesize($image) );
+        readfile($image);
         exit;
     }
 
