@@ -46,8 +46,8 @@ if ($transaction && !isset($_POST['submit'])):
 endif;
 ?>
 
-<form class="form-horizontal register-form bv-form" role="form" method="post" novalidate="novalidate">
-	<input type="hidden" name="submit" value="1" />
+<form class="form-horizontal register-form bv-form" role="form" method="post">
+	<input type="hidden" name="submitting" value="1" />
 	<fieldset>
 
 	<div class="form-group has-feedback">
@@ -259,4 +259,4 @@ endif;
 ?>
 });
 </script>
-<script src="<?= config('base_url') ?>includes/js/bv.min.js" language="javascript"></script>
+<script src="<?= config('base_url') ?>includes/js/bv.js" language="javascript"></script>

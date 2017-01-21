@@ -14,8 +14,8 @@ global $transaction;
 Controleer de onderstaande informatie goed! Als u een fout ontdekt in het afleveradres, factuuradres of in de contactgegevens, <a href="<?= route('customer_details') ?>">klik hier om deze te wijzigen</a>.
 </div>
 
-<form class="form-horizontal confirm-form bv-form" role="form" method="post" novalidate="novalidate">
-<input type="hidden" name="submit" value="1" />
+<form class="form-horizontal confirm-form bv-form" role="form" method="post">
+<input type="hidden" name="submitting" value="1" />
 <table class="customer-details-overview table">
 <thead>
 	<tr>

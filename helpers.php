@@ -50,6 +50,7 @@ function redirect($name, $params = []) {
 	exit();
 }
 function force_ssl() {
+	if (config('force_https_off')) return;
 	if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
 		// All is fine.
 	} else {

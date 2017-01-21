@@ -9,7 +9,12 @@ if (isset($_GET['act']) && $_GET['act'] == 'error') {
 // Default configuration properties
 require_once "./config.php";
 if (!Config::$domain) {
-	Config::$domain = $_SERVER['SERVER_NAME'];
+	if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+		$proto = "https";
+	} else {
+		$proto = "http";
+	}
+	Config::$domain = $proto . "://" . $_SERVER['SERVER_NAME'];
 }
 
 // Dropcart API
@@ -152,7 +157,7 @@ case 'thanks':
 	break;
 case 'checkout':
 	if (config('force_https_checkout')) force_ssl();
-	if (isset($_POST['submit']) || isset($_GET['submit'])) {
+	if (isset($_POST['submitting']) || isset($_GET['submitting'])) {
 		// Confirm the transaction
 		$returnURL = route('thanks', [], true);
 		$result = $client->confirmTransaction($shoppingBag, $reference, $checksum, $returnURL);
@@ -175,7 +180,7 @@ case 'customer_details':
 	if (config('force_https_checkout')) force_ssl();
 	global $details;
 	$details = [];
-	if (isset($_POST['submit'])) {
+	if (isset($_POST['submitting'])) {
 		acopy($_POST, $details, [
 					'billing_first_name' => 'first_name',
 					'billing_last_name' => 'last_name'
