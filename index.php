@@ -39,6 +39,7 @@ if (isset($_COOKIE['sb'])) {
 	try {
 		$readShoppingBag = $client->readShoppingBag($shoppingBag);
 	} catch (Exception $e) {
+		logger('WARNING:readShoppingBag', $e);
 		// Clear bag on error
 		$shoppingBag = "";
 		$readShoppingBag = [];
@@ -259,6 +260,7 @@ case 'customer_details':
 	foreach ($details as $key => &$value) {
 		$value = htmlspecialchars($value);
 	}
+	unset($value);
 	global $diff_billing_shipping;
 	// Check difference shipping/billing
 	$diff_billing_shipping = @$details['billing_first_name'] != @$details['shipping_first_name'] ||
@@ -268,7 +270,6 @@ case 'customer_details':
 			@$details['billing_city'] != @$details['shipping_city'] ||
 			@$details['billing_postcode'] != @$details['shipping_postcode'] ||
 			@$details['billing_country'] != @$details['shipping_country'];
-	unset($value);
 	view('customer_details');
 	break;
 case 'shopping_bag':
