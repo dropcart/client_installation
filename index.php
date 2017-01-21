@@ -44,13 +44,13 @@ if (isset($_COOKIE['sb'])) {
 		$shoppingBag = "";
 		$readShoppingBag = [];
 		unset($_COOKIE['sb']);
-		setcookie('sb', $shoppingBag, time()-3600);
+		setcookie('sb', $shoppingBag, time()-3600, '/');
 	}
 } else {
 	$shoppingBag = "";
 	$readShoppingBag = [];
 	unset($_COOKIE['sb']);
-	setcookie('sb', $shoppingBag, time()-3600);
+	setcookie('sb', $shoppingBag, time()-3600, '/');
 }
 
 // Transaction handling
@@ -92,9 +92,9 @@ if ($shoppingBag && isset($_COOKIE['ref']) && isset($_COOKIE['cs'])) {
 		unset($_COOKIE['ref']);
 		unset($_COOKIE['cs']);
 		unset($_COOKIE['sb']);
-		setcookie('ref', $reference, time()-3600);
-		setcookie('cs', $checksum, time()-3600);
-		setcookie('sb', $shoppingBag, time()-3600);
+		setcookie('ref', $reference, time()-3600, '/');
+		setcookie('cs', $checksum, time()-3600, '/');
+		setcookie('sb', $shoppingBag, time()-3600, '/');
 	} else if ($transaction_status && isset($transaction_status['status']) && ($transaction_status['status'] == "CONFIRMED")) {
 		// Do not clear transaction, as user might want to retry the payment
 	} else {
@@ -104,8 +104,8 @@ if ($shoppingBag && isset($_COOKIE['ref']) && isset($_COOKIE['cs'])) {
 		$checksum = "";
 		unset($_COOKIE['ref']);
 		unset($_COOKIE['cs']);
-		setcookie('ref', $reference, time()-3600);
-		setcookie('cs', $checksum, time()-3600);
+		setcookie('ref', $reference, time()-3600, '/');
+		setcookie('cs', $checksum, time()-3600, '/');
 		redirect('error');
 	}
 } else {
@@ -226,8 +226,8 @@ case 'customer_details':
 				$transaction['transaction']['system_status'] == "FINAL") {
 			$reference = $transaction['reference'];
 			$checksum = $transaction['checksum'];
-			setcookie('ref', $reference);
-			setcookie('cs', $checksum);
+			setcookie('ref', $reference, 0, '/'); // session-only
+			setcookie('cs', $checksum, 0, '/'); // session-only
 			redirect('checkout');
 			break;
 		}
@@ -320,7 +320,7 @@ case 'add_product':
 	} else {
 		$shoppingBag = $client->addShoppingBag($shoppingBag, $product, $quantity);
 	}
-	setcookie('sb', $shoppingBag, time() + 60*60*24*30); // 30 days
+	setcookie('sb', $shoppingBag, time() + 60*60*24*30, '/'); // 30 days
 	switch ($action) {
 	case 'edit_shopping_bag':
 		redirect('shopping_bag');
