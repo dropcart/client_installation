@@ -189,7 +189,7 @@ endforeach;
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-8">
 			<div class="next-step">
-				<button type="submit" class="btn btn-lg btn-block btn-primary">Opslaan en naar <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Stap 3: Afrekenen</button>
+				<button type="submit" class="btn btn-lg btn-block btn-primary quote-link">Opslaan en naar <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Stap 3: Afrekenen</button>
 			</div>
 		</div>
 	</div>

@@ -30,7 +30,7 @@ endif;
 ?>
 	</div>
 	<div class="col-md-7 color">
-		<h3><a href="<?= route('product', $product['id']) ?>"><?= $product['name'] ?></a></h3>
+		<h3><a class="product-link" href="<?= route('product', $product['id']) ?>"><?= $product['name'] ?></a></h3>
 		<p>
 			<?= $product['description'] ?>
 		</p>

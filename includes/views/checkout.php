@@ -144,7 +144,7 @@ endforeach;
 			<div class="next-step">
 				<div class="form-group checkbox has-feedback">
 					<div class="col-sm-12">
-						<label class="confirm"><input type="checkbox" name="conditions" data-bv-field="conditions">
+						<label class="confirm"><input type="checkbox" name="conditions" data-bv-field="conditions" class="i-agree-with-the-conditions">
 						Ik ga akoord met de algemene voorwaarden</label> <a href="#">(Bekijk)</a>
 					</div>
 				</div>
@@ -154,7 +154,7 @@ endforeach;
 	<tr>
 		<td colspan="4">
 			<div class="next-step">
-				<button type="submit" class="btn btn-lg btn-block btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Stap 4: Bestelling plaatsen</button>
+				<button type="submit" class="btn btn-lg btn-block btn-primary payment-link"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Stap 4: Bestelling plaatsen</button>
 				<p>
 					U wordt omgeleid naar onze betaalpagina waar u het totaalbedrag (&euro;&nbsp;<?= number_format($total_price,2,",",".") ?>) direct kan voldoen.
 				</p>

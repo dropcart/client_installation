@@ -97,7 +97,7 @@ global $client;
 $categories = $client->getCategories();
 foreach ($categories as $category):
 ?>
-			<li><a href="<?= route('products_by_category', $category['id']) ?>" title="<?= $category['description'] ?>"><?= $category['name'] ?></a></li>
+			<li><a class="category-link" href="<?= route('products_by_category', $category['id']) ?>" title="<?= $category['description'] ?>"><?= $category['name'] ?></a></li>
 <?php
 endforeach
 ?>

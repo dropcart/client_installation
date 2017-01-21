@@ -150,7 +150,7 @@ if ($transaction):
 <?php
 else:
 ?>
-				<a href="<?= route('customer_details'); ?>" class="btn btn-lg btn-block btn-primary">Naar <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Stap 2: Klantgegevens</a>
+				<a href="<?= route('customer_details'); ?>" class="btn btn-lg btn-block btn-primary customer-link">Naar <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Stap 2: Klantgegevens</a>
 <?php
 endif;
 ?>
