@@ -145,7 +145,7 @@ endforeach;
 				<div class="form-group checkbox has-feedback">
 					<div class="col-sm-12">
 						<label class="confirm"><input type="checkbox" name="conditions" data-bv-field="conditions" class="i-agree-with-the-conditions">
-						Ik ga akoord met de algemene voorwaarden</label> <a href="#">(Bekijk)</a>
+						Ik ga akkoord met de algemene voorwaarden</label> <a href="#">(Bekijk)</a>
 					</div>
 				</div>
 			</div>
