@@ -59,9 +59,9 @@ $app->singleton(
 |
 */
 
-// $app->middleware([
-//    App\Http\Middleware\ExampleMiddleware::class
-// ]);
+$app->middleware([
+    App\Http\Middleware\ShoppingBagMiddleware::class
+]);
 
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
@@ -83,6 +83,7 @@ $app->singleton(
 // $app->register(App\Providers\EventServiceProvider::class);
 //$app->register('')
 $app->register(Dropcart\Laravel\ServiceProvider::class);
+$app->register(App\Providers\DefaultViewServiceProvider::class);
 
 class_alias('Illuminate\Support\Facades\View', 'View');
 
@@ -99,6 +100,19 @@ class_alias('Illuminate\Support\Facades\View', 'View');
 
 require __DIR__ . '/../app/helpers.php';
 register_themes(env('THEME'));
+
+// LOCALISATION IS NEEDED BEFORE ROUTES
+$request = app('request');
+if(count($request->segments()) > 0)
+{
+    $langs = list_languages();
+    if($request->segment(1) !== loc() && in_array($request->segment(1), $langs))
+    {
+        loc($request->segment(1));
+    }
+}
+register_current_language_file();
+// END OF REGISTERING
 
 $app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
     require __DIR__.'/../routes/web.php';

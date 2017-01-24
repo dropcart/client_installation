@@ -6,11 +6,7 @@ class AssetController extends Controller
 {
     const ALLOWED_IMAGES = ['jpg', 'png', 'gif', 'svg', 'jpeg', 'bmp'];
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+
     public function __construct()
     {
         //
@@ -62,7 +58,7 @@ class AssetController extends Controller
         $file = 'js/' . implode('/', $params);
         $contents = $this->loadFile($file);
 
-        header('Content-Type: text/js');
+        header('Content-Type: text/javascript');
         header('Content-Length: ' . strlen($contents) );
         die($contents);
     }
@@ -94,12 +90,13 @@ class AssetController extends Controller
         exec("cd " . getcwd());
         $pathToFile = escapeshellcmd($path);
         $mimeType = exec("file -b --mime-type $pathToFile");
-        if(preg_match("/image\//", $mimeType))
-            header('Content-Type: ' . $mimeType);
+        if(preg_match("/(image\/|text\/plain)/", $mimeType))
+            header('Content-Type: ' . ($mimeType != 'text/plain' ? $mimeType : 'image/svg+xml'));
         else
             abort(406, 'File not supported');
 
         header('Content-Disposition: inline;');
+        header('Cache-Control: max-age=86400'); // 86400 = 1 day
         header('Content-Length: ' . filesize($pathToFile) );
         passthru('cat ' . $pathToFile);
         exit;
@@ -111,6 +108,7 @@ class AssetController extends Controller
 
         header('Content-Type: ' . $mime);
         header('Content-Disposition: inline;');
+        header('Cache-Control: max-age=86400'); // 86400 = 1 day
         header('Content-Length: ' . filesize($image) );
         readfile($image);
         exit;

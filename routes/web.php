@@ -19,13 +19,9 @@ $app->get('/', function() use ($app)
 });
 
 $app->group([
-    'prefix' => '{locale}/'
+    'prefix' => '{locale}',
 ], function () use ($app)
 {
-    $locale = strtolower($app['request']->segment(1));
-    if(loc() != $locale)
-        loc($locale);
-
     $app->get('/', ['as' => 'home', function() use ($app)
     {
         return View::make('Current::home');
@@ -33,18 +29,43 @@ $app->group([
 
     $app->get('/' . lang('url_contact'), ['as' => 'contact', function() use ($app)
     {
-        dd('lalala');
-        return View::make('Current::layout');
+        return View::make('Current::static-page', [
+            'page_title'    => lang('page_contact.title'),
+            'page_name'     => 'contact',
+            'page_content'  => lang('page_contact.content')
+        ]);
     }]);
 
     $app->get('/' . lang('url_aboutus'), ['as' => 'aboutus', function() use ($app)
     {
-        return View::make('Current::layout');
+        return View::make('Current::static-page', [
+            'page_title'    => lang('page_aboutus.title'),
+            'page_name'     => 'aboutus',
+            'page_content'  => lang('page_aboutus.content')
+        ]);
     }]);
 
     $app->get('/' . lang('url_support'), ['as' => 'support', function() use ($app)
     {
-        return View::make('Current::layout');
+
+        if(is_array(lang('page_support.faq')))
+        {
+           return View::make('Current::faq',
+               [
+                   'page_title'    => lang('page_support.title'),
+                   'page_name'     => 'support',
+                   'page_content'  => lang('page_support.content'),
+                   'faq'           => lang('page_support.faq'),
+                ]);
+        }
+        else {
+            View::make('Current::static-page',
+                [
+                    'page_title'    => lang('page_support.title'),
+                    'page_name'     => 'support',
+                    'page_content'  => lang('page_support.content'),
+                ]);
+        }
     }]);
 
     $app->get('/' . lang('url_account'), ['as' => 'account', function() use ($app)
@@ -53,6 +74,12 @@ $app->group([
     }]);
 
     $app->get('/' . lang('url_products_by_category'), ['as' => 'products_by_category', function($category_name, $category_id) use ($app)
+    {
+        return View::make('Current::layout');
+    }]);
+
+
+    $app->get('/' . lang('url_shopping_bag'), ['as' => 'shopping_bag', function() use ($app)
     {
         return View::make('Current::layout');
     }]);
