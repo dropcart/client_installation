@@ -75,11 +75,36 @@ $app->group([
 
     $app->get('/' . lang('url_products_by_category'), ['as' => 'products_by_category', function($category_name, $category_id) use ($app)
     {
-        return View::make('Current::layout');
+        $request = app('request');
+
+
+        $products = [];
+        try {
+            $products   = app('dropcart')->getProductListing(intval($category_id), $request->input('page', null));
+            $pagination = $products['pagination'];
+            $products   = $products['list'];
+
+        } catch (\Exception $e) { }
+
+
+        return View::make('Current::product-list', [
+            'page_title'        => lang('page_product_list.title', ['category_name' => ucfirst($category_name)]),
+            'products'          => $products,
+            'pagination'        => $pagination
+        ]);
     }]);
 
 
+    $app->get('/' . lang('url_product'), ['as' => 'product', function($product_name, $product_id_id) use ($app)
+    {
+        return View::make('Current::layout');
+    }]);
+
     $app->get('/' . lang('url_shopping_bag'), ['as' => 'shopping_bag', function() use ($app)
+    {
+        return View::make('Current::layout');
+    }]);
+    $app->get('/' . lang('url_shopping_bag') . '/{product_id}/{quantity}', ['as' => 'shopping_bag_add', function($product_id, $quantity = 1) use ($app)
     {
         return View::make('Current::layout');
     }]);

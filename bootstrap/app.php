@@ -25,8 +25,6 @@ $app = new Laravel\Lumen\Application(
 
 $app->withFacades();
 
-// $app->withEloquent();
-
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -78,10 +76,6 @@ $app->middleware([
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
-//$app->register('')
 $app->register(Dropcart\Laravel\ServiceProvider::class);
 $app->register(App\Providers\DefaultViewServiceProvider::class);
 

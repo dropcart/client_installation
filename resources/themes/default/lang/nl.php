@@ -66,14 +66,36 @@ return [
 		]
 	],
 
+	'page_product_list' => [
+		'title'				=> 'Producten in :category_name',
+		'no_products'		=> 'In deze categorie verkopen wij nog geen producten. Maar houd het in de gaten, want we zijn er mee bezig!',
+	],
+
+	'product_info'		=> [
+		'no_description'	=> ':product_name wordt binnen 24 uur verzonden mits op voorraad. Dat is de service van ' . env('SITE_NAME') . '!',
+		'not_in_stock'		=> 'Niet op voorraad, langere levertijd',
+		'in_stock'			=> ':stock_quantity op voorraad',
+		'delivery_time'		=> 'Leverbaar binnen :shipping_days werkdagen',
+		'shipping_included'	=> 'inclusief verzendkosten',
+	],
+
 	'no_categories'				=> 'Momenteel verkopen wij nog geen producten. Maar houd ons in de gaten!',
 
+	'pagination'			=> [
+		'num_results_on_page'		=> ':count resultaten op deze pagina',
+		'of_total'					=> 'van de :count in totaal.',
+		'prev_page'					=> 'Vorige pagina',
+		'next_page'					=> 'Volgende pagina',
+	],
 
+
+	// CHANGES AT OWN RISK!
 	'url_contact'				=> 'contact',
 	'url_support'				=> 'support-en-faq',
 	'url_aboutus'				=> 'over-ons',
 	'url_account'				=> 'mijn-account',
 	'url_products_by_category'	=> 'producten/categorie/{category_name}/{category_id}',
+	'url_product'				=> 'product/{product_name}/{product_id}',
 	'url_shopping_bag'			=> 'winkelmandje'
 
 ];

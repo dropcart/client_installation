@@ -29,6 +29,8 @@
 
     <!-- SCRIPTS -->
     @include('Default::dynamic.pre-js')
+
+    @stack('pre-js')
 </head>
 <body>
 <div class="colorgraph"></div>
@@ -38,7 +40,7 @@
         <div class="col-md-6">
             <span style="height:10px; display: block" aria-hidden="true">&nbsp;</span>
             <div class="push-left">
-            <!-- <h3 class="text-muted"><?= env('SITE_NAME'); ?></h3> -->
+            <!-- <h3 class="text-muted"><?= env('SITE_NAME') ?></h3> -->
                 <a href="<?= route('home', ['locale' => loc()]); ?>"><img style="max-height: 94px;" src="<?= env('BASE_URL', '/') ?>img/logo_small.png" alt="<?= env('SITE_NAME'); ?>" /></a>
                 @if(lang('site_slug') !== 'site_slug')<h4 class="slogan"><?= substr(lang('site_slug'), 0, 25) ?></h4>@else <div style="height: 39px;"></div>@endif
             </div>
