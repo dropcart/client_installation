@@ -109,7 +109,7 @@
 
                 {{-- PAGES BEFORE CURRENT --}}
                 <?php
-                    $maxLength = 10;
+                    $maxLength = 6;
                     $maxLengthHalf = round($maxLength / 2)-1;
                 ?>
 
