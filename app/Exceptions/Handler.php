@@ -2,11 +2,14 @@
 
 namespace App\Exceptions;
 
+use Dropcart\ClientException;
 use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use Monolog\Handler\StreamHandler;
+use Psr\Log\LogLevel;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
@@ -33,7 +36,16 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
-        parent::report($e);
+        $dcException = \Dropcart\ClientException::class;
+        if($e instanceof $dcException)
+        {
+            // DropCart Client / Error
+            $logger = app('Psr\Log\LoggerInterface');
+            $logger->critical($e);
+        }
+        else {
+            parent::report($e);
+        }
     }
 
     /**
@@ -45,6 +57,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        return parent::render($request, $e);
+        return app('view')->make('Current::error');
+        //return parent::render($request, $e);
     }
 }

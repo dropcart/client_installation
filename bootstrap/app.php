@@ -23,6 +23,19 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
+// DropCart Logger
+$app->configureMonologUsing(function ($monolog)
+{
+    $monolog->pushHandler(
+        new \Monolog\Handler\StreamHandler(storage_path('logs/lumen.log'), \Psr\Log\LogLevel::ERROR, true)
+    );
+    $monolog->pushHandler(
+        new \Monolog\Handler\StreamHandler(storage_path('logs/dropcart.log'), \Psr\Log\LogLevel::CRITICAL, false)
+    );
+
+    return $monolog;
+});
+
 $app->withFacades();
 
 /*
@@ -99,10 +112,23 @@ register_themes(env('THEME'));
 $request = app('request');
 if(count($request->segments()) > 0)
 {
-    $langs = list_languages();
-    if($request->segment(1) !== loc() && in_array($request->segment(1), $langs))
+    if(!env('MULTILINGUAL', FALSE))
     {
-        loc($request->segment(1));
+        $default = strtolower(env('APP_LOCALE', 'nl'));
+        loc($default);
+
+    } else {
+        $langs = list_languages();
+        if((strtolower($request->segment(1)) !== strtolower(loc())) &&
+            in_array($request->segment(1), $langs))
+        {
+            loc($request->segment(1));
+        } else
+        {
+            $default = strtolower(env('APP_LOCALE', 'NL'));
+            loc($default);
+        }
+
     }
 }
 register_current_language_file();

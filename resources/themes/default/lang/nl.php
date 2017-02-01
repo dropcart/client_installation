@@ -139,6 +139,13 @@ return [
 		'no_products'		=> 'In deze categorie verkopen wij nog geen producten. Maar houd het in de gaten, want we zijn er mee bezig!',
 	],
 
+	'page_error' => [
+		'title'				=> 'Fout',
+		'content'			=> 'De pagina bestaat niet of er is een andere fout. We hebben deze opgeslagen en zullen actie ondernemen wanneer nodig.',
+		'goto_home'			=> 'Terug naar de landingspagina',
+		'goto_back'			=> 'Terug naar de vorige pagina'
+	],
+
 	'product_info'		=> [
 		'no_description'	=> ':product_name wordt binnen 24 uur verzonden mits op voorraad. Dat is de service van ' . env('SITE_NAME') . '!',
 		'not_in_stock'		=> 'Niet op voorraad, langere levertijd',

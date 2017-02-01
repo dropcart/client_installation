@@ -106,7 +106,7 @@ $app->group([
         try {
             $product   = app('dropcart')->getProductInfo(intval($product_id));
 
-        } catch (\Exception $e) { abort(404); }
+        } catch (\Exception $e) { throw $e; }
 
 
         return View::make('Current::product-info', [
