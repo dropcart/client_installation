@@ -103,6 +103,16 @@ return [
 
 	],
 
+	'page_thanks'		=> [
+		'paid_title'	=> 'Bedankt voor uw besteling!',
+		'paid_content'	=> '<p>
+								We hebben uw betaling ontvangen en u een betalingsbewijs toegezonden. Uw bestelling zal zo spoedig mogelijk worden geleverd.
+							</p>',
+		'unpaid_title'	=> 'Er ging iets fout',
+		'unpaid_content' => '<p>Er is iets misgegaan tijdens uw betaling. Controlleer goed uw opgegeven e-mail voor ontvangen berichten: als de betaling toch geslaagd is, ontvangt u een betalingsbevestiging.</p>',
+		'try_again'		=> 'U kunt de betaling ook opnieuw proberen te doen.'
+	],
+
 	'page_aboutus'		=> [
 		'title'			=> 'Onze ons',
 		'content'		=> 'Wij zijn ' . env('SITE_NAME') . '!',
@@ -157,7 +167,8 @@ return [
 	'url_shopping_bag'			=> 'winkelmandje',
 	'url_order'	=> [
 		'customer_details'		=> 'bestellen/klantgegevens',
-		'checkout'				=> 'bestellen/afrekenen'
+		'checkout'				=> 'bestellen/afrekenen',
+		'confirmation'			=> 'bestellen/bevestiging'
 	]
 
 ];

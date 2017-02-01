@@ -46,7 +46,12 @@ class ShoppingBagMiddleware
                     );
 
                 } else if($transaction_status == 'PAYED')
+                {
+                    $request->merge([
+                        'transaction_status' => $transaction_status
+                    ]);
                     $clearShoppingBag = $clearTransaction = true;
+                }
                 else if ($transaction_status == 'CONFIRMED') {
                     // Do nothing
                 }

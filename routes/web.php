@@ -234,7 +234,7 @@ $app->group([
 		$request = app('request');
 		// Check for result
 		try {
-			$result = app('dropcart')->confirmTransaction($request->get('shopping_bag_internal', ""), $request->get('transaction_reference', 0), $request->get('transaction_checksum', ""), route('thanks', ['locale' => loc()]));
+			$result = app('dropcart')->confirmTransaction($request->get('shopping_bag_internal', ""), $request->get('transaction_reference', 0), $request->get('transaction_checksum', ""), route('confirmation', ['locale' => loc()]));
 
 			if (isset($result['redirect'])) {
 				return redirect()->to($result['redirect']);
@@ -244,10 +244,20 @@ $app->group([
 		return redirect()->route('shopping_bag', ['locale' => loc()]);
 	}]);
 
-	$app->get('/' . lang('url_thanks'), ['as' => 'thanks'], function()
+	$app->get('/' . lang('url_order.confirmation'), ['as' => 'confirmation', function()
 	{
-		return 'Ja bedankt!';
-	});
+		if(app('request')->has('transaction_status') && (app('request')->get('transaction_status') == 'CONFIRMED' || app('request')->has('transaction_status') == 'PAYED'))
+			$paid = app('request')->get('transaction_status') == 'PAYED' ? true : false;
+		else
+			$paid = -1;
+
+		if($paid == -1)
+			return redirect()->to('/');
+
+		return View::make('Current::confirmation', [
+			'paid'	=> $paid
+		]);
+	}]);
 });
 
 // Template asset management
