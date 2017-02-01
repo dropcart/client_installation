@@ -112,10 +112,15 @@ $app->group([
 	/** DISPLAY SHOPPING BAG */
     $app->get('/' . lang('url_shopping_bag'), ['as' => 'shopping_bag', function() use ($app)
     {
-		return View::make('Current::shopping-bag', [
+		$data = [
 			'page_title'        => lang('page_shopping_bag.title'),
 			'shopping_bag'		=> app('request')->get('shopping_bag', [])
-		]);
+		];
+
+		if(app('request')->has('transaction'))
+			$data['transaction'] =	app('request')->get('transaction');
+
+		return View::make('Current::shopping-bag', $data);
     }]);
 
 	/** WRITE SHOPPING BAG */
@@ -124,12 +129,12 @@ $app->group([
 
 		$shoppingBagInternal	= app('request')->get('shopping_bag_internal', "");
 
-		Try {
+		try {
 			if($quantity < 0)
 				$shoppingBagInternal = app('dropcart')->removeShoppingBag($shoppingBagInternal, intval($product_id), -$quantity);
 			else
 				$shoppingBagInternal = app('dropcart')->addShoppingBag($shoppingBagInternal, intval($product_id), $quantity);
-
+			
 			return redirect()
 				->route('shopping_bag', ['locale' => loc()])
 				->withCookie(new \Symfony\Component\HttpFoundation\Cookie('shopping_bag', $shoppingBagInternal, time() + 60*60*24*5)); // 5 days
@@ -145,6 +150,11 @@ $app->group([
 
 	$app->get('/' . lang('url_order.customer_details'), ['as' => 'order.customer_details', function()
 	{
+
+		if(!app('request')->has('shopping_bag'))
+			return redirect('/');
+
+
 		$data = [
 			'page_title'=> lang('page_customer_details.title'),
 		];
@@ -200,18 +210,44 @@ $app->group([
 
 
 		// Send thru
-		return redirect()->route('order.checkout')
+		return redirect()->route('order.checkout', ['locale' => loc()])
 							->withCookie(new \Symfony\Component\HttpFoundation\Cookie('transaction_reference', $transaction['reference']))
 							->withCookie(new \Symfony\Component\HttpFoundation\Cookie('transaction_checksum', $transaction['checksum']));
 	}]);
 
 	$app->get('/' . lang('url_order.checkout'), ['as' => 'order.checkout', function()
 	{
-		return View::make('Current::shopping-bag', [
-			'page_title'        => lang('page_shopping_bag.title'),
-			'shopping_bag'		=> app('request')->get('shopping_bag')
+		if(!isset(app('request')->get('transaction', [])['customer_details']) || !app('request')->has('shopping_bag'))
+		{
+			return redirect()->route('shopping_bag', ['locale' => loc()]);
+		}
+
+
+		return View::make('Current::checkout', [
+			'page_title'        => lang('page_checkout.title'),
+			'shopping_bag'		=> app('request')->get('shopping_bag'),
+			'transaction'		=> app('request')->get("transaction", [])
 		]);
 	}]);
+	$app->post('/' . lang('url_order.checkout'), ['as' => 'order.confirm', function()
+	{
+		$request = app('request');
+		// Check for result
+		try {
+			$result = app('dropcart')->confirmTransaction($request->get('shopping_bag_internal', ""), $request->get('transaction_reference', 0), $request->get('transaction_checksum', ""), route('thanks', ['locale' => loc()]));
+
+			if (isset($result['redirect'])) {
+				return redirect()->to($result['redirect']);
+			}
+		} catch (Exception $e) {  }
+
+		return redirect()->route('shopping_bag', ['locale' => loc()]);
+	}]);
+
+	$app->get('/' . lang('url_thanks'), ['as' => 'thanks'], function()
+	{
+		return 'Ja bedankt!';
+	});
 });
 
 // Template asset management

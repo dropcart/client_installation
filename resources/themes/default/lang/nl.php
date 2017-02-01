@@ -47,7 +47,7 @@ return [
 		'ship_to_other_address' => 'Mijn bestelling op een ander adres afleveren.',
 		'shipping_address'	=> 'Afleveradres',
 		'save_and_checkout'	=> 'Opslaan en naar stap 3: Afrekenen',
-
+		
 		'field_is_mandatory'=> 'Dit is een verplicht veld',
 	],
 	
@@ -64,7 +64,9 @@ return [
 		'street_and_number'	=> 'Straatnaam en huisnummer',
 		'zipcode'			=> 'Postcode',
 		'area'				=> 'Woonplaats',
-		'country'			=> 'Land'
+		'country'			=> 'Land',
+
+		'agree_with_terms'	=> 'U dient akkoord te gaan met de algemene (verkoop)voorwaarden.',
 	],
 
 	'page_home'			=>  [
@@ -87,6 +89,18 @@ return [
 		'vat'				=> 'NL902938336B02',
 		'coc_desc'			=> 'KvK-nummer',
 		'coc'				=> '232494882',
+	],
+
+	'page_checkout'		=> [
+		'title'				=> 'Afrekenen',
+		'check_info'		=> 'Controleer de onderstaande informatie goed! Als u een fout ontdekt in het afleveradres, factuuradres of in de contactgegevens, <a href=":customer_details_route">klik hier om deze te wijzigen</a>.',
+		'invoice_address'	=> 'Factuuradres',
+		'shipping_address'	=> 'Afleveradres',
+		'contact_details'	=> 'Contactgegevens',
+		'to_payment'		=> 'Naar betalen',
+		'redirect_to_payment_provider' => 'U wordt omgeleid naar onze betaalpagina waar u het totaalbedrag direct kan voldoen.',
+		'accept_terms'		=> 'Ik ga akkoord met de algemene voorwaarden <a href=":link_to_terms">(Bekijk)</a>',
+
 	],
 
 	'page_aboutus'		=> [

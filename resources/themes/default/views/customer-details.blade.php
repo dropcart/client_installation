@@ -31,13 +31,13 @@
             </a>
         </li>
         <li class="{{ isset($transaction) ? '' : 'disabled' }}">
-            <a href="{{ route('order.checkout', ['locale' => loc()]) }}">
+            <a href="{{ (isset($transaction) ? route('order.checkout', ['locale' => loc()]) : 'javascript:void(0);') }}">
                 <strong>{{ lang('page_shopping_bag.step', ['no' => 3]) }}</strong>
                 {{ lang('page_shopping_bag.confirm_and_pay') }}
             </a>
         </li>
         <li class="disabled">
-            <a href="#">
+            <a href="javascript:void(0);">
                 <strong>{{ lang('page_shopping_bag.step', ['no' => 4]) }}</strong>
                 {{ lang('page_shopping_bag.order_placed') }}
             </a>

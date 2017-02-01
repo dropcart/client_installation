@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Dropcart\ClientException;
 use Mockery\CountValidator\Exception;
 
 class ShoppingBagMiddleware
@@ -19,7 +20,7 @@ class ShoppingBagMiddleware
 
         $clearShoppingBag = false;
         $clearTransaction = false;
-        $sb = "";
+        $sb = [];
         if($request->hasCookie('shopping_bag'))
         {
             try {
@@ -34,6 +35,7 @@ class ShoppingBagMiddleware
                     $request->cookie('transaction_reference'),
                     $request->cookie('transaction_checksum')
                 )['status'];
+
 
                 if($transaction_status == 'PARTIAL' || $transaction_status == 'FINAL')
                 {
@@ -52,7 +54,7 @@ class ShoppingBagMiddleware
                     $clearTransaction = true;
                 }
 
-            } catch (Exception $e)
+            } catch (ClientException $e)
             {
                 $clearShoppingBag = $clearTransaction = true;
             }
@@ -85,12 +87,11 @@ class ShoppingBagMiddleware
             unset($_COOKIE['shopping_bag']);
             setcookie('shopping_bag', null, time()-3600);
         }
-        else {
-            $request->merge([
-                'shopping_bag'          => $sb,
-                'shopping_bag_internal' => $request->cookie('shopping_bag', "")
-            ]);
-        }
+
+        $request->merge([
+            'shopping_bag'          => $sb,
+            'shopping_bag_internal' => ($clearShoppingBag ? "" : $request->cookie('shopping_bag', ""))
+        ]);
 
 
 
