@@ -22,11 +22,13 @@ $app->group([
     'prefix' => '{locale}',
 ], function () use ($app)
 {
+	/** HOME PAGE */
     $app->get('/', ['as' => 'home', function() use ($app)
     {
         return View::make('Current::home');
     }]);
 
+	/** CONTACT PAGE */
     $app->get('/' . lang('url_contact'), ['as' => 'contact', function() use ($app)
     {
         return View::make('Current::static-page', [
@@ -36,6 +38,7 @@ $app->group([
         ]);
     }]);
 
+	/** ABOUT US PAGE */
     $app->get('/' . lang('url_aboutus'), ['as' => 'aboutus', function() use ($app)
     {
         return View::make('Current::static-page', [
@@ -45,6 +48,7 @@ $app->group([
         ]);
     }]);
 
+	/** GET SUPPORT PAGE */
     $app->get('/' . lang('url_support'), ['as' => 'support', function() use ($app)
     {
 
@@ -68,11 +72,13 @@ $app->group([
         }
     }]);
 
+	/** GET ACCOUNT VIEW */
     $app->get('/' . lang('url_account'), ['as' => 'account', function() use ($app)
     {
         return View::make('Current::layout');
     }]);
 
+	/** GET PRODUCTS IN A CATEGORY */
     $app->get('/' . lang('url_products_by_category'), ['as' => 'products_by_category', function($category_name, $category_id) use ($app)
     {
         $request = app('request');
@@ -94,7 +100,7 @@ $app->group([
         ]);
     }]);
 
-
+	/** GET PRODUCT DETAIL VIEW */
     $app->get('/' . lang('url_product'), ['as' => 'product', function($product_name, $product_id) use ($app)
     {
         try {
@@ -147,7 +153,7 @@ $app->group([
 		return redirect($last_url);
     }]);
 
-
+	/** REQUEST CUSTOMER DETAILS */
 	$app->get('/' . lang('url_order.customer_details'), ['as' => 'order.customer_details', function()
 	{
 
@@ -175,6 +181,8 @@ $app->group([
 
 		return View::make('Current::customer-details', $data);
 	}]);
+
+	/** ADD CUSTOMER DETAILS */
 	$app->post('/' . lang('url_order.customer_details'), ['as' => 'order.save_customer_details', function()
 	{
 		$request = app('request');
@@ -215,6 +223,7 @@ $app->group([
 							->withCookie(new \Symfony\Component\HttpFoundation\Cookie('transaction_checksum', $transaction['checksum']));
 	}]);
 
+	/** CONFIRM DATA */
 	$app->get('/' . lang('url_order.checkout'), ['as' => 'order.checkout', function()
 	{
 		if(!isset(app('request')->get('transaction', [])['customer_details']) || !app('request')->has('shopping_bag'))
@@ -229,6 +238,8 @@ $app->group([
 			'transaction'		=> app('request')->get("transaction", [])
 		]);
 	}]);
+
+	/** REQUEST PAYMENT */
 	$app->post('/' . lang('url_order.checkout'), ['as' => 'order.confirm', function()
 	{
 		$request = app('request');
@@ -244,6 +255,7 @@ $app->group([
 		return redirect()->route('shopping_bag', ['locale' => loc()]);
 	}]);
 
+	/** ORDER CONFIRMATION */
 	$app->get('/' . lang('url_order.confirmation'), ['as' => 'confirmation', function()
 	{
 		if(app('request')->has('transaction_status') && (app('request')->get('transaction_status') == 'CONFIRMED' || app('request')->has('transaction_status') == 'PAYED'))

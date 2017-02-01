@@ -12,6 +12,6 @@
         <li><a href="<?= route('contact', ['locale' => loc()]); ?>">{{ lang('contact') }}</a></li>
         <li><a href="<?= route('aboutus', ['locale' => loc()]); ?>">{{ lang("aboutus") }}</a></li>
         <li><a href="<?= route('support', ['locale' => loc()]); ?>">{{ lang('support') }}</a></li>
-        <li><a href="<?= route('account', ['locale' => loc()]); ?>">{{ lang('account') }}</a></li>
+        <!--<li><a href="<?= route('account', ['locale' => loc()]); ?>">{{ lang('account') }}</a></li>-->
     </ul>
 </nav>
