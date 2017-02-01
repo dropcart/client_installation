@@ -26,7 +26,7 @@ return [
 	'page_shopping_bag'	=> [
 		'title'				=> 'Uw winkelwagen',
 		'step'				=> 'Stap :no)',
-		'customer_details'	=> 'Klantgegevens',
+		'customer_details'	=> 'Uw gegevens',
 		'confirm_and_pay'	=> 'Bevestigen en betalen',
 		'order_placed'		=> 'Bestelling geplaatst',
 
@@ -37,7 +37,34 @@ return [
 		'price'				=> 'Prijs',
 
 		'to_checkout'		=> 'Naar stap 3: Afrekenen',
-		'to_customer_details'=> 'Naar stap 2: Klantgegevens',
+		'to_customer_details'=> 'Naar stap 2: uw gegevens',
+	],
+
+	'page_customer_details' => [
+		'title'				=> 'Uw gegevens',
+		'customer_details'	=> 'Uw gegevens',
+		'dont_forget_save'	=> 'Vergeet niet onderaan de pagina op de knop "Opslaan" te drukken na het bewerken van de gegevens.',
+		'ship_to_other_address' => 'Mijn bestelling op een ander adres afleveren.',
+		'shipping_address'	=> 'Afleveradres',
+		'save_and_checkout'	=> 'Opslaan en naar stap 3: Afrekenen',
+
+		'field_is_mandatory'=> 'Dit is een verplicht veld',
+	],
+	
+	'fields'				=> [
+		'emailaddress'		=> 'E-mailadres',
+		'emailaddress_help'	=> 'Op dit e-mailadres ontvangt u het besteloverzicht, het betalingsbewijs en de verzendingsinformatie.',
+		
+		'phone'				=> 'Telefoonnummer',
+		'phone_help'		=> 'Met dit telefoonnummer nemen wij contact op als wij u dringend willen spreken over uw bestelling.',
+
+		'first_name'		=> 'Voorname',
+		'last_name'			=> 'Achternaam',
+
+		'street_and_number'	=> 'Straatnaam en huisnummer',
+		'zipcode'			=> 'Postcode',
+		'area'				=> 'Woonplaats',
+		'country'			=> 'Land'
 	],
 
 	'page_home'			=>  [

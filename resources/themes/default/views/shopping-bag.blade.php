@@ -19,19 +19,19 @@
 
     <ul class="nav nav-tabs order-tabs">
         <li class="active">
-            <a href="#">
+            <a href="javascript:void(0);">
                 <strong>{{ lang('page_shopping_bag.step', ['no' => 1]) }}</strong>
                 {{ lang('page_all.shopping_bag') }}
             </a>
         </li>
-        <li class="">
-            <a href="<?= route('order.customer_details'); ?>">
+        <li>
+            <a href="<?= route('order.customer_details', ['locale' => loc()]); ?>">
                 <strong>{{ lang('page_shopping_bag.step', ['no' => 2]) }}</strong>
                 {{ lang('page_shopping_bag.customer_details') }}
             </a>
         </li>
         <li class="<?= isset($transaction) ? '' : 'disabled' ?>">
-            <a href="<?= route('order.checkout') ?>">
+            <a href="<?= route('order.checkout', ['locale' => loc()]) ?>">
                 <strong>{{ lang('page_shopping_bag.step', ['no' => 3]) }}</strong>
                 {{ lang('page_shopping_bag.confirm_and_pay') }}
             </a>
@@ -134,9 +134,9 @@
                     <td colspan="4" align="right">
                         <div class="next-step">
                             @if(isset($transaction))
-                                <a href="<?= route('order.checkout'); ?>" class="btn btn-lg btn-block btn-primary">{{ lang('page_shopping_bag.to_checkout') }} <span class="glyphicon glyphicon-shopping-cart"></span></a>
+                                <a href="<?= route('order.checkout', ['locale' => loc()]); ?>" class="btn btn-lg btn-block btn-primary">{{ lang('page_shopping_bag.to_checkout') }} <span class="glyphicon glyphicon-shopping-cart"></span></a>
                             @else
-                                <a href="<?= route('order.customer_details'); ?>" class="btn btn-lg btn-block btn-primary customer-link">{{ lang('page_shopping_bag.to_customer_details') }} <span class="glyphicon glyphicon-shopping-cart"></span></a>
+                                <a href="<?= route('order.customer_details', ['locale' => loc()]); ?>" class="btn btn-lg btn-block btn-primary customer-link">{{ lang('page_shopping_bag.to_customer_details') }} <span class="glyphicon glyphicon-shopping-cart"></span></a>
                             @endif
                         </div>
                     </td>

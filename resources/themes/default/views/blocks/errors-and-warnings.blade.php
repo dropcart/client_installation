@@ -6,7 +6,7 @@
  */
 ?>
 
-@if(isset($transaction) && isset($transaction['warnings']))
+@if(isset($transaction) && isset($transaction['warnings']) && count($transaction['warnings']) > 0)
     <div class="alert alert-dismissable alert-warning">
         <ul>
             @foreach($transaction['warnings'] as $warning)
@@ -16,7 +16,7 @@
     </div>
 @endif
 
-@if(isset($transaction) && isset($transaction['errors']))
+@if(isset($transaction) && isset($transaction['errors']) && count($transaction['errors']) > 0)
     <div class="alert alert-dismissable alert-error">
         <ul>
             @foreach($transaction['errors'] as $error)

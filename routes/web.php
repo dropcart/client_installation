@@ -143,19 +143,75 @@ $app->group([
     }]);
 
 
-	$app->get('/' . lang('url_order.customer_details'), ['as' => 'order.customer_details'], function()
+	$app->get('/' . lang('url_order.customer_details'), ['as' => 'order.customer_details', function()
+	{
+		$data = [
+			'page_title'=> lang('page_customer_details.title'),
+		];
+
+		if(app('request')->has('transaction')) {
+			$data['transaction'] = app('request')->get('transaction');
+			$data['details'] 	 = $data['transaction']['customer_details'];
+			$data['diff_billling_shipping'] = (
+				@$data['details']['billing_first_name'] != @$data['details']['shipping_first_name'] ||
+				@$data['details']['billing_last_name'] 	!= @$data['details']['shipping_last_name'] 	||
+				@$data['details']['billing_address_1'] 	!= @$data['details']['shipping_address_1'] 	||
+				@$data['details']['billing_address_2'] 	!= @$data['details']['shipping_address_2'] 	||
+				@$data['details']['billing_city'] 		!= @$data['details']['shipping_city'] 		||
+				@$data['details']['billing_postcode'] 	!= @$data['details']['shipping_postcode'] 	||
+				@$data['details']['billing_country'] 	!= @$data['details']['shipping_country']
+			);
+		}
+
+		return View::make('Current::customer-details', $data);
+	}]);
+	$app->post('/' . lang('url_order.customer_details'), ['as' => 'order.save_customer_details', function()
+	{
+		$request = app('request');
+
+		// Save customer details to transaction
+		$diffSD = (isset($_POST['has_delivery']) && $_POST['has_delivery']);
+		$customerDetails = [
+			'first_name' 			=> $request->billing_first_name,
+			'last_name'				=> $request->billing_last_name,
+			'email'					=> $request->email,
+			'telephone'				=> $request->telephone,
+			'billing_first_name'	=> $request->billing_first_name,
+			'billing_last_name'		=> $request->billing_last_name,
+			'billing_address_1'		=> $request->billing_address_1,
+			'billing_address_2'		=> $request->billing_address_2,
+			'billing_city'			=> $request->billing_city,
+			'billing_postcode'		=> $request->billing_postcode,
+			'billing_country'		=> $request->billing_country,
+
+			'shipping_first_name'	=> $diffSD ? $request->shippping_first_name : $request->billing_first_name,
+			'shipping_last_name'	=> $diffSD ? $request->shipping_last_name 	: $request->billing_last_name,
+			'shipping_address_1'	=> $diffSD ? $request->shipping_address_1 	: $request->billing_address_1,
+			'shipping_address_2'	=> $diffSD ? $request->shipping_address_2 	: $request->billing_address_2,
+			'shipping_city'			=> $diffSD ? $request->shipping_city 		: $request->billing_city,
+			'shipping_postcode'		=> $diffSD ? $request->shipping_postcode 	: $request->billing_postcode,
+			'shipping_country'		=> $diffSD ? $request->shipping_country 	: $request->billing_country,
+		];
+
+		if($request->has('transaction'))
+			$transaction = app('dropcart')->updateTransaction($request->get('shopping_bag_internal', ""), $request->get('transaction_reference', 0), $request->get('transaction_checksum', ""), $customerDetails);
+		else
+			$transaction = app('dropcart')->createTransaction($request->get('shopping_bag_internal', ""), $customerDetails);
+
+
+		// Send thru
+		return redirect()->route('order.checkout')
+							->withCookie(new \Symfony\Component\HttpFoundation\Cookie('transaction_reference', $transaction['reference']))
+							->withCookie(new \Symfony\Component\HttpFoundation\Cookie('transaction_checksum', $transaction['checksum']));
+	}]);
+
+	$app->get('/' . lang('url_order.checkout'), ['as' => 'order.checkout', function()
 	{
 		return View::make('Current::shopping-bag', [
 			'page_title'        => lang('page_shopping_bag.title'),
+			'shopping_bag'		=> app('request')->get('shopping_bag')
 		]);
-	});
-
-	$app->get('/' . lang('url_order.checkout'), ['as' => 'order.checkout'], function()
-{
-	return View::make('Current::shopping-bag', [
-		'page_title'        => lang('page_shopping_bag.title'),
-	]);
-});
+	}]);
 });
 
 // Template asset management
