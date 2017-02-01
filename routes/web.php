@@ -84,7 +84,7 @@ $app->group([
             $pagination = $products['pagination'];
             $products   = $products['list'];
 
-        } catch (\Exception $e) { }
+        } catch (\Exception $e) { abort(404); }
 
 
         return View::make('Current::product-list', [
@@ -95,9 +95,18 @@ $app->group([
     }]);
 
 
-    $app->get('/' . lang('url_product'), ['as' => 'product', function($product_name, $product_id_id) use ($app)
+    $app->get('/' . lang('url_product'), ['as' => 'product', function($product_name, $product_id) use ($app)
     {
-        return View::make('Current::layout');
+        try {
+            $product   = app('dropcart')->getProductInfo(intval($product_id));
+
+        } catch (\Exception $e) { abort(404); }
+
+
+        return View::make('Current::product-info', [
+            'page_title'        => lang('page_product_list.title', ['category_name' => ucfirst($product_name)]),
+            'product'          => $product,
+        ]);
     }]);
 
     $app->get('/' . lang('url_shopping_bag'), ['as' => 'shopping_bag', function() use ($app)
