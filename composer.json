@@ -1,0 +1,45 @@
+{
+    "name": "dropcart/client-installation",
+    "description": "A working website to use with DropCart. DropCart is a manageable dropshippment application for setting up your own webshop without the hassle of taking care of shipping and stock. https://www.dropcart.nl",
+    "type": "library",
+    "homepage": "https://www.dropcart.nl/",
+    "require": {
+        "php" : ">=5.6.4",
+        "dropcart/client": "dev-master",
+        "laravel/lumen-framework": "5.3.*",
+        "vlucas/phpdotenv": "~2.2"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "~1.4",
+        "phpunit/phpunit": "~5.0",
+        "mockery/mockery": "~0.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        },
+        "files": [
+
+        ]
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/",
+            "database/"
+        ]
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "php -r \"copy('.env.example', '.env');\""
+        ]
+    },
+    "license": "CC BY-NC-ND 3.0",
+    "authors": [
+        {
+            "name": "DropCart",
+            "email": "info@dropcart.nl"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

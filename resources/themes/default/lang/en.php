@@ -17,6 +17,10 @@ return [
 	'support'		=> 'Support & FAQ',
 	'account'		=> 'Mijn account',
 
+	'page_all'		=> [
+		'shopping_bag'		=> 'Winkelwagen',
+	],
+
 	'page_home'			=>  [
 			'title'			=> 'Welkom',
 			'lead_title'	=> 'Originele toners voor spotprijzen!',

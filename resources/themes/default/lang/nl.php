@@ -23,6 +23,23 @@ return [
 		'no_articles'		=> 'geen artikelen in winkelwagen.',
 	],
 
+	'page_shopping_bag'	=> [
+		'title'				=> 'Uw winkelwagen',
+		'step'				=> 'Stap :no)',
+		'customer_details'	=> 'Klantgegevens',
+		'confirm_and_pay'	=> 'Bevestigen en betalen',
+		'order_placed'		=> 'Bestelling geplaatst',
+
+		'no_articles'		=> 'U heeft nog geen artikelen in uw winkelwagen. Bestellen is derhalve nog niet mogelijk.',
+		'product'			=> 'Product',
+		'quantity'			=> 'Aantal',
+		'price_per_piece'	=> 'Stukprijs',
+		'price'				=> 'Prijs',
+
+		'to_checkout'		=> 'Naar stap 3: Afrekenen',
+		'to_customer_details'=> 'Naar stap 2: Klantgegevens',
+	],
+
 	'page_home'			=>  [
 			'title'			=> 'Welkom',
 			'lead_title'	=> 'Originele toners voor spotprijzen!',
@@ -96,6 +113,10 @@ return [
 	'url_account'				=> 'mijn-account',
 	'url_products_by_category'	=> 'producten/categorie/{category_name}/{category_id}',
 	'url_product'				=> 'product/{product_name}/{product_id}',
-	'url_shopping_bag'			=> 'winkelmandje'
+	'url_shopping_bag'			=> 'winkelmandje',
+	'url_order'	=> [
+		'customer_details'		=> 'bestellen/klantgegevens',
+		'checkout'				=> 'bestellen/afrekenen'
+	]
 
 ];

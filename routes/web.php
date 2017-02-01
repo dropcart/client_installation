@@ -109,14 +109,53 @@ $app->group([
         ]);
     }]);
 
+	/** DISPLAY SHOPPING BAG */
     $app->get('/' . lang('url_shopping_bag'), ['as' => 'shopping_bag', function() use ($app)
     {
-        return View::make('Current::layout');
+		return View::make('Current::shopping-bag', [
+			'page_title'        => lang('page_shopping_bag.title'),
+			'shopping_bag'		=> app('request')->get('shopping_bag', [])
+		]);
     }]);
+
+	/** WRITE SHOPPING BAG */
     $app->get('/' . lang('url_shopping_bag') . '/{product_id}/{quantity}', ['as' => 'shopping_bag_add', function($product_id, $quantity = 1) use ($app)
     {
-        return View::make('Current::layout');
+
+		$shoppingBagInternal	= app('request')->get('shopping_bag_internal', "");
+
+		Try {
+			if($quantity < 0)
+				$shoppingBagInternal = app('dropcart')->removeShoppingBag($shoppingBagInternal, intval($product_id), -$quantity);
+			else
+				$shoppingBagInternal = app('dropcart')->addShoppingBag($shoppingBagInternal, intval($product_id), $quantity);
+
+			return redirect()
+				->route('shopping_bag', ['locale' => loc()])
+				->withCookie(new \Symfony\Component\HttpFoundation\Cookie('shopping_bag', $shoppingBagInternal, time() + 60*60*24*5)); // 5 days
+		} catch (Exception $e)
+		{
+			throw $e;
+		}
+
+		$last_url = app('request')->headers->get('referer');
+		return redirect($last_url);
     }]);
+
+
+	$app->get('/' . lang('url_order.customer_details'), ['as' => 'order.customer_details'], function()
+	{
+		return View::make('Current::shopping-bag', [
+			'page_title'        => lang('page_shopping_bag.title'),
+		]);
+	});
+
+	$app->get('/' . lang('url_order.checkout'), ['as' => 'order.checkout'], function()
+{
+	return View::make('Current::shopping-bag', [
+		'page_title'        => lang('page_shopping_bag.title'),
+	]);
+});
 });
 
 // Template asset management

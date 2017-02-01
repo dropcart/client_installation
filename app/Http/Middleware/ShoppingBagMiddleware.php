@@ -16,7 +16,7 @@ class ShoppingBagMiddleware
     public function handle($request, Closure $next)
     {
 
-        $sb = [];
+        $sb = "";
         if($request->hasCookie('shopping_bag'))
         {
             try {
@@ -24,7 +24,10 @@ class ShoppingBagMiddleware
             } catch (\Exception $e) { }
         }
 
-        $request->merge(['shopping_bag' => $sb]);
+        $request->merge([
+            'shopping_bag'          => $sb,
+            'shopping_bag_internal' => $request->cookie('shopping_bag', "")
+        ]);
 
 
         return $next($request);
