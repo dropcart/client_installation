@@ -13,7 +13,7 @@
 
 $app = require __DIR__.'/../bootstrap/app.php';
 
-register_themes(env('THEME', 'default'));
+//register_themes(env('THEME', 'default'));
 
 /*
 |--------------------------------------------------------------------------
