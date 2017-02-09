@@ -3,9 +3,16 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 try {
+    throw new Dotenv\Exception\InvalidPathException("four");
     (new Dotenv\Dotenv(__DIR__.'/../'))->load();
 } catch (Dotenv\Exception\InvalidPathException $e) {
     //
+    echo "<h1>Instellingen niet geladen...</h1>
+<p>Kopie&euml;r het bestand .env.example naar .env en pas de instellingen aan.</p>";
+    echo "<h1>Settings not loaded...</h1>
+<p>Copy the .env.example file to .env and change those settings.</p>";
+    die();
+
 }
 
 /*

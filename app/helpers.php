@@ -50,18 +50,18 @@ if(! function_exists ( 'register_themes' ) )
 	{
 		global $app;
 
-		$glob = glob(resource_path('themes') . '/*');
+		$glob = glob(resource_path('themes') . DIRECTORY_SEPARATOR .  '*');
 		foreach($glob as $item)
 		{
 			if(is_dir($item))
 			{
-				$dirname = explode('/', $item);
+				$dirname = explode(DIRECTORY_SEPARATOR, $item);
 				$name = array_pop($dirname);;
-				View::addNamespace(ucfirst(camel_case($name)), $item . '/views');
+				View::addNamespace(ucfirst(camel_case($name)), $item . DIRECTORY_SEPARATOR . 'views');
 
 				// Register default Current
 				if(strtolower($name) == strtolower($current))
-					View::addNamespace('Current', $item . '/views');
+					View::addNamespace('Current', $item . DIRECTORY_SEPARATOR . 'views');
 			}
 		}
 	}
