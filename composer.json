@@ -5,7 +5,7 @@
     "homepage": "https://www.dropcart.nl/",
     "require": {
         "php" : ">=5.6.4",
-        "dropcart/client": "dev-master",
+        "dropcart/client": "^1.0",
         "laravel/lumen-framework": "5.3.*",
         "vlucas/phpdotenv": "~2.2"
     },
