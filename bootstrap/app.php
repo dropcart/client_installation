@@ -94,12 +94,9 @@ $app->middleware([
 | totally optional, so you are not required to uncomment this line.
 |
 */
-
 $app->register(Dropcart\Laravel\ServiceProvider::class);
-$app->register(App\Providers\DefaultViewServiceProvider::class);
 
 class_alias('Illuminate\Support\Facades\View', 'View');
-
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
@@ -112,7 +109,9 @@ class_alias('Illuminate\Support\Facades\View', 'View');
 */
 
 require __DIR__ . '/../app/helpers.php';
-register_themes(env('THEME'));
+register_themes(env('THEME', null));
+
+$app->register(App\Providers\DefaultViewServiceProvider::class);
 
 // LOCALISATION IS NEEDED BEFORE ROUTES
 $request = app('request');

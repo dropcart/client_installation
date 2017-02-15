@@ -57,11 +57,11 @@ if(! function_exists ( 'register_themes' ) )
 			{
 				$dirname = explode(DIRECTORY_SEPARATOR, $item);
 				$name = array_pop($dirname);;
-				View::addNamespace(ucfirst(camel_case($name)), $item . DIRECTORY_SEPARATOR . 'views');
+				$app['view']->addNamespace(ucfirst(camel_case($name)), $item . DIRECTORY_SEPARATOR . 'views');
 
 				// Register default Current
 				if(strtolower($name) == strtolower($current))
-					View::addNamespace('Current', $item . DIRECTORY_SEPARATOR . 'views');
+					$app['view']->addNamespace('Current', $item . DIRECTORY_SEPARATOR . 'views');
 			}
 		}
 	}
@@ -87,11 +87,11 @@ if(! function_exists( 'get_current_theme' ) )
 	{
 		global $app;
 
-		$hints = View::getFinder()->getHints();
+		$hints = $app['view']->getFinder()->getHints();
 		if (array_key_exists('Current', $hints))
 			$themeViewPath = $hints['Current'][0];
 		else
-			$themeViewPath = View::getFinder()->getPaths()[0];
+			$themeViewPath = $app['view']->getFinder()->getPaths()[0];
 
 		if($getPath)
 			return realpath(rtrim($themeViewPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '..');
