@@ -129,6 +129,7 @@
                     </td>
                 </tr>
             @endforeach
+            </tbody>
             <tfoot>
                 <tr>
                     <td colspan="4" align="right">
@@ -148,7 +149,6 @@
                     </td>
                 </tr>
             </tfoot>
-        </tbody>
         @endif
         {{-- END IF HAS PRODUCTS --}}
     </table>

@@ -37,23 +37,19 @@ class ShoppingBagMiddleware
                 )['status'];
 
 
-                if($transaction_status == 'PARTIAL' || $transaction_status == 'FINAL')
+                if($transaction_status == 'PARTIAL' || $transaction_status == 'FINAL' || $transaction_status == 'CONFIRMED')
                 {
                     $transaction = app('dropcart')->getTransaction(
                         $request->cookie('shopping_bag', ""),
                         $request->cookie('transaction_reference'),
                         $request->cookie('transaction_checksum')
                     );
-
                 } else if($transaction_status == 'PAYED')
                 {
                     $request->merge([
                         'transaction_status' => $transaction_status
                     ]);
                     $clearShoppingBag = $clearTransaction = true;
-                }
-                else if ($transaction_status == 'CONFIRMED') {
-                    // Do nothing
                 }
                 else {
                     $clearTransaction = true;

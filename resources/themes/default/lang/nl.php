@@ -10,7 +10,7 @@
  */
 
 return [
-	'footer_text'	=> '© ' . date('Y') . ' - Alle prijzen zijn inclusief BTW - Merknamen zijn alleen gebruikt om de toepasbaarheid van producten aan te geven en dienen verder niet te worden geassocieerd met ' . env('SITE_NAME'),
+	'footer_text'	=> '&copy; ' . date('Y') . ' - Alle prijzen zijn inclusief BTW - Merknamen zijn alleen gebruikt om de toepasbaarheid van producten aan te geven en dienen verder niet te worden geassocieerd met ' . env('SITE_NAME'),
 	'site_slug'		=> 'FANTASTISCH WEBWINKEL',
 	'contact'		=> 'Contact',
 	'aboutus'		=> 'Over ons',
@@ -94,13 +94,13 @@ return [
 	'page_checkout'		=> [
 		'title'				=> 'Afrekenen',
 		'check_info'		=> 'Controleer de onderstaande informatie goed! Als u een fout ontdekt in het afleveradres, factuuradres of in de contactgegevens, <a href=":customer_details_route">klik hier om deze te wijzigen</a>.',
+		'no_payment'        => 'Het is niet gelukt om de betaling te verrichten. Druk nogmaals op onderstaande knop om de bestelling te betalen.',
 		'invoice_address'	=> 'Factuuradres',
 		'shipping_address'	=> 'Afleveradres',
 		'contact_details'	=> 'Contactgegevens',
 		'to_payment'		=> 'Naar betalen',
 		'redirect_to_payment_provider' => 'U wordt omgeleid naar onze betaalpagina waar u het totaalbedrag direct kan voldoen.',
 		'accept_terms'		=> 'Ik ga akkoord met de algemene voorwaarden <a href=":link_to_terms">(Bekijk)</a>',
-
 	],
 
 	'page_thanks'		=> [

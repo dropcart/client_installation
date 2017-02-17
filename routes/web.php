@@ -228,8 +228,19 @@ $app->group([
 	$app->post('/' . lang('url_order.checkout'), ['as' => 'order.confirm', function()
 	{
 		$request = app('request');
+		
+		if(!isset($request->get('transaction', [])['customer_details']) || !$request->has('shopping_bag'))
+		{
+			return redirect()->route('shopping_bag', ['locale' => loc()]);
+		}
+		
 		// Check for result
-		$result = app('dropcart')->confirmTransaction($request->get('shopping_bag_internal', ""), $request->get('transaction_reference', 0), $request->get('transaction_checksum', ""), route('confirmation', ['locale' => loc()]));
+		try {
+			$result = app('dropcart')->confirmTransaction($request->get('shopping_bag_internal', ""), $request->get('transaction_reference', 0), $request->get('transaction_checksum', ""), route('confirmation', ['locale' => loc()]));
+		} catch (\Exception $e) {
+			Log::error("Unable to confirm transaction, redirecting back to checkout page", ['exception' => $e]);
+			return redirect()->route('order.checkout', ['locale' => loc()]);
+		}
 
 		if (isset($result['redirect'])) {
 			return redirect()->to($result['redirect']);
