@@ -135,9 +135,9 @@
                         <div class="next-step">
                             @if(isset($transaction))
                                 <a href="<?= route('order.checkout', ['locale' => loc()]); ?>" class="btn btn-lg btn-block btn-primary">{{ lang('page_shopping_bag.to_checkout') }} <span class="glyphicon glyphicon-shopping-cart"></span></a>
-                                <br>
-                            @endif
+                            @else
                                 <a href="<?= route('order.customer_details', ['locale' => loc()]); ?>" class="btn btn-lg btn-block btn-primary customer-link">{{ lang('page_shopping_bag.to_customer_details') }} <span class="glyphicon glyphicon-shopping-cart"></span></a>
+                            @endif
                         </div>
                     </td>
                     <td>

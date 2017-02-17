@@ -37,7 +37,7 @@ return [
 		'price'				=> 'Prijs',
 
 		'to_checkout'		=> 'Naar stap 3: Afrekenen',
-		'to_customer_details'=> 'Naar stap 2: uw gegevens',
+		'to_customer_details'=> 'Naar stap 2: Uw gegevens',
 	],
 
 	'page_customer_details' => [
