@@ -142,11 +142,13 @@ $app->group([
 	/** REQUEST CUSTOMER DETAILS */
 	$app->get('/' . lang('url_order.customer_details'), ['as' => 'order.customer_details', function()
 	{
-
-		if(!app('request')->has('shopping_bag'))
+		if(!app('request')->has('shopping_bag')) {
 			return redirect('/');
-
-
+		}
+		if (count(app('request')->get('shopping_bag', [])) < 1) {
+			return redirect()->route('shopping_bag', ['locale' => loc()]);
+		}
+		
 		$data = [
 			'page_title'=> lang('page_customer_details.title'),
 		];
@@ -171,6 +173,12 @@ $app->group([
 	/** ADD CUSTOMER DETAILS */
 	$app->post('/' . lang('url_order.customer_details'), ['as' => 'order.save_customer_details', function()
 	{
+		if(!app('request')->has('shopping_bag')) {
+			return redirect('/');
+		}
+		if (count(app('request')->get('shopping_bag', [])) < 1) {
+			return redirect()->route('shopping_bag', ['locale' => loc()]);
+		}
 		$request = app('request');
 
 		// Save customer details to transaction

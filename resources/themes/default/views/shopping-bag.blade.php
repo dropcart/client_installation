@@ -24,8 +24,8 @@
                 {{ lang('page_all.shopping_bag') }}
             </a>
         </li>
-        <li>
-            <a href="<?= route('order.customer_details', ['locale' => loc()]); ?>">
+        <li class="{{ count($shopping_bag) >= 1 ? '' : 'disabled' }}">
+            <a href="{{ (count($shopping_bag) >= 1 ? route('order.customer_details', ['locale' => loc()]) : 'javascript:void(0);') }}">
                 <strong>{{ lang('page_shopping_bag.step', ['no' => 2]) }}</strong>
                 {{ lang('page_shopping_bag.customer_details') }}
             </a>
