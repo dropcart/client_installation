@@ -220,7 +220,8 @@ $app->group([
 		return View::make('Current::checkout', [
 			'page_title'        => lang('page_checkout.title'),
 			'shopping_bag'		=> app('request')->get('shopping_bag'),
-			'transaction'		=> app('request')->get("transaction", [])
+			'transaction'		=> app('request')->get("transaction", []),
+			'transaction_status' => app('request')->get("transaction_status", "FINAL")
 		]);
 	}]);
 

@@ -46,9 +46,16 @@
 
     @include('Default::blocks.errors-and-warnings')
 
+	
+	@if($transaction_status == "CONFIRMED")
+	<div class="alert alert-warning">
+        {!! lang('page_checkout.no_payment') !!}
+    </div>
+	@else
     <div class="alert alert-info">
         {!! lang('page_checkout.check_info', ['customer_details_route' => route('order.customer_details', ['locale' => loc()])]) !!}
     </div>
+    @endif
 
     <form class="form-horizontal confirm-form bv-form" role="form" method="post">
         <input type="hidden" name="submitting" value="1" />
@@ -162,7 +169,7 @@
                         <div class="next-step">
                             <div class="form-group checkbox has-feedback">
                                 <div class="col-sm-12">
-                                    <label class="confirm"><input type="checkbox" name="conditions" data-bv-field="conditions" class="i-agree-with-the-conditions">
+                                    <label class="confirm"><input type="checkbox" name="conditions"{!! $transaction_status == "CONFIRMED" ? ' checked="checked" disabled="disabled"' : '' !!} data-bv-field="conditions" class="i-agree-with-the-conditions">
                                         {!! lang('page_checkout.accept_terms', ['link_to_terms' => '#']) !!}
                                     </label>
                                 </div>
@@ -173,7 +180,11 @@
                 <tr>
                     <td colspan="4" align="right">
                         <div class="next-step">
-                            <button type="submit" class="btn btn-lg btn-block btn-primary payment-link"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;{{ lang('page_checkout.to_payment') }}</button>
+                        	@if($transaction_status == "CONFIRMED")
+                            	<button type="submit" class="btn btn-lg btn-block btn-primary payment-link"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;{{ lang('page_checkout.to_payment') }}</button>
+                            @else
+                            	<button type="submit" class="btn btn-lg btn-block btn-primary payment-link"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;{{ lang('page_checkout.confirm_and_to_payment') }}</button>
+                            @endif
                             <p>
                                 {{ lang('page_checkout.redirect_to_payment_provider') }}
                             </p>
