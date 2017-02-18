@@ -68,7 +68,9 @@
                     <small><em>{{ lang('product_info.shipping_included') }}</em></small>
                 </p>
                 <div>
-                    <a href="<?= route('shopping_bag_add', ['product_id' => $product['id'], 'quantity' => 1, 'locale' => loc()]); ?>" class="btn btn-lg btn-block btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;Bestellen</a>
+                    <a href="<?= route('shopping_bag_add', ['product_id' => $product['id'], 'quantity' => 1, 'locale' => loc()]); ?>" class="btn btn-lg btn-block btn-primary order-link">
+                    	<span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;{{ lang('product_info.order_now') }}
+                    </a>
                 </div>
             @endif
 

@@ -153,6 +153,7 @@ return [
 		'in_stock'			=> ':stock_quantity op voorraad',
 		'delivery_time'		=> 'Leverbaar binnen :shipping_days werkdagen',
 		'shipping_included'	=> 'inclusief verzendkosten',
+		'order_now'         => 'Bestellen',
 	],
 
 	'no_categories'				=> 'Momenteel verkopen wij nog geen producten. Maar houd ons in de gaten!',

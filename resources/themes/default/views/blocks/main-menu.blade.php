@@ -20,7 +20,7 @@
                     'locale' => loc(),
                     'category_name' => str_slug($category['name']),
                     'category_id' => $category['id']
-            ]) }}" title="{{ $category['description'] }}">
+            ]) }}" class=".category-link" title="{{ $category['description'] }}">
                 {{ $category['name'] }}
             </a>
         </li>
