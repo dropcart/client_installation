@@ -247,7 +247,7 @@ $app->group([
 		try {
 			$result = app('dropcart')->confirmTransaction($request->get('shopping_bag_internal', ""), $request->get('transaction_reference', 0), $request->get('transaction_checksum', ""), route('confirmation', ['locale' => loc()]));
 		} catch (\Exception $e) {
-			Log::error("Unable to confirm transaction, redirecting back to checkout page", ['exception' => $e]);
+			\Log::error("Unable to confirm transaction, redirecting back to checkout page", ['exception' => $e]);
 			return redirect()->route('order.checkout', ['locale' => loc()]);
 		}
 
@@ -261,17 +261,19 @@ $app->group([
 	/** ORDER CONFIRMATION */
 	$app->get('/' . lang('url_order.confirmation'), ['as' => 'confirmation', function()
 	{
-		if(app('request')->has('transaction_status') && (app('request')->get('transaction_status') == 'CONFIRMED' || app('request')->has('transaction_status') == 'PAYED'))
+		if (!app('request')->has('transaction_status')) {
+			\Log::warning("Unknown transaction status");
+			return abort(404);
+		}
+		if (app('request')->get('transaction_status') == 'CONFIRMED' || app('request')->has('transaction_status') == 'PAYED') {
 			$paid = app('request')->get('transaction_status') == 'PAYED' ? true : false;
-		else
-			$paid = -1;
-
-		if($paid == -1)
+			return View::make('Current::confirmation', [
+					'paid'	=> $paid
+			]);
+		} else {
+			\Log::error("Invalid transaction status", ['transaction_status' => app('request')->get('transaction_status')]);
 			return redirect()->to('/');
-
-		return View::make('Current::confirmation', [
-			'paid'	=> $paid
-		]);
+		}
 	}]);
 });
 
