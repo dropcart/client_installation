@@ -105,7 +105,7 @@ return [
 	],
 
 	'page_thanks'		=> [
-		'paid_title'	=> 'Bedankt voor uw besteling!',
+		'paid_title'	=> 'Bedankt voor uw bestelling!',
 		'paid_content'	=> '<p>
 								We hebben uw betaling ontvangen en u een betalingsbewijs toegezonden. Uw bestelling zal zo spoedig mogelijk worden geleverd.
 							</p>',
