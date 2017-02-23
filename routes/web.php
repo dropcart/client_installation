@@ -83,15 +83,10 @@ $app->group([
     {
         $request = app('request');
 
-
         $products = [];
-        try {
-            $products   = app('dropcart')->getProductListing(intval($category_id), $request->input('page', null));
-            $pagination = $products['pagination'];
-            $products   = $products['list'];
-
-        } catch (\Exception $e) { abort(404); }
-
+        $products   = app('dropcart')->getProductListing(intval($category_id), $request->input('page', null));
+        $pagination = $products['pagination'];
+        $products   = $products['list'];
 
         return View::make('Current::product-list', [
             'page_title'        => lang('page_product_list.title', ['category_name' => ucfirst($category_name)]),
@@ -103,12 +98,8 @@ $app->group([
 	/** GET PRODUCT DETAIL VIEW */
     $app->get('/' . lang('url_product'), ['as' => 'product', function($product_name, $product_id) use ($app)
     {
-        try {
-            $product   = app('dropcart')->getProductInfo(intval($product_id));
-
-        } catch (\Exception $e) { throw $e; }
-
-
+        $product   = app('dropcart')->getProductInfo(intval($product_id));
+        
         return View::make('Current::product-info', [
             'page_title'        => lang('page_product_list.title', ['category_name' => ucfirst($product_name)]),
             'product'          => $product,
@@ -135,19 +126,14 @@ $app->group([
 
 		$shoppingBagInternal	= app('request')->get('shopping_bag_internal', "");
 
-		try {
-			if($quantity < 0)
-				$shoppingBagInternal = app('dropcart')->removeShoppingBag($shoppingBagInternal, intval($product_id), -$quantity);
-			else
-				$shoppingBagInternal = app('dropcart')->addShoppingBag($shoppingBagInternal, intval($product_id), $quantity);
-			
-			return redirect()
-				->route('shopping_bag', ['locale' => loc()])
-				->withCookie(new \Symfony\Component\HttpFoundation\Cookie('shopping_bag', $shoppingBagInternal, time() + 60*60*24*5)); // 5 days
-		} catch (Exception $e)
-		{
-			throw $e;
-		}
+		if($quantity < 0)
+			$shoppingBagInternal = app('dropcart')->removeShoppingBag($shoppingBagInternal, intval($product_id), -$quantity);
+		else
+			$shoppingBagInternal = app('dropcart')->addShoppingBag($shoppingBagInternal, intval($product_id), $quantity);
+		
+		return redirect()
+			->route('shopping_bag', ['locale' => loc()])
+			->withCookie(new \Symfony\Component\HttpFoundation\Cookie('shopping_bag', $shoppingBagInternal, time() + 60*60*24*5)); // 5 days
 
 		$last_url = app('request')->headers->get('referer');
 		return redirect($last_url);
@@ -156,11 +142,13 @@ $app->group([
 	/** REQUEST CUSTOMER DETAILS */
 	$app->get('/' . lang('url_order.customer_details'), ['as' => 'order.customer_details', function()
 	{
-
-		if(!app('request')->has('shopping_bag'))
+		if(!app('request')->has('shopping_bag')) {
 			return redirect('/');
-
-
+		}
+		if (count(app('request')->get('shopping_bag', [])) < 1) {
+			return redirect()->route('shopping_bag', ['locale' => loc()]);
+		}
+		
 		$data = [
 			'page_title'=> lang('page_customer_details.title'),
 		];
@@ -185,6 +173,12 @@ $app->group([
 	/** ADD CUSTOMER DETAILS */
 	$app->post('/' . lang('url_order.customer_details'), ['as' => 'order.save_customer_details', function()
 	{
+		if(!app('request')->has('shopping_bag')) {
+			return redirect('/');
+		}
+		if (count(app('request')->get('shopping_bag', [])) < 1) {
+			return redirect()->route('shopping_bag', ['locale' => loc()]);
+		}
 		$request = app('request');
 
 		// Save customer details to transaction
@@ -231,12 +225,12 @@ $app->group([
 			return redirect()->route('shopping_bag', ['locale' => loc()]);
 		}
 
-
 		return View::make('Current::checkout', [
 			'page_title'        => lang('page_checkout.title'),
 			'shopping_bag'		=> app('request')->get('shopping_bag'),
 			'transaction'		=> app('request')->get("transaction", []),
-			'payment_methods'	=> app('dropcart')->getPaymentMethods()
+			'payment_methods'	=> app('dropcart')->getPaymentMethods(),
+			'transaction_status' => app('request')->get("transaction_status", "FINAL")
 		]);
 	}]);
 
@@ -244,6 +238,12 @@ $app->group([
 	$app->post('/' . lang('url_order.checkout'), ['as' => 'order.confirm', function()
 	{
 		$request = app('request');
+		
+		if(!isset($request->get('transaction', [])['customer_details']) || !$request->has('shopping_bag'))
+		{
+			return redirect()->route('shopping_bag', ['locale' => loc()]);
+		}
+		
 		// Check for result
 		try {
 			$result = app('dropcart')
@@ -253,34 +253,38 @@ $app->group([
 									route('confirmation', ['locale' => loc()]),
 									$request->get('paymentMethod', 'ideal'),
 									$request->get('paymentMethodAttributes', []));
+		} catch (\Exception $e) {
+			\Log::error("Unable to confirm transaction, redirecting back to checkout page", ['exception' => $e]);
+			return redirect()->route('order.checkout', ['locale' => loc()]);
+		}
 
-			if (isset($result['redirect'])) {
-				return redirect()->to($result['redirect']);
-			}
-		} catch (Exception $e) {  }
-
-		return redirect()->route('shopping_bag', ['locale' => loc()]);
+		if (isset($result['redirect'])) {
+			return redirect()->to($result['redirect']);
+		} else {
+			return redirect()->route('shopping_bag', ['locale' => loc()]);
+		}
 	}]);
 
 	/** ORDER CONFIRMATION */
 	$app->get('/' . lang('url_order.confirmation'), ['as' => 'confirmation', function()
 	{
-		if(app('request')->has('transaction_status') && (app('request')->get('transaction_status') == 'CONFIRMED' || app('request')->has('transaction_status') == 'PAYED'))
+		if (!app('request')->has('transaction_status')) {
+			\Log::warning("Unknown transaction status");
+			return abort(404);
+		}
+		if (app('request')->get('transaction_status') == 'CONFIRMED' || app('request')->has('transaction_status') == 'PAYED') {
 			$paid = app('request')->get('transaction_status') == 'PAYED' ? true : false;
-		else
-			$paid = -1;
-
-		if($paid == -1)
+			return View::make('Current::confirmation', [
+					'paid'	=> $paid
+			]);
+		} else {
+			\Log::error("Invalid transaction status", ['transaction_status' => app('request')->get('transaction_status')]);
 			return redirect()->to('/');
-
-		return View::make('Current::confirmation', [
-			'paid'	=> $paid
-		]);
+		}
 	}]);
 });
 
-// Template asset management
-// It is a little dirty yes
+// Template asset management (up to 5 parameters)
 $app->get('/css/{p1}',                      ['uses' => 'AssetController@css']);
 $app->get('/css/{p1}/{p2}',                 ['uses' => 'AssetController@css']);
 $app->get('/css/{p1}/{p2}/{p3}',            ['uses' => 'AssetController@css']);

@@ -10,7 +10,7 @@
  */
 
 return [
-	'footer_text'	=> '© ' . date('Y') . ' - Alle prijzen zijn inclusief BTW - Merknamen zijn alleen gebruikt om de toepasbaarheid van producten aan te geven en dienen verder niet te worden geassocieerd met ' . env('SITE_NAME'),
+	'footer_text'	=> '&copy; ' . date('Y') . ' - Alle prijzen zijn inclusief BTW - Merknamen zijn alleen gebruikt om de toepasbaarheid van producten aan te geven en dienen verder niet te worden geassocieerd met ' . env('SITE_NAME'),
 	'site_slug'		=> 'FANTASTISCH WEBWINKEL',
 	'contact'		=> 'Contact',
 	'aboutus'		=> 'Over ons',
@@ -37,7 +37,7 @@ return [
 		'price'				=> 'Prijs',
 
 		'to_checkout'		=> 'Naar stap 3: Afrekenen',
-		'to_customer_details'=> 'Naar stap 2: uw gegevens',
+		'to_customer_details'=> 'Naar stap 2: Uw gegevens',
 	],
 
 	'page_customer_details' => [
@@ -94,18 +94,19 @@ return [
 	'page_checkout'		=> [
 		'title'				=> 'Afrekenen',
 		'check_info'		=> 'Controleer de onderstaande informatie goed! Als u een fout ontdekt in het afleveradres, factuuradres of in de contactgegevens, <a href=":customer_details_route">klik hier om deze te wijzigen</a>.',
+		'no_payment'        => 'De bestelling is al bevestigd. Het is nog niet gelukt om de betaling te voltooien. Druk nogmaals op onderstaande knop om deze bestelling te betalen.',
 		'invoice_address'	=> 'Factuuradres',
 		'shipping_address'	=> 'Afleveradres',
 		'contact_details'	=> 'Contactgegevens',
-		'to_payment'		=> 'Naar betalen',
+		'to_payment'		=> 'Opnieuw naar Betalen',
+		'confirm_and_to_payment' => 'Bestelling plaatsen en Betalen',
 		'redirect_to_payment_provider' => 'U wordt omgeleid naar onze betaalpagina waar u het totaalbedrag direct kan voldoen.',
 		'accept_terms'		=> 'Ik ga akkoord met de algemene voorwaarden <a href=":link_to_terms">(Bekijk)</a>',
 		'select_payment_method' => 'Selecteer uw gewenste betaalmethode',
-
 	],
 
 	'page_thanks'		=> [
-		'paid_title'	=> 'Bedankt voor uw besteling!',
+		'paid_title'	=> 'Bedankt voor uw bestelling!',
 		'paid_content'	=> '<p>
 								We hebben uw betaling ontvangen en u een betalingsbewijs toegezonden. Uw bestelling zal zo spoedig mogelijk worden geleverd.
 							</p>',
@@ -153,6 +154,7 @@ return [
 		'in_stock'			=> ':stock_quantity op voorraad',
 		'delivery_time'		=> 'Leverbaar binnen :shipping_days werkdagen',
 		'shipping_included'	=> 'inclusief verzendkosten',
+		'order_now'         => 'Bestellen',
 	],
 
 	'no_categories'				=> 'Momenteel verkopen wij nog geen producten. Maar houd ons in de gaten!',

@@ -10,7 +10,7 @@
  */
 
 return [
-	'footer_text'	=> '© ' . date('Y') . ' - All prices are including VAT - Brand names are only used for the applicability of products and should further not be associated with ' . env('SITE_NAME'),
+	'footer_text'	=> '&copy; ' . date('Y') . ' - All prices are including VAT - Brand names are only used for the applicability of products and should further not be associated with ' . env('SITE_NAME'),
 	'site_slug'		=> 'GREAT WEB STORE',
 	'contact'		=> 'Contact',
 	'aboutus'		=> 'About us',
