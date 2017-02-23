@@ -100,6 +100,7 @@ return [
 		'to_payment'		=> 'To payment',
 		'redirect_to_payment_provider' => 'You\'ll be redirected to our payment provider where you can pay.',
 		'accept_terms'		=> 'I accept the terms and conditions. <a href=":link_to_terms">(View)</a>',
+		'select_payment_method' => 'Select your preferred payment method',
 
 	],
 

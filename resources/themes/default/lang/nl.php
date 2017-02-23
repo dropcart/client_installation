@@ -100,6 +100,7 @@ return [
 		'to_payment'		=> 'Naar betalen',
 		'redirect_to_payment_provider' => 'U wordt omgeleid naar onze betaalpagina waar u het totaalbedrag direct kan voldoen.',
 		'accept_terms'		=> 'Ik ga akkoord met de algemene voorwaarden <a href=":link_to_terms">(Bekijk)</a>',
+		'select_payment_method' => 'Selecteer uw gewenste betaalmethode',
 
 	],
 

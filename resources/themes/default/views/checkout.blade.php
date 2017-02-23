@@ -156,6 +156,57 @@
                         </td>
                     </tr>
                 @endforeach
+                </tbody>
+                <tbody>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="2">
+                            <div class="col-xs-12"><h4>{{ lang('page_checkout.select_payment_method') }}:</h4></div>
+                            <div class="row">
+                        @foreach($payment_methods as $pm)
+                            <div class="col-sm-3 col-xs-6 col-md-2" style="text-align: center; margin-top: 20px;">
+                               <label>
+                                    @if(!empty($pm['logo']))
+                                        <input type="radio" class="form-control" name="paymentMethod" value="{{ $pm['id'] }}">
+                                        <img src="{{ $pm['logo'] }}" style="height: 50px; width: auto;"><br>
+                                        {{ $pm['name'] }}
+                                    @else
+                                        <input type="radio" name="paymentMethod" value="{{ $pm['id'] }}"> {{ $pm['name'] }}
+                                    @endif
+                               @if(array_key_exists('extra', $pm))
+                                    @foreach($pm['extra']['fields'] as $field)
+                                        <br>
+                                        @if($field['type'] == 'selectable')
+                                            <select name="paymentMethodAttributes[{{ $field['id'] }}]">
+                                                <?php
+                                                $values = $field['values'];
+                                                if(is_string($values))
+                                                    $values = $pm['extra'][$field['values']];
+                                                ?>
+                                                @foreach($values as $val)
+                                                    <option value="{{ $val['id'] }}">{{ $val['name'] }}</option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+                                    @endforeach
+                                @endif
+                               </label>
+                            </div>
+
+                            @if($loop->iteration%2 == 0)
+                                <div class="clearfix visible-xs-block"></div>
+                            @endif
+                            @if($loop->iteration%4 == 0)
+                                <div class="clearfix visible-sm-block"></div>
+                            @endif
+                            @if($loop->iteration%6 == 0)
+                                <div class="clearfix visible-md-block visible-lg-block"></div>
+                            @endif
+                        @endforeach
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
                 <tfoot>
                 <tr>
                     <td colspan="4">
@@ -187,7 +238,6 @@
                     </td>
                 </tr>
                 </tfoot>
-                </tbody>
             @endif
             {{-- END IF HAS PRODUCTS --}}
         </table>

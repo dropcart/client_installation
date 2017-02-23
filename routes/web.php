@@ -235,7 +235,8 @@ $app->group([
 		return View::make('Current::checkout', [
 			'page_title'        => lang('page_checkout.title'),
 			'shopping_bag'		=> app('request')->get('shopping_bag'),
-			'transaction'		=> app('request')->get("transaction", [])
+			'transaction'		=> app('request')->get("transaction", []),
+			'payment_methods'	=> app('dropcart')->getPaymentMethods()
 		]);
 	}]);
 
@@ -245,7 +246,13 @@ $app->group([
 		$request = app('request');
 		// Check for result
 		try {
-			$result = app('dropcart')->confirmTransaction($request->get('shopping_bag_internal', ""), $request->get('transaction_reference', 0), $request->get('transaction_checksum', ""), route('confirmation', ['locale' => loc()]));
+			$result = app('dropcart')
+				->confirmTransaction($request->get('shopping_bag_internal', ""),
+									$request->get('transaction_reference', 0),
+									$request->get('transaction_checksum', ""),
+									route('confirmation', ['locale' => loc()]),
+									$request->get('paymentMethod', 'ideal'),
+									$request->get('paymentMethodAttributes', []));
 
 			if (isset($result['redirect'])) {
 				return redirect()->to($result['redirect']);
