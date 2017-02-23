@@ -14,7 +14,7 @@ include_once __DIR__ . '/custom.php';
 
 $app->get('/', function() use ($app)
 {
-    $locale = loc();
+	$locale = loc();
     return redirect('/' . $locale, 303);
 });
 

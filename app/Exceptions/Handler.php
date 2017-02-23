@@ -58,7 +58,7 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
         try {
-            return app('view')->make('Current::error');
+            return response()->make(view('error'), 404);
         } catch (\Exception $e)
         {
             return parent::render($request, $e);

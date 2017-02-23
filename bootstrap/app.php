@@ -94,9 +94,10 @@ $app->middleware([
 | totally optional, so you are not required to uncomment this line.
 |
 */
-$app->register(Dropcart\Laravel\ServiceProvider::class);
 
+$app->register(Dropcart\Laravel\ServiceProvider::class);
 class_alias('Illuminate\Support\Facades\View', 'View');
+
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
