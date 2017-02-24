@@ -63,10 +63,8 @@ class ShoppingBagMiddleware
 
         // Do we need to clear the transaction
         if($clearTransaction){
-            unset($_COOKIE['transaction_reference']);
-            setcookie('transaction_reference', null, time()-3600);
-            unset($_COOKIE['transaction_checksum']);
-            setcookie('transaction_checksum', null, time()-3600);
+            setcookie('transaction_reference', "0");
+            setcookie('transaction_checksum', "0");
         } elseif(isset($transaction)) {
             $request->merge([
                 'transaction'          => $transaction,
@@ -78,8 +76,7 @@ class ShoppingBagMiddleware
 
         // Do we need to clear the shopping bag
         if($clearShoppingBag) {
-            unset($_COOKIE['shopping_bag']);
-            setcookie('shopping_bag', null, time()-3600);
+            setcookie('shopping_bag', "");
         } else {
         	$request->merge([
             	'shopping_bag'          => $sb,
