@@ -45,6 +45,12 @@
     </ul>
 
     @include('Default::blocks.errors-and-warnings')
+    
+    @if (isset($transaction) && $transaction_status == "CONFIRMED")
+	<div class="alert alert-warning">
+        {!! lang('page_shopping_bag.no_payment_read_only') !!}
+    </div>
+    @endif
 
     <table class="shopping-bag table">
         @if(count($shopping_bag) < 1)
@@ -107,6 +113,7 @@
                     </td>
                     <td>
                         <input type="number" value="{{ $sbi['quantity'] }}" disabled>
+                        @if (!isset($transaction) || $transaction_status != "CONFIRMED")
                         <br>
                         <a class="btn btn-xs btn-success btn-bag-plus"
                            href="<?= route('shopping_bag_add', [
@@ -120,6 +127,7 @@
                                    'product_id' => $sbi['product']['id'],
                                    'quantity' => -1]); ?>" alt="-"><span
                                     class="glyphicon glyphicon-minus"></span></a>
+                        @endif
                     </td>
                     <td>
                         &euro;&nbsp;<?= number_format($sbi['product']['price']['price_with_shipment_and_tax'],2,",",".") ?>

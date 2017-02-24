@@ -38,6 +38,7 @@ return [
 
 		'to_checkout'		=> 'Naar stap 3: Afrekenen',
 		'to_customer_details'=> 'Naar stap 2: Uw gegevens',
+		'no_payment_read_only' => 'De bestelling is al bevestigd. U kunt deze gegevens daarom niet meer aanpassen, maar alleen lezen.',
 	],
 
 	'page_customer_details' => [
@@ -49,6 +50,8 @@ return [
 		'save_and_checkout'	=> 'Opslaan en naar stap 3: Afrekenen',
 		
 		'field_is_mandatory'=> 'Dit is een verplicht veld',
+		'no_payment_read_only' => 'De bestelling is al bevestigd. U kunt deze gegevens daarom niet meer aanpassen, maar alleen lezen.',
+		'to_checkout'		=> 'Naar stap 3: Afrekenen',
 	],
 	
 	'fields'				=> [

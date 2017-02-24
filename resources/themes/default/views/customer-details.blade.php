@@ -46,7 +46,11 @@
 
     @include('Default::blocks.errors-and-warnings')
 
-    @if (isset($transaction) && !isset($_POST['submit']))
+	@if ($transaction_status == "CONFIRMED")
+	<div class="alert alert-warning">
+        {!! lang('page_customer_details.no_payment_read_only') !!}
+    </div>
+	@elseif (!isset($_POST['submit']))
     <div class="alert alert-info">
         {{ lang('page_customer_details.dont_forget_save') }}
     </div>
@@ -59,7 +63,7 @@
             <div class="form-group has-feedback">
                 <label class="col-sm-2 control-label" for="email">{{ lang('fields.emailaddress') }}</label>
                 <div class="col-sm-8">
-                    <input type="email" class="form-control" name="email" value="{{ @$details['email'] }}" data-bv-notempty="true" data-bv-emailaddress="true" data-bv-field="email">
+                    <input type="email"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} class="form-control" name="email" value="{{ @$details['email'] }}" data-bv-notempty="true" data-bv-emailaddress="true" data-bv-field="email">
                     <p class="help-block">
                         {{ lang('fields.emailaddress_help') }}
                     </p>
@@ -69,7 +73,7 @@
             <div class="form-group has-feedback">
                 <label class="col-sm-2 control-label" for="telephone">{{ lang('fields.phone') }}</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" name="telephone" value="{{ @$details['telephone'] }}" data-bv-notempty="true" data-bv-field="telephone">
+                    <input type="text"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} class="form-control" name="telephone" value="{{ @$details['telephone'] }}" data-bv-notempty="true" data-bv-field="telephone">
                     <p class="help-block">
                         {{ lang('fields.phone_help') }}
                     </p>
@@ -81,33 +85,33 @@
             <div class="form-group has-feedback">
                 <label class="col-sm-2 control-label" for="billing_first_name">{{ lang('fields.first_name') }}</label>
                 <div class="col-sm-4">
-                    <input type="text" placeholder="" class="form-control" name="billing_first_name" value="{{ @$details['billing_first_name'] }}" data-bv-notempty="true" data-bv-field="billing_first_name">
+                    <input type="text"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} placeholder="" class="form-control" name="billing_first_name" value="{{ @$details['billing_first_name'] }}" data-bv-notempty="true" data-bv-field="billing_first_name">
                 </div>
             </div>
 
             <div class="form-group has-feedback">
                 <label class="col-sm-2 control-label" for="billing_last_name">{{ lang('fields.last_name') }}</label>
                 <div class="col-sm-6">
-                    <input type="text" placeholder="" class="form-control" name="billing_last_name" value="{{ @$details['billing_last_name'] }}" data-bv-notempty="true" data-bv-field="billing_last_name">
+                    <input type="text"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} placeholder="" class="form-control" name="billing_last_name" value="{{ @$details['billing_last_name'] }}" data-bv-notempty="true" data-bv-field="billing_last_name">
                 </div>
             </div>
 
             <div class="form-group has-feedback">
                 <label class="col-sm-2 control-label" for="billing_address_1">{{ lang('fields.street_and_number') }}</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control billing_address_1" name="billing_address_1" value="{{ @$details['billing_address_1'] }}" data-bv-notempty="true" autocomplete="off" data-bv-field="billing_address_1" /><br />
-                    <input type="text" class="form-control billing_address_2 double-input" name="billing_address_2" value="{{ @$details['billing_address_2'] }}" autocomplete="off" data-bv-field="billing_address_2" />
+                    <input type="text"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} class="form-control billing_address_1" name="billing_address_1" value="{{ @$details['billing_address_1'] }}" data-bv-notempty="true" autocomplete="off" data-bv-field="billing_address_1" /><br />
+                    <input type="text"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} class="form-control billing_address_2 double-input" name="billing_address_2" value="{{ @$details['billing_address_2'] }}" autocomplete="off" data-bv-field="billing_address_2" />
                 </div>
             </div>
 
             <div class="form-group has-feedback">
                 <label class="col-sm-2 control-label" for="billing_postcode">{{ lang('fields.zipcode') }}</label>
                 <div class="col-sm-3">
-                    <input type="text" placeholder="1234AB" class="form-control billing_postcode" name="billing_postcode" value="{{ @$details['billing_postcode'] }}" data-bv-notempty="true" data-bv-field="billing_postcode">
+                    <input type="text"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} placeholder="1234AB" class="form-control billing_postcode" name="billing_postcode" value="{{ @$details['billing_postcode'] }}" data-bv-notempty="true" data-bv-field="billing_postcode">
                 </div>
                 <label class="col-sm-1 control-label" for="billing_city">{{ lang('fields.area') }}</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control billing_city" name="billing_city" value="{{ @$details['billing_city'] }}" data-bv-notempty="true" data-bv-field="billing_city">
+                    <input type="text"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} class="form-control billing_city" name="billing_city" value="{{ @$details['billing_city'] }}" data-bv-notempty="true" data-bv-field="billing_city">
                 </div>
             </div>
 
@@ -117,8 +121,7 @@
                     <?php
                     $countries = explode(',', env('COUNTRIES', 'Nederland'));
                     ?>
-                    <select class="form-control" name="billing_country">
-
+                    <select class="form-control"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} name="billing_country">
                         @foreach($countries as $country)
                             <?php $country = trim($country); ?>
                         <option value="{{ $country }}"{{ @$details['billing_country'] == $country ? ' selected' : '' }}>{{ $country }}</option>
@@ -132,7 +135,7 @@
         <div class="form-group checkbox">
             <div class="col-sm-2"></div>
             <div class="col-sm-8">
-                <label><input type="checkbox" name="has_delivery" id="deliveryAddress"{{ (isset($diff_billing_shipping) && $diff_billing_shipping) ? ' checked' : '' }} value="1"> {{ lang('page_customer_details.ship_to_other_address') }}</label>
+                <label><input type="checkbox"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} name="has_delivery" id="deliveryAddress"{{ (isset($diff_billing_shipping) && $diff_billing_shipping) ? ' checked' : '' }} value="1"> {{ lang('page_customer_details.ship_to_other_address') }}</label>
             </div>
         </div>
 
@@ -143,40 +146,40 @@
             <div class="form-group has-feedback">
                 <label class="col-sm-2 control-label" for="shipping_first_name">{{ lang('fields.first_name') }}</label>
                 <div class="col-sm-4">
-                    <input type="text" placeholder="" class="form-control" name="shipping_first_name" value="{{ @$details['shipping_first_name'] }}" data-bv-notempty="true" data-bv-field="shipping_first_name">
+                    <input type="text"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} placeholder="" class="form-control" name="shipping_first_name" value="{{ @$details['shipping_first_name'] }}" data-bv-notempty="true" data-bv-field="shipping_first_name">
                 </div>
             </div>
 
             <div class="form-group has-feedback">
                 <label class="col-sm-2 control-label" for="shipping_last_name">{{ lang('fields.last_name') }}</label>
                 <div class="col-sm-6">
-                    <input type="text" placeholder="" class="form-control" name="shipping_last_name" value="{{ @$details['shipping_last_name'] }}" data-bv-notempty="true" data-bv-field="shipping_last_name">
+                    <input type="text"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} placeholder="" class="form-control" name="shipping_last_name" value="{{ @$details['shipping_last_name'] }}" data-bv-notempty="true" data-bv-field="shipping_last_name">
                 </div>
             </div>
 
             <div class="form-group has-feedback">
                 <label class="col-sm-2 control-label" for="shipping_address_1">{{ lang('fields.street_and_number') }}</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control shipping_address_1" name="shipping_address_1" value="{{ @$details['shipping_address_1'] }}" data-bv-notempty="true" autocomplete="off" data-bv-field="shipping_address_1" /><br />
-                    <input type="text" class="form-control shipping_address_2 double-input" name="shipping_address_2" value="{{ @$details['shipping_address_2'] }}" autocomplete="off" data-bv-field="shipping_address_2" />
+                    <input type="text"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} class="form-control shipping_address_1" name="shipping_address_1" value="{{ @$details['shipping_address_1'] }}" data-bv-notempty="true" autocomplete="off" data-bv-field="shipping_address_1" /><br />
+                    <input type="text"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} class="form-control shipping_address_2 double-input" name="shipping_address_2" value="{{ @$details['shipping_address_2'] }}" autocomplete="off" data-bv-field="shipping_address_2" />
                 </div>
             </div>
 
             <div class="form-group has-feedback">
                 <label class="col-sm-2 control-label" for="shipping_postcode">{{ lang('fields.zipcode') }}</label>
                 <div class="col-sm-3">
-                    <input type="text" placeholder="1234AB" class="form-control shipping_postcode" name="shipping_postcode" value="{{ @$details['shipping_postcode'] }}" data-bv-notempty="true" data-bv-field="shipping_postcode">
+                    <input type="text"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} placeholder="1234AB" class="form-control shipping_postcode" name="shipping_postcode" value="{{ @$details['shipping_postcode'] }}" data-bv-notempty="true" data-bv-field="shipping_postcode">
                 </div>
                 <label class="col-sm-1 control-label" for="shipping_city">{{ lang('fields.area') }}</label>
                 <div class="col-sm-4">
-                    <input type="text" class="form-control shipping_city" name="shipping_city" value="{{ @$details['shipping_city'] }}" data-bv-notempty="true" data-bv-field="shipping_city">
+                    <input type="text"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} class="form-control shipping_city" name="shipping_city" value="{{ @$details['shipping_city'] }}" data-bv-notempty="true" data-bv-field="shipping_city">
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="shipping_country">Land</label>
                 <div class="col-sm-8">
-                    <select class="form-control" name="shipping_country">
+                    <select class="form-control"{{ ($transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} name="shipping_country">
                         @foreach($countries as $country)
                             <?php $country = trim($country); ?>
                             <option value="{{ $country }}"{{ @$details['billing_country'] == $country ? ' selected' : '' }}>{{ $country }}</option>
@@ -194,7 +197,11 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-8">
                 <div class="next-step">
-                    <button type="submit" class="btn btn-lg btn-block btn-primary quote-link">{{ lang('page_customer_details.save_and_checkout') }}</button>
+                	@if($transaction_status == "CONFIRMED")
+                		<button type="submit" class="btn btn-lg btn-block btn-primary quote-link">{{ lang('page_customer_details.to_checkout') }}</button>
+                	@else
+                    	<button type="submit" class="btn btn-lg btn-block btn-primary quote-link">{{ lang('page_customer_details.save_and_checkout') }}</button>
+                    @endif
                 </div>
             </div>
         </div>
