@@ -21,23 +21,23 @@ class ShoppingBagMiddleware
         $clearShoppingBag = false;
         $clearTransaction = false;
         $sb = [];
-        if($request->hasCookie('shopping_bag'))
-        {
+        if($request->hasCookie('shopping_bag') && !empty($request->cookie('shopping_bag'))) {
             try {
                 $sb = app('dropcart')->readShoppingBag($request->cookie('shopping_bag'));
             } catch (\Exception $e) {
             	$sb = [];
             }
+        } else {
+        	$clearShoppingBag = true;
         }
 
-        if($request->hasCookie('transaction_reference') && $request->hasCookie('transaction_checksum'))
-        {
+        if($request->hasCookie('transaction_reference') && !empty($request->cookie('transaction_reference')) &&
+        		$request->hasCookie('transaction_checksum') && !empty($request->cookie('transaction_checksum'))) {
             try {
                 $transaction_status = app('dropcart')->statusTransaction(
                     $request->cookie('transaction_reference'),
                     $request->cookie('transaction_checksum')
                 )['status'];
-
 
                 if($transaction_status == 'PARTIAL' || $transaction_status == 'FINAL' || $transaction_status == 'CONFIRMED') {
                     $transaction = app('dropcart')->getTransaction(
@@ -54,17 +54,17 @@ class ShoppingBagMiddleware
                 	// Unknown transaction status: we just clear the transaction.
                     $clearTransaction = true;
                 }
-            } catch (ClientException $e)
-            {
+            } catch (ClientException $e) {
             	// Something went wrong, so better to clear the transaction.
             	// Potentially results in a lost shopping bag.
                 $clearShoppingBag = $clearTransaction = true;
             }
-
+        } else {
+        	$clearTransaction = true;
         }
 
         // Do we need to clear the transaction
-        if($clearTransaction){
+        if($clearTransaction) {
             setcookie('transaction_reference', "0", 0, '/');
             setcookie('transaction_checksum', "0", 0, '/');
         } elseif(isset($transaction)) {
@@ -78,7 +78,7 @@ class ShoppingBagMiddleware
 
         // Do we need to clear the shopping bag
         if($clearShoppingBag) {
-            setcookie('shopping_bag', "none", 0, '/');
+            setcookie('shopping_bag', "0", 0, '/');
         } else {
         	$request->merge([
             	'shopping_bag'          => $sb,
