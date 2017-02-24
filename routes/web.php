@@ -125,7 +125,7 @@ $app->group([
 	/** WRITE SHOPPING BAG */
     $app->get('/' . lang('url_shopping_bag') . '/{product_id}/{quantity}', ['as' => 'shopping_bag_add', function($product_id, $quantity = 1) use ($app)
     {
-    	if (!$request->has('transaction') || $request->get('transaction_status') != "CONFIRMED") {
+    	if (!app('request')->has('transaction') || app('request')->get('transaction_status') != "CONFIRMED") {
     		// Only process shopping bag modifications when not confirmed
     		$shoppingBagInternal	= app('request')->get('shopping_bag_internal', "");
     		if($quantity < 0) {
