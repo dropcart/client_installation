@@ -25,7 +25,9 @@ class ShoppingBagMiddleware
         {
             try {
                 $sb = app('dropcart')->readShoppingBag($request->cookie('shopping_bag'));
-            } catch (\Exception $e) { }
+            } catch (\Exception $e) {
+            	$sb = [];
+            }
         }
 
         if($request->hasCookie('transaction_reference') && $request->hasCookie('transaction_checksum'))
@@ -76,7 +78,7 @@ class ShoppingBagMiddleware
 
         // Do we need to clear the shopping bag
         if($clearShoppingBag) {
-            setcookie('shopping_bag', "");
+            setcookie('shopping_bag', "none");
         } else {
         	$request->merge([
             	'shopping_bag'          => $sb,
