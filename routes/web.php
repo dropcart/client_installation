@@ -196,7 +196,7 @@ $app->group([
 				'billing_postcode'		=> $request->billing_postcode,
 				'billing_country'		=> $request->billing_country,
 	
-				'shipping_first_name'	=> $diffSD ? $request->shippping_first_name : $request->billing_first_name,
+				'shipping_first_name'	=> $diffSD ? $request->shipping_first_name : $request->billing_first_name,
 				'shipping_last_name'	=> $diffSD ? $request->shipping_last_name 	: $request->billing_last_name,
 				'shipping_address_1'	=> $diffSD ? $request->shipping_address_1 	: $request->billing_address_1,
 				'shipping_address_2'	=> $diffSD ? $request->shipping_address_2 	: $request->billing_address_2,
