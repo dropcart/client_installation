@@ -67,35 +67,26 @@ class ShoppingBagMiddleware
             setcookie('transaction_reference', null, time()-3600);
             unset($_COOKIE['transaction_checksum']);
             setcookie('transaction_checksum', null, time()-3600);
-        }
-        else {
-            if(isset($transaction))
-            {
-                $request->merge([
-                    'transaction'          => $transaction,
-                    'transaction_status'   => $transaction_status,
-                    'transaction_reference'=> $request->cookie('transaction_reference'),
-                    'transaction_checksum' => $request->cookie('transaction_checksum'),
-                ]);
-            }
+        } elseif(isset($transaction)) {
+            $request->merge([
+                'transaction'          => $transaction,
+                'transaction_status'   => $transaction_status,
+                'transaction_reference'=> $request->cookie('transaction_reference'),
+                'transaction_checksum' => $request->cookie('transaction_checksum'),
+            ]);
         }
 
-
-        // Do we need to clear the shopping bag?
-        if($clearShoppingBag)
-        {
+        // Do we need to clear the shopping bag
+        if($clearShoppingBag) {
             unset($_COOKIE['shopping_bag']);
             setcookie('shopping_bag', null, time()-3600);
+        } else {
+        	$request->merge([
+            	'shopping_bag'          => $sb,
+            	'shopping_bag_internal' => ($clearShoppingBag ? "" : $request->cookie('shopping_bag', ""))
+        	]);
         }
-
-        $request->merge([
-            'shopping_bag'          => $sb,
-            'shopping_bag_internal' => ($clearShoppingBag ? "" : $request->cookie('shopping_bag', ""))
-        ]);
-
-
-
-
+        
         return $next($request);
     }
 }
