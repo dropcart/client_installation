@@ -173,13 +173,11 @@
                         @foreach($payment_methods as $pm)
                             <div class="col-sm-3 col-xs-6 col-md-2" style="text-align: center; margin-top: 20px;">
                                <label>
+                               		<input type="radio" name="paymentMethod" class="radio-{{ $pm['id'] }}" value="{{ $pm['id'] }}">
                                     @if(!empty($pm['logo']))
-                                        <input type="radio" class="form-control" name="paymentMethod" value="{{ $pm['id'] }}">
-                                        <img src="{{ $pm['logo'] }}" style="height: 50px; width: auto;"><br>
-                                        {{ $pm['name'] }}
-                                    @else
-                                        <input type="radio" name="paymentMethod" value="{{ $pm['id'] }}"> {{ $pm['name'] }}
+                                        <img src="{{ $pm['logo'] }}" style="height: 50px; width: auto;"><br />
                                     @endif
+                                    {{ $pm['name'] }}
                                @if(array_key_exists('extra', $pm))
                                     @foreach($pm['extra']['fields'] as $field)
                                         <br>
