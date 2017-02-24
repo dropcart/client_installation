@@ -155,7 +155,7 @@ $app->group([
 			$data['transaction'] = app('request')->get('transaction');
 			$data['transaction_status'] = app('request')->get('transaction_status');
 			$data['details'] 	 = $data['transaction']['customer_details'];
-			$data['diff_billling_shipping'] = (
+			$data['diff_billing_shipping'] = (
 				@$data['details']['billing_first_name'] != @$data['details']['shipping_first_name'] ||
 				@$data['details']['billing_last_name'] 	!= @$data['details']['shipping_last_name'] 	||
 				@$data['details']['billing_address_1'] 	!= @$data['details']['shipping_address_1'] 	||

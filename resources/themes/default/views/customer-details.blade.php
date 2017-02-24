@@ -182,7 +182,7 @@
                     <select class="form-control"{{ (isset($transaction) && $transaction_status == "CONFIRMED") ? ' disabled="disabled"' : '' }} name="shipping_country">
                         @foreach($countries as $country)
                             <?php $country = trim($country); ?>
-                            <option value="{{ $country }}"{{ @$details['billing_country'] == $country ? ' selected' : '' }}>{{ $country }}</option>
+                            <option value="{{ $country }}"{{ @$details['shipping_country'] == $country ? ' selected' : '' }}>{{ $country }}</option>
                         @endforeach
                     </select>
                 </div>
