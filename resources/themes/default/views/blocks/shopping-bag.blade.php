@@ -8,11 +8,13 @@
 
 $total_price = 0.0;
 $total_quantity = 0;
-foreach (app('request')->get('shopping_bag') as $pq) {
-    $product = $pq['product'];
-    $quantity = $pq['quantity'];
-    $total_price += (float) ($quantity * $product['price']['price_with_shipment_and_tax']);
-    $total_quantity += (int) $quantity;
+if (app('request')->has('shopping_bag')) {
+	foreach (app('request')->get('shopping_bag') as $pq) {
+	    $product = $pq['product'];
+	    $quantity = $pq['quantity'];
+	    $total_price += (float) ($quantity * $product['price']['price_with_shipment_and_tax']);
+	    $total_quantity += (int) $quantity;
+	}
 }
 ?>
 
