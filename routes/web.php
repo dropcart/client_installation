@@ -185,28 +185,30 @@ $app->group([
 		$request = app('request');
 
 		// Save customer details to transaction
-		$diffSD = (isset($_POST['has_delivery']) && $_POST['has_delivery']);
-		$customerDetails = [
-			'first_name' 			=> $request->billing_first_name,
-			'last_name'				=> $request->billing_last_name,
-			'email'					=> $request->email,
-			'telephone'				=> $request->telephone,
-			'billing_first_name'	=> $request->billing_first_name,
-			'billing_last_name'		=> $request->billing_last_name,
-			'billing_address_1'		=> $request->billing_address_1,
-			'billing_address_2'		=> $request->billing_address_2,
-			'billing_city'			=> $request->billing_city,
-			'billing_postcode'		=> $request->billing_postcode,
-			'billing_country'		=> $request->billing_country,
-
-			'shipping_first_name'	=> $diffSD ? $request->shippping_first_name : $request->billing_first_name,
-			'shipping_last_name'	=> $diffSD ? $request->shipping_last_name 	: $request->billing_last_name,
-			'shipping_address_1'	=> $diffSD ? $request->shipping_address_1 	: $request->billing_address_1,
-			'shipping_address_2'	=> $diffSD ? $request->shipping_address_2 	: $request->billing_address_2,
-			'shipping_city'			=> $diffSD ? $request->shipping_city 		: $request->billing_city,
-			'shipping_postcode'		=> $diffSD ? $request->shipping_postcode 	: $request->billing_postcode,
-			'shipping_country'		=> $diffSD ? $request->shipping_country 	: $request->billing_country,
-		];
+		if (!$request->has('transaction') || $request->get('transaction_status') != "CONFIRMED") {
+			$diffSD = (isset($_POST['has_delivery']) && $_POST['has_delivery']);
+			$customerDetails = [
+				'first_name' 			=> $request->billing_first_name,
+				'last_name'				=> $request->billing_last_name,
+				'email'					=> $request->email,
+				'telephone'				=> $request->telephone,
+				'billing_first_name'	=> $request->billing_first_name,
+				'billing_last_name'		=> $request->billing_last_name,
+				'billing_address_1'		=> $request->billing_address_1,
+				'billing_address_2'		=> $request->billing_address_2,
+				'billing_city'			=> $request->billing_city,
+				'billing_postcode'		=> $request->billing_postcode,
+				'billing_country'		=> $request->billing_country,
+	
+				'shipping_first_name'	=> $diffSD ? $request->shippping_first_name : $request->billing_first_name,
+				'shipping_last_name'	=> $diffSD ? $request->shipping_last_name 	: $request->billing_last_name,
+				'shipping_address_1'	=> $diffSD ? $request->shipping_address_1 	: $request->billing_address_1,
+				'shipping_address_2'	=> $diffSD ? $request->shipping_address_2 	: $request->billing_address_2,
+				'shipping_city'			=> $diffSD ? $request->shipping_city 		: $request->billing_city,
+				'shipping_postcode'		=> $diffSD ? $request->shipping_postcode 	: $request->billing_postcode,
+				'shipping_country'		=> $diffSD ? $request->shipping_country 	: $request->billing_country,
+			];
+		}
 
 		if($request->has('transaction')) {
 			if ($request->get('transaction_status') != "CONFIRMED") {
