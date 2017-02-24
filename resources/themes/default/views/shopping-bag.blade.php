@@ -48,7 +48,7 @@
     
     @if (isset($transaction) && $transaction_status == "CONFIRMED")
 	<div class="alert alert-warning">
-        {!! lang('page_shopping_bag.no_payment_read_only') !!}
+        {!! lang('page_shopping_bag.no_payment_read_only', ['checkout_route' => route('order.checkout', ['locale' => loc()])]) !!}
     </div>
     @endif
 

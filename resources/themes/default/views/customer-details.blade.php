@@ -48,7 +48,7 @@
 
 	@if (isset($transaction) && $transaction_status == "CONFIRMED")
 	<div class="alert alert-warning">
-        {!! lang('page_customer_details.no_payment_read_only') !!}
+        {!! lang('page_customer_details.no_payment_read_only', ['checkout_route' => route('order.checkout', ['locale' => loc()])]) !!}
     </div>
 	@elseif (!isset($_POST['submit']))
     <div class="alert alert-info">
@@ -257,7 +257,7 @@
             }
         });
 
-        @if(isset($transaction))
+        @if(isset($transaction) && $transaction_status != "CONFIRMED")
             $('.register-form').data('bootstrapValidator').validate();
         @endif
 
