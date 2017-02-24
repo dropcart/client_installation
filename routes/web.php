@@ -133,10 +133,10 @@ $app->group([
 		else
 			$shoppingBagInternal = app('dropcart')->addShoppingBag($shoppingBagInternal, intval($product_id), $quantity);
 		
+		setcookie('shopping_bag', $shoppingBagInternal);
 		return redirect()
-			->route('shopping_bag', ['locale' => loc()])
-			->withCookie(new \Symfony\Component\HttpFoundation\Cookie('shopping_bag', $shoppingBagInternal, time() + 60*60*24*5)); // 5 days
-
+			->route('shopping_bag', ['locale' => loc()]);
+		
 		$last_url = app('request')->headers->get('referer');
 		return redirect($last_url);
     }]);
@@ -222,11 +222,10 @@ $app->group([
 			$transaction = app('dropcart')->createTransaction($request->get('shopping_bag_internal', ""), $customerDetails);
 		}
 
-
+		setcookie('transaction_reference', $transaction['reference']);
+		setcookie('transaction_checksum', $transaction['checksum']);
 		// Send thru
-		return redirect()->route('order.checkout', ['locale' => loc()])
-							->withCookie(new \Symfony\Component\HttpFoundation\Cookie('transaction_reference', $transaction['reference']))
-							->withCookie(new \Symfony\Component\HttpFoundation\Cookie('transaction_checksum', $transaction['checksum']));
+		return redirect()->route('order.checkout', ['locale' => loc()]);
 	}]);
 
 	/** CONFIRM DATA */
