@@ -114,8 +114,10 @@ $app->group([
 			'shopping_bag'		=> app('request')->get('shopping_bag', [])
 		];
 
-		if(app('request')->has('transaction'))
-			$data['transaction'] =	app('request')->get('transaction');
+		if(app('request')->has('transaction')) {
+			$data['transaction'] = app('request')->get('transaction');
+			$data['transaction_status'] = app('request')->get('transaction_status');
+		}
 
 		return View::make('Current::shopping-bag', $data);
     }]);
@@ -155,6 +157,7 @@ $app->group([
 
 		if(app('request')->has('transaction')) {
 			$data['transaction'] = app('request')->get('transaction');
+			$data['transaction_status'] = app('request')->get('transaction_status');
 			$data['details'] 	 = $data['transaction']['customer_details'];
 			$data['diff_billling_shipping'] = (
 				@$data['details']['billing_first_name'] != @$data['details']['shipping_first_name'] ||
@@ -205,10 +208,17 @@ $app->group([
 			'shipping_country'		=> $diffSD ? $request->shipping_country 	: $request->billing_country,
 		];
 
-		if($request->has('transaction'))
-			$transaction = app('dropcart')->updateTransaction($request->get('shopping_bag_internal', ""), $request->get('transaction_reference', 0), $request->get('transaction_checksum', ""), $customerDetails);
-		else
+		if($request->has('transaction')) {
+			if ($request->get('transaction_status') != "CONFIRMED") {
+				// Do not allow updating transactions whenever it is already confirmed.
+				$transaction = app('dropcart')->updateTransaction($request->get('shopping_bag_internal', ""), $request->get('transaction_reference', 0), $request->get('transaction_checksum', ""), $customerDetails);
+			} else {
+				// Retrieve transaction as-is
+				$transaction = $request->get('transaction');
+			}
+		} else {
 			$transaction = app('dropcart')->createTransaction($request->get('shopping_bag_internal', ""), $customerDetails);
+		}
 
 
 		// Send thru
