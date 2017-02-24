@@ -125,15 +125,16 @@ $app->group([
 	/** WRITE SHOPPING BAG */
     $app->get('/' . lang('url_shopping_bag') . '/{product_id}/{quantity}', ['as' => 'shopping_bag_add', function($product_id, $quantity = 1) use ($app)
     {
-
-		$shoppingBagInternal	= app('request')->get('shopping_bag_internal', "");
-
-		if($quantity < 0)
-			$shoppingBagInternal = app('dropcart')->removeShoppingBag($shoppingBagInternal, intval($product_id), -$quantity);
-		else
-			$shoppingBagInternal = app('dropcart')->addShoppingBag($shoppingBagInternal, intval($product_id), $quantity);
-		
-		setcookie('shopping_bag', $shoppingBagInternal, 0, '/');
+    	if (!$request->has('transaction') || $request->get('transaction_status') != "CONFIRMED") {
+    		// Only process shopping bag modifications when not confirmed
+    		$shoppingBagInternal	= app('request')->get('shopping_bag_internal', "");
+    		if($quantity < 0) {
+    			$shoppingBagInternal = app('dropcart')->removeShoppingBag($shoppingBagInternal, intval($product_id), -$quantity);
+    		} else {
+    			$shoppingBagInternal = app('dropcart')->addShoppingBag($shoppingBagInternal, intval($product_id), $quantity);
+    		}
+    		setcookie('shopping_bag', $shoppingBagInternal, 0, '/');
+    	}
 		return redirect()->route('shopping_bag', ['locale' => loc()]);
     }]);
 
@@ -227,8 +228,8 @@ $app->group([
 	/** CONFIRM DATA */
 	$app->get('/' . lang('url_order.checkout'), ['as' => 'order.checkout', function()
 	{
-		if(!isset(app('request')->get('transaction', [])['customer_details']) || !app('request')->has('shopping_bag'))
-		{
+		$transaction = app('request')->get('transaction', []);
+		if(!isset($transaction['customer_details']) || !app('request')->has('shopping_bag')) {
 			return redirect()->route('shopping_bag', ['locale' => loc()]);
 		}
 
