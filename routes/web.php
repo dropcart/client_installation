@@ -133,12 +133,8 @@ $app->group([
 		else
 			$shoppingBagInternal = app('dropcart')->addShoppingBag($shoppingBagInternal, intval($product_id), $quantity);
 		
-		setcookie('shopping_bag', $shoppingBagInternal);
-		return redirect()
-			->route('shopping_bag', ['locale' => loc()]);
-		
-		$last_url = app('request')->headers->get('referer');
-		return redirect($last_url);
+		setcookie('shopping_bag', $shoppingBagInternal, 0, '/');
+		return redirect()->route('shopping_bag', ['locale' => loc()]);
     }]);
 
 	/** REQUEST CUSTOMER DETAILS */
@@ -222,8 +218,8 @@ $app->group([
 			$transaction = app('dropcart')->createTransaction($request->get('shopping_bag_internal', ""), $customerDetails);
 		}
 
-		setcookie('transaction_reference', $transaction['reference']);
-		setcookie('transaction_checksum', $transaction['checksum']);
+		setcookie('transaction_reference', $transaction['reference'], 0, '/');
+		setcookie('transaction_checksum', $transaction['checksum'], 0, '/');
 		// Send thru
 		return redirect()->route('order.checkout', ['locale' => loc()]);
 	}]);
