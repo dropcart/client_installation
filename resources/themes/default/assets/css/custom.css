@@ -122,3 +122,10 @@
     cursor: default;
     border-color: transparent;
 }
+
+/* Filter box */
+.search-filter {
+    background-color: #eee;
+    padding: 1em;
+    border-radius: 1em;
+}

@@ -3994,12 +3994,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/dropcart/client.git",
-            "reference": "ff3a238bc6253900dbb58c5e71c0d3500721bda9"
+            "reference": "59257ac9d5ed4b42bb700008c64ee45e153156c4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dropcart/client/zipball/ff3a238bc6253900dbb58c5e71c0d3500721bda9",
-            "reference": "ff3a238bc6253900dbb58c5e71c0d3500721bda9",
+            "url": "https://api.github.com/repos/dropcart/client/zipball/59257ac9d5ed4b42bb700008c64ee45e153156c4",
+            "reference": "59257ac9d5ed4b42bb700008c64ee45e153156c4",
             "shasum": ""
         },
         "require": {
@@ -4010,7 +4010,7 @@
         "require-dev": {
             "victorjonsson/markdowndocs": "^1.3"
         },
-        "time": "2017-02-23 16:56:03",
+        "time": "2017-02-25 13:49:42",
         "type": "library",
         "installation-source": "source",
         "autoload": {

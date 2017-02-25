@@ -16,6 +16,69 @@
 
 @section('content')
     <h1>{!! $page_title or '' !!}</h1>
+    
+    <div class="search-filter">
+    	<form class="form-horizontal">
+		<fieldset>
+		
+		
+		<!-- change col-sm-N to reflect how you would like your column spacing (http://getbootstrap.com/css/#forms-control-sizes) -->
+		
+		
+		<!-- Form Name -->
+		<legend>Filteren</legend>
+		
+		<div class="form-group">
+		  <div class="col-sm-12">
+		    <div class="search input-group" data-initialize="search" role="search">
+		      <input id="query" name="query" class="form-control" placeholder="Naam, beschrijving, EAN of SKU" type="search" value="{{$query}}">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" type="submit">
+		          <span class="glyphicon glyphicon-search"></span>
+		          <span class="sr-only">Search</span>
+		        </button>
+		      </span>
+		    </div>
+		    
+		  </div>
+		</div>
+		
+		@if (!empty($brands))
+		<div class="form-group">
+		  <div class=" col-sm-12">
+		  	@foreach ($brands as $brand_id => $brand_name)
+		    <div class="checkbox">
+		      <label class="checkbox-custom" id="brand-{{$brand_id}}">
+		        <input name="brands[]" type="checkbox" value="{{$brand_id}}"{{in_array($brand_id, $selected_brands) ? ' checked="checked"' : ''}}>
+		        <span class="checkbox-label">{{$brand_name}}</span>
+		      </label>
+		    </div>
+		    @endforeach
+		  </div>
+		</div>
+		@endif
+		
+		<div class="form-group">
+		  <div class="col-sm-12">
+		    <div class="checkbox">
+		      <label class="checkbox-custom" id="0">
+		        <input name="show_unavailable_items" type="checkbox" value="true"{{ $show_unavailable_items ? ' checked="checked"' : '' }}>
+		        <span class="checkbox-label">Toon ook producten die niet op voorraad zijn</span>
+		      </label>
+		    </div>
+		  </div>
+		</div>
+		
+		<div class="form-group">
+		  <label for="" class="control-label col-sm-2"></label>
+		  <div class="col-sm-10">
+		  	<input type="submit" class="btn btn-primary" value="Filteren..." />
+		  </div>
+		</div>
+		
+		</fieldset>
+		</form>
+    </div>
 
     <div class="product-list">
         @forelse($products as $product)
@@ -89,7 +152,9 @@
             </div>
             @if(!$loop->last) <hr> @endif
         @empty
-            <p>{{ lang('page_product_list.no_products') }}</p>
+            <div class="alert alert-info">
+            	{{ lang('page_product_list.no_products') }}
+            </div>
         @endforelse
     </div>
 

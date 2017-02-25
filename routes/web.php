@@ -82,15 +82,33 @@ $app->group([
     $app->get('/' . lang('url_products_by_category'), ['as' => 'products_by_category', function($category_name, $category_id) use ($app)
     {
         $request = app('request');
+        $show_unavailable_items = !!$request->input('show_unavailable_items', false);
+        $selected_brands = $request->input('brands', []);
+        if (empty($selected_brands)) {
+        	$selected_brands = [];
+        }
+        $query = $request->input('query', null);
+        if (empty($query)) {
+        	$query = null;
+        }
 
         $products = [];
-        $products   = app('dropcart')->getProductListing(intval($category_id), $request->input('page', null));
+        $products   = app('dropcart')->getProductListing(intval($category_id), $request->input('page', null), $show_unavailable_items, $selected_brands, $query);
         $pagination = $products['pagination'];
+        $brands     = $products['brands'];
         $products   = $products['list'];
+        
+        if (empty($selected_brands)) {
+        	$selected_brands = array_keys($brands);
+        }
 
         return View::make('Current::product-list', [
             'page_title'        => lang('page_product_list.title', ['category_name' => ucfirst($category_name)]),
             'products'          => $products,
+        	'brands'            => $brands,
+        	'selected_brands'   => $selected_brands,
+        	'show_unavailable_items' => $show_unavailable_items,
+        	'query'             => $query,
             'pagination'        => $pagination
         ]);
     }]);
@@ -308,4 +326,3 @@ $app->get('/img/{p1}/{p2}',                 ['uses' => 'AssetController@img']);
 $app->get('/img/{p1}/{p2}/{p3}',            ['uses' => 'AssetController@img']);
 $app->get('/img/{p1}/{p2}/{p3}/{p4}',       ['uses' => 'AssetController@img']);
 $app->get('/img/{p1}/{p2}/{p3}/{p4}/{p5}',  ['uses' => 'AssetController@img']);
-
