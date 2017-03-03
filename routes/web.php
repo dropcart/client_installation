@@ -251,11 +251,13 @@ $app->group([
 			return redirect()->route('shopping_bag', ['locale' => loc()]);
 		}
 
+		$payment_methods = app('dropcart')->getPaymentMethods();
+		
 		return View::make('Current::checkout', [
 			'page_title'        => lang('page_checkout.title'),
 			'shopping_bag'		=> app('request')->get('shopping_bag'),
 			'transaction'		=> app('request')->get("transaction", []),
-			'payment_methods'	=> app('dropcart')->getPaymentMethods(),
+			'payment_methods'	=> $payment_methods,
 			'transaction_status' => app('request')->get("transaction_status", "FINAL")
 		]);
 	}]);
