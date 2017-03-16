@@ -175,6 +175,7 @@ return [
 	'url_support'				=> 'support-en-faq',
 	'url_aboutus'				=> 'over-ons',
 	'url_account'				=> 'mijn-account',
+    'url_products_by_query'	    => 'producten/alles/',
 	'url_products_by_category'	=> 'producten/categorie/{category_name}/{category_id}',
 	'url_product'				=> 'product/{product_name}/{product_id}',
 	'url_shopping_bag'			=> 'winkelmandje',
