@@ -20,7 +20,7 @@
     <div class="col-md-2 filter-box">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Filter op merk</h3>
+                <h5 class="panel-title">Filter op merk</h5>
             </div>
             <div class="panel-body">
                 <!-- change col-sm-N to reflect how you would like your column spacing (http://getbootstrap.com/css/#forms-control-sizes) -->

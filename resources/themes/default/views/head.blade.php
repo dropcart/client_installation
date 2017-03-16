@@ -42,7 +42,7 @@
             <div class="push-left">
             <!-- <h3 class="text-muted"><?= env('SITE_NAME') ?></h3> -->
                 <a href="<?= route('home', ['locale' => loc()]); ?>"><img style="max-height: 94px;"
-                                                                          src="<?= env('BASE_URL', '/') ?>img/logo_small.png"
+                                                                          src="http://beheer.dropcart.app/images/uploads/store/1/logo-510-188.png"
                                                                           alt="<?= env('SITE_NAME'); ?>"/></a>
                 @if(lang('site_slug') !== 'site_slug')<h4
                         class="slogan"><?= substr(lang('site_slug'), 0, 25) ?></h4>@else
@@ -58,6 +58,7 @@
                 @endif
                 <div class="form-group">
                     <div class="col-sm-12">
+                        <h5 class="global-search-title">Zoek in assortiment:</h5>
                         <div class="search input-group" data-initialize="search" role="search">
                             <input id="query" name="query" class="form-control"
                                    placeholder="Naam, beschrijving, EAN of SKU" type="search"

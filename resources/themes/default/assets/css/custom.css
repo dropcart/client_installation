@@ -117,6 +117,7 @@
 /* Override Bootstrap */
 .nav-justified {
 	max-height: none !important;
+	border-radius: 2px;
 }
 .nav > li.disabled > a:hover {
     cursor: default;
@@ -126,10 +127,21 @@
 /* Filter box */
 .filter-box {
     padding: 0px;
+	margin-top: 48px;
 }
 
-.search.input-group {
+.filter-box .panel.panel-default {
+	border-radius: 4px;
+}
+
+.filter-box .panel-title {
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.global-search-title {
 	margin-top: 70px;
+	font-weight: bold;
 }
 
 .search-category.input-group {
