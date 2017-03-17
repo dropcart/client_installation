@@ -979,5 +979,38 @@ class Client {
 			return new ClientException($this->context, $any);
 		}
 	}
+
+	/**
+     * IMAGE ROUTES (LOGO / BRANDS)
+     */
+    public function getLogoDefault()
+    {
+        $request = new Request('GET', $this->findUrl('store/logo/logo-default.png'));
+        $response = $this->client->send($request, [
+            'timeout' => self::$g_timeout,
+            'connect_timeout' => self::$g_connect_timeout
+        ]);
+        return $response->getBody();
+    }
+
+    public function getLogoSquare()
+    {
+        $request = new Request('GET', $this->findUrl('store/logo/logo-square.png'));
+        $response = $this->client->send($request, [
+            'timeout' => self::$g_timeout,
+            'connect_timeout' => self::$g_connect_timeout
+        ]);
+        return $response->getBody();
+    }
+
+    public function getLogo()
+    {
+        $request = new Request('GET', $this->findUrl('store/logo/logo.png'));
+        $response = $this->client->send($request, [
+            'timeout' => self::$g_timeout,
+            'connect_timeout' => self::$g_connect_timeout
+        ]);
+        return $response->getBody();
+    }
 	
 }

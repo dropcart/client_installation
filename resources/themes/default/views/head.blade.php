@@ -42,7 +42,7 @@
             <div class="push-left">
             <!-- <h3 class="text-muted"><?= env('SITE_NAME') ?></h3> -->
                 <a href="<?= route('home', ['locale' => loc()]); ?>"><img style="max-height: 94px;"
-                                                                          src="http://beheer.dropcart.app/images/uploads/store/1/logo-510-188.png"
+                                                                          src="<?= route('home', ['locale' => loc()]); ?>/images/logo.png"
                                                                           alt="<?= env('SITE_NAME'); ?>"/></a>
                 @if(lang('site_slug') !== 'site_slug')<h4
                         class="slogan"><?= substr(lang('site_slug'), 0, 25) ?></h4>@else

@@ -339,6 +339,23 @@ $app->group([
 			return redirect()->to('/');
 		}
 	}]);
+
+    /** LOGO ROUTES */
+    $app->get('/images/logo-default.png', ['as' => 'images', function()
+    {
+        $image = app('dropcart')->getLogoDefault();
+        return response($image)->header('Content-Type', 'image/png');
+    }]);
+    $app->get('/images/logo-square.png', ['as' => 'images', function()
+    {
+        $image = app('dropcart')->getLogoSquare();
+        return response($image)->header('Content-Type', 'image/png');
+    }]);
+    $app->get('/images/logo.png', ['as' => 'images', function()
+    {
+        $image = app('dropcart')->getLogo();
+        return response($image)->header('Content-Type', 'image/png');
+    }]);
 });
 
 // Template asset management (up to 5 parameters)
