@@ -7,7 +7,8 @@
         "php" : ">=5.6.4",
         "dropcart/client": "dev-master",
         "laravel/lumen-framework": "5.3.*",
-        "vlucas/phpdotenv": "~2.2"
+        "vlucas/phpdotenv": "~2.2",
+        "bugsnag/bugsnag-laravel": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

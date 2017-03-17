@@ -55,6 +55,10 @@ return array(
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
     'Cron\\' => array($vendorDir . '/mtdowling/cron-expression/src/Cron'),
+    'Composer\\CaBundle\\' => array($vendorDir . '/composer/ca-bundle/src'),
     'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
+    'Bugsnag\\PsrLogger\\' => array($vendorDir . '/bugsnag/bugsnag-psr-logger/src'),
+    'Bugsnag\\BugsnagLaravel\\' => array($vendorDir . '/bugsnag/bugsnag-laravel/src'),
+    'Bugsnag\\' => array($vendorDir . '/bugsnag/bugsnag/src'),
     'App\\' => array($baseDir . '/app'),
 );

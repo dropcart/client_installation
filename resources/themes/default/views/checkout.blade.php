@@ -69,25 +69,25 @@
             </thead>
             <tbody>
             <tr>
-                <td><?= $transaction['customer_details']['billing_first_name'] ?> <?= $transaction['customer_details']['billing_last_name'] ?></td>
-                <td><?= $transaction['customer_details']['shipping_first_name'] ?> <?= $transaction['customer_details']['shipping_last_name'] ?></td>
-                <td><?= $transaction['customer_details']['first_name'] ?> <?= $transaction['customer_details']['last_name'] ?></td>
+                <td><?= @$transaction['customer_details']['billing_first_name'] ?> <?= @$transaction['customer_details']['billing_last_name'] ?></td>
+                <td><?= @$transaction['customer_details']['shipping_first_name'] ?> <?= @$transaction['customer_details']['shipping_last_name'] ?></td>
+                <td><?= @$transaction['customer_details']['first_name'] ?> <?= @$transaction['customer_details']['last_name'] ?></td>
             </tr>
             <tr>
-                <td rowspan="2"><?= $transaction['customer_details']['billing_address_1'] ?><?= $transaction['customer_details']['billing_address_2'] ?></td>
-                <td rowspan="2"><?= $transaction['customer_details']['shipping_address_1'] ?><?= $transaction['customer_details']['shipping_address_2'] ?></td>
-                <td><?= $transaction['customer_details']['email'] ?></td>
+                <td rowspan="2"><?= @$transaction['customer_details']['billing_address_1'] ?><?= @$transaction['customer_details']['billing_address_2'] ?></td>
+                <td rowspan="2"><?= @$transaction['customer_details']['shipping_address_1'] ?><?= @$transaction['customer_details']['shipping_address_2'] ?></td>
+                <td><?= @$transaction['customer_details']['email'] ?></td>
             </tr>
             <tr>
-                <td><?= $transaction['customer_details']['telephone'] ?></td>
+                <td><?= @$transaction['customer_details']['telephone'] ?></td>
             </tr>
             <tr>
-                <td><?= $transaction['customer_details']['billing_postcode'] ?> <?= $transaction['customer_details']['billing_city'] ?></td>
-                <td><?= $transaction['customer_details']['shipping_postcode'] ?> <?= $transaction['customer_details']['shipping_city'] ?></td>
+                <td><?= @$transaction['customer_details']['billing_postcode'] ?> <?= @$transaction['customer_details']['billing_city'] ?></td>
+                <td><?= @$transaction['customer_details']['shipping_postcode'] ?> <?= @$transaction['customer_details']['shipping_city'] ?></td>
             </tr>
             <tr>
-                <td><?= $transaction['customer_details']['billing_country'] ?></td>
-                <td><?= $transaction['customer_details']['shipping_country'] ?></td>
+                <td><?= @$transaction['customer_details']['billing_country'] ?></td>
+                <td><?= @$transaction['customer_details']['shipping_country'] ?></td>
             </tr>
             </tbody>
         </table>

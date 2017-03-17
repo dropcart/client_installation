@@ -65,6 +65,13 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+// Bugsnag integration
+$app->register(Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class);
+
+$app->extend(\Psr\Log\LoggerInterface::class, function ($logger, $app) {
+	return new \Bugsnag\BugsnagLaravel\MultiLogger([$logger, $app['bugsnag.logger']]);
+});
+
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
