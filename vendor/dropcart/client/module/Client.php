@@ -52,7 +52,7 @@ class Client {
 		return function (callable $handler) use ($that) {
 			return function (RequestInterface $request, array $options) use ($handler, $that) {
 				$token = [ 'iss' => $that->public_key, 'iat' => time() ];
-				$jwt = JWT::encode($token, $that->public_key);
+				$jwt = JWT::encode($token, $that->private_key);
 				$request = $request->withHeader("Authorization", "Bearer " . $jwt);
 				return $handler($request, $options);
 			};
@@ -207,58 +207,6 @@ class Client {
 			throw $this->wrapException($any);
 		}
 	}
-
-    /**
-     * Retrieves a list of products.
-     *
-     * <p>
-     * Makes a blocking request with the Dropcart API server to retrieve the products associated with
-     * the account currently authenticated with.
-     * </p>
-     *
-     * <p>
-     * Returns an array of products, one element for each product. The product itself is an associative array with the summary fields of a product. These fields are:
-     * `id`, `ean`, `sku`, `shipping_days`, `image`, `price`, `in_stock`, `name`, `description`. See the API documentation for information concering the
-     * value ranges of these fields. The return value is similar to that of `findProductListing`.
-     * </p>
-     *
-     * @param mixed $category
-     */
-    public function getProductListingBySearch($page = null, $show_unavailable_items = false, $brands = [], $query = null)
-    {
-        $param = [];
-        if ($page) $param['page'] = (string) $page;
-        if ($show_unavailable_items) $param['show_unavailable_items'] = 'true';
-        if (!empty($brands)) $param['brands'] = implode(",", $brands);
-        if ($query) $param['query'] = (string) $query;
-
-        try {
-            $request = new Request('GET', $this->findUrl('products', '/all', $param));
-            $response = $this->client->send($request, ['timeout' => self::$g_timeout, 'connect_timeout' => self::$g_connect_timeout]);
-            $this->checkResult($response);
-            $json = json_decode($response->getBody(), true);
-            $result = [
-                'list' => [],
-                'pagination' => [],
-                'brands' => [],
-            ];
-            if (isset($json['data'])) {
-                $result['list'] = $json['data'];
-            }
-            if (isset($json['meta']) && isset($json['meta']['pagination'])) {
-                $result['pagination'] = $json['meta']['pagination'];
-            }
-            if (isset($json['meta']) && isset($json['meta']['brands'])) {
-                $result['brands'] = $json['meta']['brands'];
-            }
-            if (count($result) > 0) {
-                return $result;
-            }
-        } catch (\Exception $any) {
-            throw $this->wrapException($any);
-        }
-        throw $this->wrapException(new ClientException("Product listing has no results"));
-    }
 	
 	/**
 	 * Retrieves a list of products.
@@ -282,7 +230,7 @@ class Client {
 	 * 
 	 * @param mixed $category
 	 */
-	public function getProductListingByCategory($category = null, $page = null, $show_unavailable_items = false, $brands = [], $query = null)
+	public function getProductListing($category = null, $page = null, $show_unavailable_items = false, $brands = [], $query = null)
 	{
 		if (is_null($category) && $this->default_category) {
 			$category = $this->default_category;
@@ -979,38 +927,5 @@ class Client {
 			return new ClientException($this->context, $any);
 		}
 	}
-
-	/**
-     * IMAGE ROUTES (LOGO / BRANDS)
-     */
-    public function getLogoDefault()
-    {
-        $request = new Request('GET', $this->findUrl('store/logo/logo-default.png'));
-        $response = $this->client->send($request, [
-            'timeout' => self::$g_timeout,
-            'connect_timeout' => self::$g_connect_timeout
-        ]);
-        return $response->getBody();
-    }
-
-    public function getLogoSquare()
-    {
-        $request = new Request('GET', $this->findUrl('store/logo/logo-square.png'));
-        $response = $this->client->send($request, [
-            'timeout' => self::$g_timeout,
-            'connect_timeout' => self::$g_connect_timeout
-        ]);
-        return $response->getBody();
-    }
-
-    public function getLogo()
-    {
-        $request = new Request('GET', $this->findUrl('store/logo/logo.png'));
-        $response = $this->client->send($request, [
-            'timeout' => self::$g_timeout,
-            'connect_timeout' => self::$g_connect_timeout
-        ]);
-        return $response->getBody();
-    }
 	
 }
