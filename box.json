@@ -1,0 +1,33 @@
+{
+	"files": [
+		"vendor/phpseclib/phpseclib/phpseclib/bootstrap.php",
+		"vendor/herrera-io/json/src/lib/json_version.php",
+		"vendor/herrera-io/phar-update/src/lib/constants.php"
+	],
+    "finder": [
+        {
+            "name": "*.php",
+            "exclude": [
+                "herrera-io",
+                "kherge",
+                "phpseclib",
+                "phpunit",
+                "phine",
+                "seld",
+                "tedivm",
+                "justinrainbow",
+                "faker",
+                "phpunit",
+                "mockery",
+                "tests",
+                "Tests",
+                "test",
+                "Test",
+                "Testing"
+            ],
+            "in": "vendor"
+        }
+    ],
+    "output": "vendor.phar",
+    "web": true
+}

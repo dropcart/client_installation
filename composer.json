@@ -11,23 +11,7 @@
         "bugsnag/bugsnag-laravel": "^2.0"
     },
     "require-dev": {
-        "fzaninotto/faker": "~1.4",
-        "phpunit/phpunit": "~5.0",
-        "mockery/mockery": "~0.9"
-    },
-    "autoload": {
-        "psr-4": {
-            "App\\": "app/"
-        },
-        "files": [
-
-        ]
-    },
-    "autoload-dev": {
-        "classmap": [
-            "tests/",
-            "database/"
-        ]
+        "kherge/box": "^2.7"
     },
     "scripts": {
         "post-root-package-install": [

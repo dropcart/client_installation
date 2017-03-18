@@ -1,7 +1,0 @@
-# Composer
-vendor/
-# Eclipse
-.settings/
-.project
-.buildpath
-/.idea

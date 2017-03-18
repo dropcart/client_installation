@@ -1,6 +1,12 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+// Use the phar compiled using `box build` from the Composer dependencies.
+$loader = require_once 'phar://'.__DIR__.'/../vendor.phar/vendor/autoload.php';
+// Or use the vendor files directly (for testing purposes only)
+//$loader = require_once __DIR__.'/../vendor/autoload.php';
+
+// Add the application class mapping manually (not via composer)
+$loader->addPsr4("App\\", __DIR__."/../app/");
 
 try {
     (new Dotenv\Dotenv(__DIR__.'/../'))->load();
