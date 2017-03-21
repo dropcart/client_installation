@@ -142,7 +142,14 @@ return [
 	'page_product_list' => [
 		'title'				=> 'Producten in :category_name',
 		'no_products'		=> 'In deze categorie verkopen wij nog geen producten. Maar houd het in de gaten, want we zijn er mee bezig!',
+		'filter_brand'		=> 'Filter op merk',
+		'filter'			=> 'Filter',
+		'search_in_category'=> 'Zoek binnen :category',
 	],
+
+	'search_in_products'	=> 'Zoek binnen assortiment',
+	'search'				=> 'Zoeken',
+	'search_placeholder'	=> 'Naam, beschrijving, EAN of SKU',
 
 	'page_error' => [
 		'title'				=> 'Fout',
@@ -175,7 +182,7 @@ return [
 	'url_support'				=> 'support-en-faq',
 	'url_aboutus'				=> 'over-ons',
 	'url_account'				=> 'mijn-account',
-    'url_products_by_query'	    => 'producten/alles/',
+    'url_products_by_query'	    => 'producten',
 	'url_products_by_category'	=> 'producten/categorie/{category_name}/{category_id}',
 	'url_product'				=> 'product/{product_name}/{product_id}',
 	'url_shopping_bag'			=> 'winkelmandje',

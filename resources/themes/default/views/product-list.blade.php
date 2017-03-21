@@ -20,11 +20,9 @@
     <div class="col-md-2 filter-box">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h5 class="panel-title">Filter op merk</h5>
+                <h5 class="panel-title">{{ lang('page_product_list.filter_brand') }}</h5>
             </div>
             <div class="panel-body">
-                <!-- change col-sm-N to reflect how you would like your column spacing (http://getbootstrap.com/css/#forms-control-sizes) -->
-                <!-- Form Name -->
                 <form class="form-horizontal">
                     @if(isset($query))
                         <input type="hidden" name="query" value="{{$query}}" />
@@ -58,7 +56,7 @@
                     <br/>
                     <div class="form-group">
                         <div class="col-sm-12">
-                            <button type="submit" class="btn btn-primary pull-left">Filter op merk</button>
+                            <button type="submit" class="btn btn-primary pull-left">{{ lang('page_product_list.filter') }}</button>
                         </div>
                     </div>
                 </form>
@@ -75,18 +73,18 @@
             <div class="form-group">
                 <div class="col-sm-12">
                     <?php $url = $_SERVER['REQUEST_URI']; ?>
-                    @if(strstr($url, 'producten/categorie'))
-                        <h4>Zoek in categorie</h4>
-                    @elseif(strstr($url, 'producten/alles'))
-                        <h4>Zoek in assortiment</h4>
+                    @if(strstr($url, lang('url_products_by_category')))
+                        <h4>{{ lang('page_product_list.search_in_category', ['category' => $category_name]) }}</h4>
+                    @elseif(strstr($url, lang('url_products_by_query')))
+                        <h4>{{ lang('search_in_products') }}</h4>
                     @endif
                     <div class="search-category input-group" data-initialize="search" role="search">
-                        <input id="query" name="query" class="form-control" placeholder="Naam, beschrijving, EAN of SKU"
+                        <input id="query" name="query" class="form-control" placeholder="{{ lang('search_placeholder') }}"
                                type="search" value="{{(isset($query) ? $query : '')}}">
                         <span class="input-group-btn">
 		        <button class="btn btn-default" type="submit">
 		          <span class="glyphicon glyphicon-search"></span>
-		          <span class="sr-only">Search</span>
+		          <span class="sr-only">{{ lang('search') }}</span>
 		        </button>
 		        </span>
                     </div>

@@ -58,15 +58,15 @@
                 @endif
                 <div class="form-group">
                     <div class="col-sm-12">
-                        <h5 class="global-search-title">Zoek in assortiment:</h5>
+                        <h5 class="global-search-title">{{ lang('search_in_products') }}</h5>
                         <div class="search input-group" data-initialize="search" role="search">
                             <input id="query" name="query" class="form-control"
-                                   placeholder="Naam, beschrijving, EAN of SKU" type="search"
+                                   placeholder="{{ lang('search_placeholder') }}" type="search"
                                    value="{{(isset($query) ? $query : '')}}">
                             <span class="input-group-btn">
 		        <button class="btn btn-default" type="submit">
 		          <span class="glyphicon glyphicon-search"></span>
-		          <span class="sr-only">Search</span>
+		          <span class="sr-only">{{ lang('search') }}</span>
 		        </button>
 		      </span>
                         </div>

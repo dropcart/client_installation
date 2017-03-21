@@ -101,6 +101,7 @@ $app->group([
 
         return View::make('Current::product-list', [
             'page_title'        => lang('page_product_list.title', ['category_name' => ucfirst($category_name)]),
+			'category_name'		=> $category_name,
             'products'          => $products,
         	'brands'            => $brands,
         	'selected_brands'   => $selected_brands,
