@@ -267,7 +267,7 @@ $app->group([
 			$transaction = app('dropcart')->createTransaction($request->get('shopping_bag_internal', ""), $customerDetails);
 		}
 
-		if ($transaction['transaction_status'] == "FINAL") {
+		if ($transaction['status'] == "FINAL") {
 			setcookie('transaction_reference', $transaction['reference'], 0, '/');
 			setcookie('transaction_checksum', $transaction['checksum'], 0, '/');
 			// Send thru
@@ -299,6 +299,9 @@ $app->group([
 		$transaction = app('request')->get('transaction', []);
 		if(!isset($transaction['customer_details']) || !app('request')->has('shopping_bag')) {
 			return redirect()->route('shopping_bag', ['locale' => loc()]);
+		}
+		if ($transaction['status'] == "PARTIAL") {
+			return redirect()->route('order.customer_details', ['locale' => loc()]);
 		}
 
 		$payment_methods = app('dropcart')->getPaymentMethods();
