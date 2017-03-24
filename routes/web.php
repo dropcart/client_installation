@@ -277,7 +277,7 @@ $app->group([
 			setcookie('transaction_checksum', $transaction['checksum'], 0, '/');
 			
 			$data['transaction'] = $transaction;
-			$data['transaction_status'] = $transaction['transaction_status'];
+			$data['transaction_status'] = $transaction['status'];
 			$data['details'] 	 = $transaction['customer_details'];
 			$data['diff_billing_shipping'] = (
 					@$data['details']['billing_first_name'] != @$data['details']['shipping_first_name'] ||
