@@ -230,7 +230,7 @@ $app->group([
 		$request = app('request');
 
 		// Save customer details to transaction
-		if (!$request->has('transaction') || $request->get('transaction_status') != "CONFIRMED") {
+		if (!$request->has('transaction') || $request->get('transaction_status') == "PARTIAL" || $request->get('transaction_status') == "FINAL") {
 			$diffSD = (isset($_POST['has_delivery']) && $_POST['has_delivery']);
 			$customerDetails = [
 				'first_name' 			=> $request->billing_first_name,
@@ -256,7 +256,7 @@ $app->group([
 		}
 
 		if($request->has('transaction')) {
-			if ($request->get('transaction_status') != "CONFIRMED") {
+			if ($request->get('transaction_status') == "PARTIAL" || $request->get('transaction_status') == "FINAL") {
 				// Do not allow updating transactions whenever it is already confirmed.
 				$transaction = app('dropcart')->updateTransaction($request->get('shopping_bag_internal', ""), $request->get('transaction_reference', 0), $request->get('transaction_checksum', ""), $customerDetails);
 			} else {
@@ -267,10 +267,30 @@ $app->group([
 			$transaction = app('dropcart')->createTransaction($request->get('shopping_bag_internal', ""), $customerDetails);
 		}
 
-		setcookie('transaction_reference', $transaction['reference'], 0, '/');
-		setcookie('transaction_checksum', $transaction['checksum'], 0, '/');
-		// Send thru
-		return redirect()->route('order.checkout', ['locale' => loc()]);
+		if ($transaction['transaction_status'] == "FINAL") {
+			setcookie('transaction_reference', $transaction['reference'], 0, '/');
+			setcookie('transaction_checksum', $transaction['checksum'], 0, '/');
+			// Send thru
+			return redirect()->route('order.checkout', ['locale' => loc()]);
+		} else {
+			setcookie('transaction_reference', $transaction['reference'], 0, '/');
+			setcookie('transaction_checksum', $transaction['checksum'], 0, '/');
+			
+			$data['transaction'] = $transaction;
+			$data['transaction_status'] = $transaction['transaction_status'];
+			$data['details'] 	 = $transaction['customer_details'];
+			$data['diff_billing_shipping'] = (
+					@$data['details']['billing_first_name'] != @$data['details']['shipping_first_name'] ||
+					@$data['details']['billing_last_name'] 	!= @$data['details']['shipping_last_name'] 	||
+					@$data['details']['billing_address_1'] 	!= @$data['details']['shipping_address_1'] 	||
+					@$data['details']['billing_address_2'] 	!= @$data['details']['shipping_address_2'] 	||
+					@$data['details']['billing_city'] 		!= @$data['details']['shipping_city'] 		||
+					@$data['details']['billing_postcode'] 	!= @$data['details']['shipping_postcode'] 	||
+					@$data['details']['billing_country'] 	!= @$data['details']['shipping_country']
+					);
+			
+			return View::make('Current::customer-details', $data);
+		}
 	}]);
 
 	/** CONFIRM DATA */
