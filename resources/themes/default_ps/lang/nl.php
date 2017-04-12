@@ -14,7 +14,7 @@ return [
 	'site_slug'		=> 'FANTASTISCH WEBWINKEL',
 	'contact'		=> 'Contact',
 	'aboutus'		=> 'Over ons',
-	'support'		=> 'Support & FAQ je ma',
+	'support'		=> 'Support & FAQ',
 	'account'		=> 'Mijn account',
 
 	'page_all'		=> [
