@@ -190,6 +190,6 @@ return [
 		'customer_details'		=> 'bestellen/klantgegevens',
 		'checkout'				=> 'bestellen/afrekenen',
 		'confirmation'			=> 'bestellen/bevestiging'
-	]
+	],
 
 ];

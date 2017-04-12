@@ -12,6 +12,11 @@
 
 include_once __DIR__ . '/custom.php';
 
+// Include theme routes if required
+if(file_exists('../resources/themes/'.env('THEME').'/assets/routes.php')) {
+    include_once '../resources/themes/' . env('THEME') . '/assets/routes.php';
+}
+
 $app->get('/', function() use ($app)
 {
 	$locale = loc();
