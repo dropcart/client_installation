@@ -26,7 +26,9 @@
 <div class="row">
     <div class="col-md-12">
         <br />
+        <form class="printer-products" method="get">
         <a disabled href="#" class="btn btn-primary pull-right submit-btn">{{ lang('show_my_cartridges') }}</a>
+        </form>
     </div><!-- /col-->
 </div><!-- /row -->
 
@@ -124,7 +126,14 @@
         var printerTypeId = $('#printerTypeSelect').val();
         var url = '<?php echo loc().'/'.lang('url_products_by_printer') ?>';
         url = url.replace('{printer_id}', printerTypeId)
-        window.location.replace(url);
+        $('.printer-products').attr('action', url);
+
+        // Append printer name, serie and type to the form for displaying purpose
+        $('.printer-products').append('<input type="hidden" name="printer-brand" value="'+$("#printerBrandSelect option:selected").text()+'" />');
+        $('.printer-products').append('<input type="hidden" name="printer-series" value="'+$("#printerSerieSelect option:selected").text()+'" />');
+        $('.printer-products').append('<input type="hidden" name="printer-type" value="'+$("#printerTypeSelect option:selected").text()+'" />');
+
+        $('.printer-products').submit();
     });
 
 </script>

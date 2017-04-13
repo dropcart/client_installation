@@ -141,6 +141,7 @@ return [
 
 	'page_product_list' => [
 		'title'				=> 'Producten in :category_name',
+		'title_printer'     => 'Producten geschikt voor de :printer_name',
 		'no_products'		=> 'In deze categorie verkopen wij nog geen producten. Maar houd het in de gaten, want we zijn er mee bezig!',
 		'filter_brand'		=> 'Filter op merk',
 		'filter'			=> 'Filter',

@@ -43,7 +43,7 @@
                         </div>
                     @endif
 
-                    <div class="form-group">
+                   {{-- <div class="form-group">
                     <div class="col-sm-12">
                     <div class="checkbox">
                     <label class="checkbox-custom" id="0">
@@ -52,8 +52,8 @@
                     </label>
                     </div>
                     </div>
-                    </div>
-                    <br/>
+                    </div>--}}
+
                     <div class="form-group">
                         <div class="col-sm-12">
                             <button type="submit" class="btn btn-primary pull-left">{{ lang('page_product_list.filter') }}</button>
@@ -215,7 +215,8 @@
                 ?>
 
                 @if($pagination['total_pages'] == 1)
-                    <li class="disabled">1</li>
+                    <li class="{{ $pagination['current_page'] == 1 ? 'active' : '' }} disabled"><a
+                                href="?page=1{{ $vars }}">1</a></li>
                 @else
                     <li class="{{ $pagination['current_page'] == 1 ? 'active' : '' }}"><a
                                 href="?page=1{{ $vars }}">1</a></li>

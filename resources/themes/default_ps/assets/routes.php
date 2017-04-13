@@ -48,7 +48,7 @@ $app->group([
                 // Construct client with custom stack
                 $client = new \GuzzleHttp\Client(['handler' => $stack]);
             } catch (\Exception $any) {
-                throw $this->wrapException($any);
+                $this->response->errorNotFound('Authorization error');
             }
 
             $params = [
@@ -66,7 +66,7 @@ $app->group([
                 return $json;
             }
         } catch (\Exception $any) {
-            throw $this->wrapException($any);
+            $this->response->errorNotFound('Error getting brands');
         }
     }]);
 
@@ -93,7 +93,7 @@ $app->group([
                 // Construct client with custom stack
                 $client = new \GuzzleHttp\Client(['handler' => $stack]);
             } catch (\Exception $any) {
-                throw $this->wrapException($any);
+                $this->response->errorNotFound('Authorization error');
             }
 
             $params = [
@@ -112,7 +112,7 @@ $app->group([
                 return $json;
             }
         } catch (\Exception $any) {
-            throw $this->wrapException($any);
+            $this->response->errorNotFound('Error getting series');
         }
     }]);
 
@@ -139,7 +139,7 @@ $app->group([
                 // Construct client with custom stack
                 $client = new \GuzzleHttp\Client(['handler' => $stack]);
             } catch (\Exception $any) {
-                throw $this->wrapException($any);
+                $this->response->errorNotFound('Authorization error');
             }
 
             $params = [
@@ -161,7 +161,7 @@ $app->group([
                 return $json;
             }
         } catch (\Exception $any) {
-            throw $this->wrapException($any);
+            $this->response->errorNotFound('Error getting types');
         }
     }]);
 
@@ -170,22 +170,34 @@ $app->group([
         $request = app('request');
         $locale = loc();
 
-        $show_unavailable_items = !!$request->input('show_unavailable_items', false);
+        // Set the selected printer name
+        $printer_name = $request->get('printer-brand').' '.$request->get('printer-series').' '.$request->get('printer-type');
+
+        // Always show unavailable items for now
+        $show_unavailable_items = !!$request->input('show_unavailable_items', true);
+
         $selected_brands = $request->input('brands', []);
         if (empty($selected_brands)) {
             $selected_brands = [];
         }
 
+        $param = [];
+
+        // Set parameters
         $query = $request->input('query', null);
-        if (empty($query)) {
-            $query = null;
-        }
+        if ($request->input('page')) $param['page'] = (string) $request->input('page');
+        if ($query) $param['query'] = (string) $query;
 
         $products = [];
 
+        // Set endpoint and add parameters
         $endpoint = env('DROPCART_ENDPOINT') . '/v2/printer-selector/' . $printer_id . '/products?country=' . $locale;
+        foreach ($param as $key => $value) {
+            $endpoint .= "&" . urlencode($key) . "=" . urlencode($value);
+        }
+
         try {
-            $request = new Request('GET', $endpoint);
+            $request = new Request('GET', $endpoint, $param);
 
             try {
                 // Use static create method to use default Middleware
@@ -205,7 +217,7 @@ $app->group([
                 // Construct client with custom stack
                 $client = new \GuzzleHttp\Client(['handler' => $stack]);
             } catch (\Exception $any) {
-                throw $this->wrapException($any);
+                $this->response->errorNotFound('Authorization error');
             }
 
             $params = [
@@ -241,7 +253,7 @@ $app->group([
                 // throw new ClientException("Server responded with an error");
             }
         } catch (\Exception $any) {
-            throw $this->wrapException($any);
+            $this->response->errorNotFound('Printer not found');
         }
 
         $pagination = $products['pagination'];
@@ -249,7 +261,7 @@ $app->group([
         $products   = $products['list'];
 
         return View::make('Current::product-list', [
-            'page_title'        => lang('page_product_list.title', ['category_name' => 'Printer']),
+            'page_title'        => lang('page_product_list.title_printer', ['printer_name' => $printer_name]),
             'products'          => $products,
             'brands'            => $brands,
             'selected_brands'   => $selected_brands,

@@ -87,7 +87,10 @@ $app->group([
     $app->get('/' . lang('url_products_by_category'), ['as' => 'products_by_category', function($category_name, $category_id) use ($app)
     {
         $request = app('request');
-        $show_unavailable_items = !!$request->input('show_unavailable_items', false);
+
+        // ALWAYS SHOW UNAVAILABLE PRODUCTS FOR NOW
+        $show_unavailable_items = !!$request->input('show_unavailable_items', true);
+
         $selected_brands = $request->input('brands', []);
         if (empty($selected_brands)) {
         	$selected_brands = [];
@@ -120,7 +123,10 @@ $app->group([
     $app->get('/' . lang('url_products_by_query'), ['as' => 'products_by_query', function() use ($app)
     {
         $request = app('request');
-        $show_unavailable_items = !!$request->input('show_unavailable_items', false);
+
+        // ALWAYS SHOW UNAVAILABLE PRODUCTS FOR NOW
+        $show_unavailable_items = !!$request->input('show_unavailable_items', true);
+
         $selected_brands = $request->input('brands', []);
         if (empty($selected_brands)) {
             $selected_brands = [];
