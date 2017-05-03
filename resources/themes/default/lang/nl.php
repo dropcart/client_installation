@@ -192,4 +192,5 @@ return [
 		'confirmation'			=> 'bestellen/bevestiging'
 	],
 
+    'more' => "Meer",
 ];

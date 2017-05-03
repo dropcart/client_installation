@@ -210,4 +210,5 @@ return [
     'step_two'      => 'Stap 2',
     'step_three'    => 'Stap 3',
 
+    'more' => "Meer",
 ];
