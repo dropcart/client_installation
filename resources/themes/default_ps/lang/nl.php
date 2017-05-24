@@ -146,6 +146,7 @@ return [
 		'filter_brand'		=> 'Filter op merk',
 		'filter'			=> 'Filter',
 		'search_in_category'=> 'Zoek binnen :category',
+        'not_available'    => 'Toon ook producten die niet op voorraad zijn',
 	],
 
 	'search_in_products'	=> 'Zoek binnen assortiment',

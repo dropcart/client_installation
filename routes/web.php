@@ -88,8 +88,8 @@ $app->group([
     {
         $request = app('request');
 
-        // ALWAYS SHOW UNAVAILABLE PRODUCTS FOR NOW
-        $show_unavailable_items = !!$request->input('show_unavailable_items', true);
+        // SHOW UNAVAILABLE ITEMS
+        $show_unavailable_items = !!$request->input('show_unavailable_items', false);
 
         $selected_brands = $request->input('brands', []);
         if (empty($selected_brands)) {
@@ -124,7 +124,7 @@ $app->group([
     {
         $request = app('request');
 
-        // ALWAYS SHOW UNAVAILABLE PRODUCTS FOR NOW
+        // ALWAYS SHOW UNAVAILABLE PRODUCTS IN SEARCH FOR NOW
         $show_unavailable_items = !!$request->input('show_unavailable_items', true);
 
         $selected_brands = $request->input('brands', []);

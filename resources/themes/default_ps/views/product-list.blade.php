@@ -43,22 +43,22 @@
                         </div>
                     @endif
 
-                   {{-- <div class="form-group">
-                    <div class="col-sm-12">
-                    <div class="checkbox">
-                    <label class="checkbox-custom" id="0">
-                    <input name="show_unavailable_items" type="checkbox" value="true"{{ $show_unavailable_items ? ' checked="checked"' : '' }}>
-                    <span class="checkbox-label">Toon ook producten die niet op voorraad zijn</span>
-                    </label>
-                    </div>
-                    </div>
-                    </div>--}}
-
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <button type="submit" class="btn btn-primary pull-left">{{ lang('page_product_list.filter') }}</button>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="checkbox">
+                                    <label class="checkbox-custom" id="0">
+                                        <input name="show_unavailable_items" type="checkbox" value="true"{{ $show_unavailable_items ? ' checked="checked"' : '' }}>
+                                        <span class="checkbox-label">{{ lang('page_product_list.not_available') }}</span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <button type="submit" class="btn btn-primary pull-left">{{ lang('page_product_list.filter') }}</button>
+                            </div>
+                        </div>
                 </form>
             </div>
         </div>
