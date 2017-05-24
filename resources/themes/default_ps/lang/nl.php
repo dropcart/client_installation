@@ -164,7 +164,7 @@ return [
 		'no_description'	=> ':product_name wordt binnen 24 uur verzonden mits op voorraad. Dat is de service van ' . env('SITE_NAME') . '!',
 		'not_in_stock'		=> 'Niet op voorraad, langere levertijd',
 		'in_stock'			=> ':stock_quantity op voorraad',
-		'delivery_time'		=> 'Leverbaar binnen :shipping_days werkdagen',
+		'delivery_time'		=> 'Leverbaar binnen :shipping_days werkdag(en)',
 		'shipping_included'	=> 'inclusief verzendkosten',
 		'order_now'         => 'Bestellen',
 	],

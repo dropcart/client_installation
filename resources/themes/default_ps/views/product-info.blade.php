@@ -30,9 +30,7 @@
             {{-- PRODUCT STOCK --}}
             <div class="float-left stock-shipping-status">
                 @if($product['stock'])
-                    <div class="label label-success">{{ lang('product_info.in_stock', [
-                                'stock_quantity' => $product['stock']
-                            ]) }}</div>
+                    <div class="label label-success">{{$product['stock']}}</div>
                     @if($product['shipping_days'])
                         <div class="label label-info">{{ lang('product_info.delivery_time', [
                                 'shipping_days' => $product['shipping_days']
