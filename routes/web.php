@@ -187,6 +187,7 @@ $app->group([
     	if (!app('request')->has('transaction') || app('request')->get('transaction_status') != "CONFIRMED") {
     		// Only process shopping bag modifications when not confirmed
     		$shoppingBagInternal	= app('request')->get('shopping_bag_internal', "");
+
     		if($quantity < 0) {
     			$shoppingBagInternal = app('dropcart')->removeShoppingBag($shoppingBagInternal, intval($product_id), -$quantity);
     		} else {
@@ -194,7 +195,24 @@ $app->group([
     		}
     		setcookie('shopping_bag', $shoppingBagInternal, 0, '/');
     	}
-		return redirect()->route('shopping_bag', ['locale' => loc()]);
+        return redirect()->route('shopping_bag', ['locale' => loc()]);
+    }]);
+
+    /** WRITE SHOPPING BAG */
+    $app->get('/' . lang('url_shopping_bag') . '/{product_id}/{quantity}/ajax', ['as' => 'shopping_bag_add_ajax', function($product_id, $quantity = 1) use ($app)
+    {
+        if (!app('request')->has('transaction') || app('request')->get('transaction_status') != "CONFIRMED") {
+            // Only process shopping bag modifications when not confirmed
+            $shoppingBagInternal	= app('request')->get('shopping_bag_internal', "");
+
+            if($quantity < 0) {
+                $shoppingBagInternal = app('dropcart')->removeShoppingBag($shoppingBagInternal, intval($product_id), -$quantity);
+            } else {
+                $shoppingBagInternal = app('dropcart')->addShoppingBag($shoppingBagInternal, intval($product_id), $quantity);
+            }
+            setcookie('shopping_bag', $shoppingBagInternal, 0, '/');
+        }
+        return response()->json(['shoppingbag' => $shoppingBagInternal]);
     }]);
 
 	/** REQUEST CUSTOMER DETAILS */
