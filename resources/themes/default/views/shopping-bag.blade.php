@@ -166,11 +166,11 @@
 
 @push('post-js')
 <script>
-    $('.btn-bag-minus, .btn-bag-plus').click(function(){
+    $('.btn-bag-minus, .btn-bag-plus').click(function () {
 
         var product_id = $(this).data('productid');
         var route = $(this).data('route');
-        var $product_row = $('tr.'+ product_id);
+        var $product_row = $('tr.' + product_id);
         var $quantity_input = $product_row.find('.product-quantity');
         var current_value = parseInt($quantity_input.val(), 10);
 
@@ -178,52 +178,68 @@
 
         var new_value = 0;
 
-        if($(this).hasClass('btn-bag-plus')){
+        if ($(this).hasClass('btn-bag-plus')) {
             // add 1 to current value
             new_value = current_value + 1;
-        }else{
+        } else {
             // subtract 1 from current_value
             new_value = current_value - 1;
         }
-
-        $quantity_input.val(new_value);
 
         $.ajax({
             method: 'GET',
             url: route,
             changed_value: new_value
-        }).success(function (a) {
-            console.log(a);
+        }).success(function (output) {
+            console.log(output);
 
-            // Calculate total items and update the cart items span
-            var amount_products = 0;
-            $('.product-quantity').each(function(){
-                amount_products = amount_products + parseInt($(this).val(), 10);
-            });
+            if (output.error === 0) {
+                // Set new value
+                $quantity_input.val(new_value);
 
-            var total_products = ''+ amount_products + ' {{lang('page_all.articles')}}';
-            $('.cart-items').text(total_products);
+                // Check what came back from the response change the stock message accordingly
+                if (output.stock_ok === 0) {
+                    $product_row.find('.label').first().removeClass('label-success').addClass('label-warning').text(output.stock_response);
+                } else {
+                    $product_row.find('.label').first().removeClass('label-warning').addClass('label-success').text(output.stock_response);
+                }
 
-            var sub_total = parseFloat(parseFloat($product_row.find('.product_piece').text().replace(',', '.')) * new_value).toFixed(2).replace('.', ',');
-            $product_row.find('.product_subtotal').text(sub_total);
+                // Calculate total items and update the cart items span
+                var amount_products = 0;
+                $('.product-quantity').each(function () {
+                    amount_products = amount_products + parseInt($(this).val(), 10);
+                });
 
-            // Calculate total price of shopping bag and update the total in the header and footer of the shopping bag
-            var total = 0.00;
-            $('.product_subtotal').each(function(){
-                total = total + parseFloat($(this).text().replace(',', '.'));
-            });
+                var total_products = '' + amount_products + ' {{lang('page_all.articles')}}';
+                $('.cart-items').text(total_products);
 
-            total = total.toFixed(2).replace('.', ',');
+                var sub_total = parseFloat(parseFloat($product_row.find('.product_piece').text().replace(',', '.')) * new_value).toFixed(2).replace('.', ',');
+                $product_row.find('.product_subtotal').text(sub_total);
 
-            total = total.toLocaleString('nl-NL', { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, useGrouping: true});
-            $('.cart-total-amount, .shopping-bag-total').text(total);
-            console.log(total);
+                // Calculate total price of shopping bag and update the total in the header and footer of the shopping bag
+                var total = 0.00;
+                $('.product_subtotal').each(function () {
+                    total = total + parseFloat($(this).text().replace(',', '.'));
+                });
 
+                total = total.toFixed(2).replace('.', ',');
 
-            $product_row.find('.btn-bag-plus, .btn-bag-minus').attr('disabled', false);
-            // Reload page when quantity is set to 0 to remove product from list
-            if(new_value === 0){
-                window.location.reload();
+                // Format total amount
+                total = total.toLocaleString('nl-NL', {
+                    style: 'currency',
+                    currency: 'EUR',
+                    maximumFractionDigits: 2,
+                    useGrouping: true
+                });
+
+                // Change total amounts on the shopping bag page
+                $('.cart-total-amount, .shopping-bag-total').text(total);
+
+                $product_row.find('.btn-bag-plus, .btn-bag-minus').attr('disabled', false);
+                // Reload page when quantity is set to 0 to remove product from list
+                if (new_value === 0) {
+                    window.location.reload();
+                }
             }
         });
     });

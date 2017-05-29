@@ -203,7 +203,7 @@ $app->group([
     {
         if (!app('request')->has('transaction') || app('request')->get('transaction_status') != "CONFIRMED") {
             // Only process shopping bag modifications when not confirmed
-            $shoppingBagInternal	= app('request')->get('shopping_bag_internal', "");
+            $shoppingBagInternal = app('request')->get('shopping_bag_internal', "");
 
             if($quantity < 0) {
                 $shoppingBagInternal = app('dropcart')->removeShoppingBag($shoppingBagInternal, intval($product_id), -$quantity);
@@ -211,8 +211,33 @@ $app->group([
                 $shoppingBagInternal = app('dropcart')->addShoppingBag($shoppingBagInternal, intval($product_id), $quantity);
             }
             setcookie('shopping_bag', $shoppingBagInternal, 0, '/');
+
+            $shoppingBag = app('request')->get('shopping_bag', []);
+
+            foreach($shoppingBag as $arrProduct){
+                $product = $arrProduct['product'];
+                if($product['id'] == $product_id){
+                    if($arrProduct['quantity'] > 10){
+                        $stock_ok = 0;
+                        $stock_response = lang('product_info.not_in_stock');
+
+                    }elseif($arrProduct['quantity'] > 5){
+                        $stock_ok = 1;
+                        $stock_response = lang('product_info.in_stock', [
+                            'stock_quantity' => $product['stock']
+                        ]);
+                    }else{
+                        $stock_ok = 1;
+                        $stock_response = lang('product_info.in_stock', [
+                            'stock_quantity' => $product['stock']
+                        ]);
+                    }
+                    break;
+                }
+            }
+            return response()->json(['error' => 0,'stock_response' => $stock_response, 'stock_ok' => $stock_ok, 'message' => 'Succesfully edited the shopping bag']);
         }
-        return response()->json(['shoppingbag' => $shoppingBagInternal]);
+        return response()->json(['error' => 1, 'message' => 'Nothing happened']);
     }]);
 
 	/** REQUEST CUSTOMER DETAILS */
