@@ -51,9 +51,6 @@
         {!! lang('page_shopping_bag.no_payment_read_only', ['checkout_route' => route('order.checkout', ['locale' => loc()])]) !!}
     </div>
     @endif
-    <pre>
-        <?php print_r($shopping_bag) ;?>
-    </pre>
     <table class="shopping-bag table">
         @if(count($shopping_bag) < 1)
             <tbody>
