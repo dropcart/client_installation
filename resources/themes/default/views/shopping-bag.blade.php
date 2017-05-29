@@ -115,7 +115,7 @@
                         </table>
                     </td>
                     <td>
-                        <input class="product-quantity" type="text" value="<?=$sbi['quantity'];?>" disabled/>
+                        <input class="product-quantity" type="text" data-truevalue="<?=$sbi['quantity'];?>" value="<?=$sbi['quantity'];?>" disabled/>
                         @if (!isset($transaction) || $transaction_status != "CONFIRMED")
                             <span data-productid="{{$sbi['product']['id']}}" data-route="<?= route('shopping_bag_add_ajax', [
                                 'locale'     => loc(),
@@ -244,6 +244,14 @@
                 }
             }
         });
+    });
+
+    // Re-set the values because the cache is interfering
+    $(document).ready(function(){
+       $('.product-quantity').each(function(){
+           var value = $(this).data('truevalue');
+           $(this).val(value);
+       });
     });
 </script>
 @endpush
