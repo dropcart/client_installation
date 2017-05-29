@@ -88,9 +88,13 @@
                         <strong><a href="{{ route('product', ['locale' => loc(), 'product_id' => $sbi['product']['id'], 'product_name' => str_slug($sbi['product']['name'])]) }}">{{ $sbi['product']['name'] }}</a></strong>
                         <br>
                         @if($sbi['product']['stock'])
-                            <div class="label label-success">{{ lang('product_info.in_stock', [
+                            @if($sbi['quantity'] > $sbi['product']['stock_quantity'])
+                                <div class="label label-warning">{{ lang('product_info.not_enough_stock') }}</div>
+                            @else
+                                <div class="label label-success">{{ lang('product_info.in_stock', [
                                 'stock_quantity' => $sbi['product']['stock']
                             ]) }}</div>
+                            @endif
                             @if($sbi['product']['shipping_days'])
                                 <div class="label label-info">{{ lang('product_info.delivery_time', [
                                 'shipping_days' => $sbi['product']['shipping_days']
@@ -191,8 +195,6 @@
             url: route,
             changed_value: new_value
         }).success(function (output) {
-            console.log(output);
-
             if (output.error === 0) {
                 // Set new value
                 $quantity_input.val(new_value);

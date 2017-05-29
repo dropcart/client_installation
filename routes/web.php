@@ -217,15 +217,10 @@ $app->group([
             foreach($shoppingBag as $arrProduct){
                 $product = $arrProduct['product'];
                 if($product['id'] == $product_id){
-                    if($arrProduct['quantity'] > 10){
+                    // Compensate with passed quantity since setcookie is behaving weirdly @todo check why the latest update value in the shopping bag is unretrievable
+                    if($arrProduct['quantity'] + $quantity > $product['stock_quantity']){
                         $stock_ok = 0;
-                        $stock_response = lang('product_info.not_in_stock');
-
-                    }elseif($arrProduct['quantity'] > 5){
-                        $stock_ok = 1;
-                        $stock_response = lang('product_info.in_stock', [
-                            'stock_quantity' => $product['stock']
-                        ]);
+                        $stock_response = lang('product_info.not_enough_stock');
                     }else{
                         $stock_ok = 1;
                         $stock_response = lang('product_info.in_stock', [
