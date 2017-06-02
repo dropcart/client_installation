@@ -9,7 +9,7 @@
 ?>
 
 
-@extends('Default::layout')
+@extends('DefaultPs::layout')
 
 @section('page_title', isset($page_title) ? $page_title : '')
 
@@ -44,7 +44,7 @@
         </li>
     </ul>
 
-    @include('Default::blocks.errors-and-warnings')
+    @include('DefaultPs::blocks.errors-and-warnings')
     
     @if (isset($transaction) && $transaction_status == "CONFIRMED")
 	<div class="alert alert-warning">
