@@ -26,7 +26,7 @@ if (app('request')->has('shopping_bag')) {
     <div class="cart-content">
         @if ($total_quantity > 0)
         <span class="cart-items">{{ $total_quantity . ' ' . lang('page_all.articles') }}</span>
-        - <span class="cart-total">&euro;&nbsp;{{ number_format($total_price,2,",",".") }}</span>
+        - <span class="cart-total">&euro;&nbsp;<span class="cart-total-amount">{{ number_format($total_price,2,",",".") }}</span></span>
         @else
             <small><i>{{ lang('page_all.no_articles') }}</i></small>
         @endif
