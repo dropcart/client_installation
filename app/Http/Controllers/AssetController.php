@@ -80,33 +80,15 @@ class AssetController extends Controller
         else
                 abort(404, $file . ' does not exists');
 
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            // Load image for windows
-            $this->loadImageWindows($path);
-            exit;
-        }
-
-        // Load on unix
-        exec("cd " . getcwd());
-        $pathToFile = escapeshellcmd($path);
-        $mimeType = exec("file -b --mime-type $pathToFile");
-        if(preg_match("/(image\/|text\/plain)/", $mimeType))
-            header('Content-Type: ' . ($mimeType != 'text/plain' ? $mimeType : 'image/svg+xml'));
-        else
-            abort(406, 'File not supported');
-
-        header('Content-Disposition: inline;');
-        header('Cache-Control: max-age=86400'); // 86400 = 1 day
-        header('Content-Length: ' . filesize($pathToFile) );
-        passthru('cat ' . $pathToFile);
+        $this->loadImage($path);
         exit;
     }
 
-    private function loadImageWindows($image)
+    private function loadImage($image)
     {
         $mime = mime_content_type($image);
 
-        header('Content-Type: ' . $mime);
+        header('Content-Type: ' . ($mime != 'text/plain' ? $mime : 'image/svg+xml'));
         header('Content-Disposition: inline;');
         header('Cache-Control: max-age=86400'); // 86400 = 1 day
         header('Content-Length: ' . filesize($image) );
